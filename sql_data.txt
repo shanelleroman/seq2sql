@@ -1,0 +1,4949 @@
+[
+    {
+        "database_name": "art_1", 
+        "question": [
+            "What is the name and year created of each sculpture?", 
+            "Which one was created most recently?"
+        ], 
+        "table_ids": [
+            [
+                "sculptures"
+            ], 
+            [
+                "sculptures"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "title", 
+                ",", 
+                "year", 
+                "from", 
+                "sculptures"
+            ], 
+            [
+                "select", 
+                "title", 
+                ",", 
+                "year", 
+                "from", 
+                "sculptures", 
+                "order", 
+                "by", 
+                "year", 
+                "desc", 
+                "limit", 
+                "1"
+            ]
+        ], 
+        "query": [
+            "SELECT title ,  YEAR FROM sculptures", 
+            "SELECT title ,  YEAR FROM sculptures ORDER BY YEAR DESC LIMIT 1"
+        ], 
+        "question_tok": [
+            [
+                "what", 
+                "is", 
+                "the", 
+                "name", 
+                "and", 
+                "year", 
+                "created", 
+                "of", 
+                "each", 
+                "sculpture", 
+                "?"
+            ], 
+            [
+                "which", 
+                "one", 
+                "was", 
+                "created", 
+                "most", 
+                "recently", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Which is the oldest painting?", 
+            "What is its title, location and year created?"
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "paintings", 
+                "order", 
+                "by", 
+                "year", 
+                "limit", 
+                "1"
+            ], 
+            [
+                "select", 
+                "title", 
+                ",", 
+                "location", 
+                ",", 
+                "year", 
+                "from", 
+                "paintings", 
+                "order", 
+                "by", 
+                "year", 
+                "limit", 
+                "1"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM paintings ORDER BY YEAR LIMIT 1", 
+            "SELECT title ,  LOCATION ,  YEAR FROM paintings ORDER BY YEAR LIMIT 1"
+        ], 
+        "question_tok": [
+            [
+                "which", 
+                "is", 
+                "the", 
+                "oldest", 
+                "painting", 
+                "?"
+            ], 
+            [
+                "what", 
+                "is", 
+                "its", 
+                "title", 
+                ",", 
+                "location", 
+                "and", 
+                "year", 
+                "created", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "What are the titles of all the sculptures?", 
+            "Which ones are located in gallery 226?"
+        ], 
+        "table_ids": [
+            [
+                "sculptures"
+            ], 
+            [
+                "sculptures"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "title", 
+                "from", 
+                "sculptures"
+            ], 
+            [
+                "select", 
+                "title", 
+                "from", 
+                "sculptures", 
+                "where", 
+                "location", 
+                "=", 
+                "``", 
+                "gallery", 
+                "226", 
+                "''"
+            ]
+        ], 
+        "query": [
+            "SELECT title FROM sculptures", 
+            "SELECT title FROM sculptures WHERE LOCATION  =  \"Gallery 226\""
+        ], 
+        "question_tok": [
+            [
+                "what", 
+                "are", 
+                "the", 
+                "titles", 
+                "of", 
+                "all", 
+                "the", 
+                "sculptures", 
+                "?"
+            ], 
+            [
+                "which", 
+                "ones", 
+                "are", 
+                "located", 
+                "in", 
+                "gallery", 
+                "226", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "What are the titles of all the paintings?", 
+            "Also list their locations."
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "title", 
+                "from", 
+                "paintings"
+            ], 
+            [
+                "select", 
+                "title", 
+                ",", 
+                "location", 
+                "from", 
+                "paintings"
+            ]
+        ], 
+        "query": [
+            "SELECT title FROM paintings", 
+            "SELECT title ,  LOCATION FROM paintings"
+        ], 
+        "question_tok": [
+            [
+                "what", 
+                "are", 
+                "the", 
+                "titles", 
+                "of", 
+                "all", 
+                "the", 
+                "paintings", 
+                "?"
+            ], 
+            [
+                "also", 
+                "list", 
+                "their", 
+                "locations", 
+                "."
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "What are the titles of all the sculptures?", 
+            "Also list their locations."
+        ], 
+        "table_ids": [
+            [
+                "sculptures"
+            ], 
+            [
+                "sculptures"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "title", 
+                "from", 
+                "sculptures"
+            ], 
+            [
+                "select", 
+                "title", 
+                ",", 
+                "location", 
+                "from", 
+                "sculptures"
+            ]
+        ], 
+        "query": [
+            "SELECT title FROM sculptures", 
+            "SELECT title ,  LOCATION FROM sculptures"
+        ], 
+        "question_tok": [
+            [
+                "what", 
+                "are", 
+                "the", 
+                "titles", 
+                "of", 
+                "all", 
+                "the", 
+                "sculptures", 
+                "?"
+            ], 
+            [
+                "also", 
+                "list", 
+                "their", 
+                "locations", 
+                "."
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Which painting has an id equal to 80?", 
+            "What is its medium type?"
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "paintings", 
+                "where", 
+                "paintingid", 
+                "=", 
+                "80"
+            ], 
+            [
+                "select", 
+                "medium", 
+                "from", 
+                "paintings", 
+                "where", 
+                "paintingid", 
+                "=", 
+                "80"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM paintings WHERE paintingID  =  80", 
+            "SELECT medium FROM paintings WHERE paintingID  =  80"
+        ], 
+        "question_tok": [
+            [
+                "which", 
+                "painting", 
+                "has", 
+                "an", 
+                "id", 
+                "equal", 
+                "to", 
+                "80", 
+                "?"
+            ], 
+            [
+                "what", 
+                "is", 
+                "its", 
+                "medium", 
+                "type", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "What are the first and last names of all the artists?", 
+            "Which of those were born after 1850?"
+        ], 
+        "table_ids": [
+            [
+                "artists"
+            ], 
+            [
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "lname", 
+                ",", 
+                "fname", 
+                "from", 
+                "artists"
+            ], 
+            [
+                "select", 
+                "lname", 
+                ",", 
+                "fname", 
+                "from", 
+                "artists", 
+                "where", 
+                "birthyear", 
+                ">", 
+                "1850"
+            ]
+        ], 
+        "query": [
+            "SELECT lname ,  fname FROM artists", 
+            "SELECT lname ,  fname FROM artists WHERE birthYear  >  1850"
+        ], 
+        "question_tok": [
+            [
+                "what", 
+                "are", 
+                "the", 
+                "first", 
+                "and", 
+                "last", 
+                "names", 
+                "of", 
+                "all", 
+                "the", 
+                "artists", 
+                "?"
+            ], 
+            [
+                "which", 
+                "of", 
+                "those", 
+                "were", 
+                "born", 
+                "after", 
+                "1850", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Which sculptures are not located in gallery 226?", 
+            "Of those, what are their names and years?"
+        ], 
+        "table_ids": [
+            [
+                "sculptures"
+            ], 
+            [
+                "sculptures"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "title", 
+                "from", 
+                "sculptures", 
+                "where", 
+                "location", 
+                "!", 
+                "=", 
+                "``", 
+                "gallery", 
+                "226", 
+                "''"
+            ], 
+            [
+                "select", 
+                "title", 
+                ",", 
+                "year", 
+                "from", 
+                "sculptures", 
+                "where", 
+                "location", 
+                "!", 
+                "=", 
+                "``", 
+                "gallery", 
+                "226", 
+                "''"
+            ]
+        ], 
+        "query": [
+            "SELECT title FROM sculptures WHERE LOCATION ! =  \"Gallery 226\"", 
+            "SELECT title ,  YEAR FROM sculptures WHERE LOCATION ! =  \"Gallery 226\""
+        ], 
+        "question_tok": [
+            [
+                "which", 
+                "sculptures", 
+                "are", 
+                "not", 
+                "located", 
+                "in", 
+                "gallery", 
+                "226", 
+                "?"
+            ], 
+            [
+                "of", 
+                "those", 
+                ",", 
+                "what", 
+                "are", 
+                "their", 
+                "names", 
+                "and", 
+                "years", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Who were all the distinct artists who made sculptures?", 
+            "Of those, which made them before 1900?", 
+            "What were their first and last names?"
+        ], 
+        "table_ids": [
+            [
+                "sculptures", 
+                "artists"
+            ], 
+            [
+                "sculptures", 
+                "artists"
+            ], 
+            [
+                "sculptures", 
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "sculptures", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.sculptorid"
+            ], 
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "sculptures", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.sculptorid", 
+                "where", 
+                "t2.year", 
+                "<", 
+                "1900"
+            ], 
+            [
+                "select", 
+                "distinct", 
+                "t1.lname", 
+                ",", 
+                "t1.fname", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "sculptures", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.sculptorid", 
+                "where", 
+                "t2.year", 
+                "<", 
+                "1900"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM artists AS T1 JOIN sculptures AS T2 ON T1.artistID  =  T2.sculptorID", 
+            "SELECT * FROM artists AS T1 JOIN sculptures AS T2 ON T1.artistID  =  T2.sculptorID WHERE T2.year  <  1900", 
+            "SELECT DISTINCT T1.lname ,  T1.fname FROM artists AS T1 JOIN sculptures AS T2 ON T1.artistID  =  T2.sculptorID WHERE T2.year  <  1900"
+        ], 
+        "question_tok": [
+            [
+                "who", 
+                "were", 
+                "all", 
+                "the", 
+                "distinct", 
+                "artists", 
+                "who", 
+                "made", 
+                "sculptures", 
+                "?"
+            ], 
+            [
+                "of", 
+                "those", 
+                ",", 
+                "which", 
+                "made", 
+                "them", 
+                "before", 
+                "1900", 
+                "?"
+            ], 
+            [
+                "what", 
+                "were", 
+                "their", 
+                "first", 
+                "and", 
+                "last", 
+                "names", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Who are all the distinct artists?", 
+            "Which of them made sculptures after 1920?", 
+            "What are their birth years?"
+        ], 
+        "table_ids": [
+            [
+                "sculptures", 
+                "artists"
+            ], 
+            [
+                "sculptures", 
+                "artists"
+            ], 
+            [
+                "sculptures", 
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "sculptures", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.sculptorid"
+            ], 
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "sculptures", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.sculptorid", 
+                "where", 
+                "t2.year", 
+                ">", 
+                "1920"
+            ], 
+            [
+                "select", 
+                "distinct", 
+                "t1.birthyear", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "sculptures", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.sculptorid", 
+                "where", 
+                "t2.year", 
+                ">", 
+                "1920"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM artists AS T1 JOIN sculptures AS T2 ON T1.artistID  =  T2.sculptorID", 
+            "SELECT * FROM artists AS T1 JOIN sculptures AS T2 ON T1.artistID  =  T2.sculptorID WHERE T2.year  >  1920", 
+            "SELECT DISTINCT T1.birthYear FROM artists AS T1 JOIN sculptures AS T2 ON T1.artistID  =  T2.sculptorID WHERE T2.year  >  1920"
+        ], 
+        "question_tok": [
+            [
+                "who", 
+                "are", 
+                "all", 
+                "the", 
+                "distinct", 
+                "artists", 
+                "?"
+            ], 
+            [
+                "which", 
+                "of", 
+                "them", 
+                "made", 
+                "sculptures", 
+                "after", 
+                "1920", 
+                "?"
+            ], 
+            [
+                "what", 
+                "are", 
+                "their", 
+                "birth", 
+                "years", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Who are all the artists?", 
+            "Order the result by their lifetime.", 
+            "What was the first and last name of the one who lived the longest?"
+        ], 
+        "table_ids": [
+            [
+                "artists"
+            ], 
+            [
+                "artists"
+            ], 
+            [
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists"
+            ], 
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "order", 
+                "by", 
+                "deathyear", 
+                "-", 
+                "birthyear", 
+                "desc"
+            ], 
+            [
+                "select", 
+                "lname", 
+                ",", 
+                "fname", 
+                "from", 
+                "artists", 
+                "order", 
+                "by", 
+                "deathyear", 
+                "-", 
+                "birthyear", 
+                "desc", 
+                "limit", 
+                "1"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM artists", 
+            "SELECT * FROM artists ORDER BY deathYear - birthYear DESC", 
+            "SELECT lname ,  fname FROM artists ORDER BY deathYear - birthYear DESC LIMIT 1"
+        ], 
+        "question_tok": [
+            [
+                "who", 
+                "are", 
+                "all", 
+                "the", 
+                "artists", 
+                "?"
+            ], 
+            [
+                "order", 
+                "the", 
+                "result", 
+                "by", 
+                "their", 
+                "lifetime", 
+                "."
+            ], 
+            [
+                "what", 
+                "was", 
+                "the", 
+                "first", 
+                "and", 
+                "last", 
+                "name", 
+                "of", 
+                "the", 
+                "one", 
+                "who", 
+                "lived", 
+                "the", 
+                "longest", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Who are all the artists?", 
+            "Which one lived the shortest?", 
+            "What was his/her age?"
+        ], 
+        "table_ids": [
+            [
+                "artists"
+            ], 
+            [
+                "artists"
+            ], 
+            [
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists"
+            ], 
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "order", 
+                "by", 
+                "deathyear", 
+                "-", 
+                "birthyear", 
+                "limit", 
+                "1"
+            ], 
+            [
+                "select", 
+                "deathyear", 
+                "-", 
+                "birthyear", 
+                "from", 
+                "artists", 
+                "order", 
+                "by", 
+                "deathyear", 
+                "-", 
+                "birthyear", 
+                "limit", 
+                "1"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM artists", 
+            "SELECT * FROM artists ORDER BY deathYear - birthYear LIMIT 1", 
+            "SELECT deathYear - birthYear FROM artists ORDER BY deathYear - birthYear LIMIT 1"
+        ], 
+        "question_tok": [
+            [
+                "who", 
+                "are", 
+                "all", 
+                "the", 
+                "artists", 
+                "?"
+            ], 
+            [
+                "which", 
+                "one", 
+                "lived", 
+                "the", 
+                "shortest", 
+                "?"
+            ], 
+            [
+                "what", 
+                "was", 
+                "his/her", 
+                "age", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Who are all the artists?", 
+            "Which one lived the longests?", 
+            "What was his/her first name and age?"
+        ], 
+        "table_ids": [
+            [
+                "artists"
+            ], 
+            [
+                "artists"
+            ], 
+            [
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists"
+            ], 
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "order", 
+                "by", 
+                "deathyear", 
+                "-", 
+                "birthyear", 
+                "desc", 
+                "limit", 
+                "1"
+            ], 
+            [
+                "select", 
+                "fname", 
+                ",", 
+                "deathyear", 
+                "-", 
+                "birthyear", 
+                "from", 
+                "artists", 
+                "order", 
+                "by", 
+                "deathyear", 
+                "-", 
+                "birthyear", 
+                "desc", 
+                "limit", 
+                "1"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM artists", 
+            "SELECT * FROM artists ORDER BY deathYear - birthYear DESC LIMIT 1", 
+            "SELECT fname ,  deathYear - birthYear FROM artists ORDER BY deathYear - birthYear DESC LIMIT 1"
+        ], 
+        "question_tok": [
+            [
+                "who", 
+                "are", 
+                "all", 
+                "the", 
+                "artists", 
+                "?"
+            ], 
+            [
+                "which", 
+                "one", 
+                "lived", 
+                "the", 
+                "longests", 
+                "?"
+            ], 
+            [
+                "what", 
+                "was", 
+                "his/her", 
+                "first", 
+                "name", 
+                "and", 
+                "age", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "How many paintings are there?", 
+            "How many of those are exhibited at gallery 240?"
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                "from", 
+                "paintings"
+            ], 
+            [
+                "select", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                "from", 
+                "paintings", 
+                "where", 
+                "location", 
+                "=", 
+                "``", 
+                "gallery", 
+                "240", 
+                "''"
+            ]
+        ], 
+        "query": [
+            "SELECT count(*) FROM paintings", 
+            "SELECT count(*) FROM paintings WHERE LOCATION  =  \"Gallery 240\""
+        ], 
+        "question_tok": [
+            [
+                "how", 
+                "many", 
+                "paintings", 
+                "are", 
+                "there", 
+                "?"
+            ], 
+            [
+                "how", 
+                "many", 
+                "of", 
+                "those", 
+                "are", 
+                "exhibited", 
+                "at", 
+                "gallery", 
+                "240", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "How many paintings did each artist make?", 
+            "How many paintings did the oldest of them make?"
+        ], 
+        "table_ids": [
+            [
+                "paintings", 
+                "artists"
+            ], 
+            [
+                "paintings", 
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                ",", 
+                "t2.painterid", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "group", 
+                "by", 
+                "t2.painterid"
+            ], 
+            [
+                "select", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                ",", 
+                "t2.painterid", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "group", 
+                "by", 
+                "t2.painterid", 
+                "order", 
+                "by", 
+                "t1.deathyear", 
+                "-", 
+                "t1.birthyear", 
+                "desc", 
+                "limit", 
+                "1"
+            ]
+        ], 
+        "query": [
+            "SELECT count(*) ,  T2.painterID FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID GROUP BY T2.painterID", 
+            "SELECT count(*) ,  T2.painterID FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID GROUP BY T2.painterID ORDER BY T1.deathYear - T1.birthYear DESC LIMIT 1"
+        ], 
+        "question_tok": [
+            [
+                "how", 
+                "many", 
+                "paintings", 
+                "did", 
+                "each", 
+                "artist", 
+                "make", 
+                "?"
+            ], 
+            [
+                "how", 
+                "many", 
+                "paintings", 
+                "did", 
+                "the", 
+                "oldest", 
+                "of", 
+                "them", 
+                "make", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Which artist has a first name of Mary?", 
+            "What are the names of the paintings and date of creation for all her paintings?"
+        ], 
+        "table_ids": [
+            [
+                "artists"
+            ], 
+            [
+                "paintings", 
+                "artists"
+            ], 
+            [
+                "paintings", 
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "where", 
+                "fname", 
+                "=", 
+                "``", 
+                "mary", 
+                "''"
+            ], 
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "where", 
+                "t1.fname", 
+                "=", 
+                "``", 
+                "mary", 
+                "''"
+            ], 
+            [
+                "select", 
+                "t2.title", 
+                ",", 
+                "t2.year", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "where", 
+                "t1.fname", 
+                "=", 
+                "``", 
+                "mary", 
+                "''"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM artists WHERE fname  =  \"Mary\"", 
+            "SELECT * FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID WHERE T1.fname  =  \"Mary\"", 
+            "SELECT T2.title ,   T2.year FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID WHERE T1.fname  =  \"Mary\""
+        ], 
+        "question_tok": [
+            [
+                "which", 
+                "artist", 
+                "has", 
+                "a", 
+                "first", 
+                "name", 
+                "of", 
+                "mary", 
+                "?"
+            ], 
+            [
+                "what", 
+                "are", 
+                "the", 
+                "names", 
+                "of", 
+                "the", 
+                "paintings", 
+                "and", 
+                "date", 
+                "of", 
+                "creation", 
+                "for", 
+                "all", 
+                "her", 
+                "paintings", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Which artist was born before 1850?", 
+            "What paintings did he/she create?", 
+            "What are the widths of those paintings?"
+        ], 
+        "table_ids": [
+            [
+                "artists"
+            ], 
+            [
+                "paintings", 
+                "artists"
+            ], 
+            [
+                "paintings", 
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "where", 
+                "birthyear", 
+                "<", 
+                "1850"
+            ], 
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "where", 
+                "t1.birthyear", 
+                "<", 
+                "1850"
+            ], 
+            [
+                "select", 
+                "t2.width_mm", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "where", 
+                "t1.birthyear", 
+                "<", 
+                "1850"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM artists WHERE birthYear  <  1850", 
+            "SELECT * FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID WHERE T1.birthYear  <  1850", 
+            "SELECT T2.width_mm FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID WHERE T1.birthYear  <  1850"
+        ], 
+        "question_tok": [
+            [
+                "which", 
+                "artist", 
+                "was", 
+                "born", 
+                "before", 
+                "1850", 
+                "?"
+            ], 
+            [
+                "what", 
+                "paintings", 
+                "did", 
+                "he/she", 
+                "create", 
+                "?"
+            ], 
+            [
+                "what", 
+                "are", 
+                "the", 
+                "widths", 
+                "of", 
+                "those", 
+                "paintings", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Which artist has a first name of Pablo?", 
+            "What paintings are created by him?", 
+            "What are the location and medium types of those paintings?"
+        ], 
+        "table_ids": [
+            [
+                "artists"
+            ], 
+            [
+                "paintings", 
+                "artists"
+            ], 
+            [
+                "paintings", 
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "where", 
+                "fname", 
+                "=", 
+                "``", 
+                "pablo", 
+                "''"
+            ], 
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "where", 
+                "t1.fname", 
+                "=", 
+                "``", 
+                "pablo", 
+                "''"
+            ], 
+            [
+                "select", 
+                "t2.location", 
+                ",", 
+                "t2.medium", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "where", 
+                "t1.fname", 
+                "=", 
+                "``", 
+                "pablo", 
+                "''"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM artists WHERE fname  =  \"Pablo\"", 
+            "SELECT * FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID WHERE T1.fname  =  \"Pablo\"", 
+            "SELECT T2.location ,   T2.medium FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID WHERE T1.fname  =  \"Pablo\""
+        ], 
+        "question_tok": [
+            [
+                "which", 
+                "artist", 
+                "has", 
+                "a", 
+                "first", 
+                "name", 
+                "of", 
+                "pablo", 
+                "?"
+            ], 
+            [
+                "what", 
+                "paintings", 
+                "are", 
+                "created", 
+                "by", 
+                "him", 
+                "?"
+            ], 
+            [
+                "what", 
+                "are", 
+                "the", 
+                "location", 
+                "and", 
+                "medium", 
+                "types", 
+                "of", 
+                "those", 
+                "paintings", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Which artists have works of paintings?", 
+            "Which artists created some sculptures?", 
+            "What are the first and last names of the artists who have all of them?"
+        ], 
+        "table_ids": [
+            [
+                "paintings", 
+                "artists"
+            ], 
+            [
+                "sculptures", 
+                "artists"
+            ], 
+            [
+                "paintings", 
+                "sculptures", 
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid"
+            ], 
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "sculptures", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.sculptorid"
+            ], 
+            [
+                "select", 
+                "t1.lname", 
+                ",", 
+                "t1.fname", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "sculptures", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.sculptorid", 
+                "intersect", 
+                "select", 
+                "t1.lname", 
+                ",", 
+                "t1.fname", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID", 
+            "SELECT * FROM artists AS T1 JOIN sculptures AS T2 ON T1.artistID  =  T2.sculptorID", 
+            "SELECT T1.lname ,  T1.fname FROM artists AS T1 JOIN sculptures AS T2 ON T1.artistID  =  T2.sculptorID INTERSECT SELECT T1.lname ,  T1.fname FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID"
+        ], 
+        "question_tok": [
+            [
+                "which", 
+                "artists", 
+                "have", 
+                "works", 
+                "of", 
+                "paintings", 
+                "?"
+            ], 
+            [
+                "which", 
+                "artists", 
+                "created", 
+                "some", 
+                "sculptures", 
+                "?"
+            ], 
+            [
+                "what", 
+                "are", 
+                "the", 
+                "first", 
+                "and", 
+                "last", 
+                "names", 
+                "of", 
+                "the", 
+                "artists", 
+                "who", 
+                "have", 
+                "all", 
+                "of", 
+                "them", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Which artists have medium oil paintings?", 
+            "Of those, who also have paintings with the lithographic medium?", 
+            "What are their first and last names?"
+        ], 
+        "table_ids": [
+            [
+                "paintings", 
+                "artists"
+            ], 
+            [
+                "paintings", 
+                "artists"
+            ], 
+            [
+                "paintings", 
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "where", 
+                "t2.medium", 
+                "=", 
+                "``", 
+                "oil", 
+                "''"
+            ], 
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "where", 
+                "t2.medium", 
+                "=", 
+                "``", 
+                "oil", 
+                "''", 
+                "intersect", 
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "where", 
+                "t2.medium", 
+                "=", 
+                "``", 
+                "lithograph", 
+                "''"
+            ], 
+            [
+                "select", 
+                "t1.lname", 
+                ",", 
+                "t1.fname", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "where", 
+                "t2.medium", 
+                "=", 
+                "``", 
+                "oil", 
+                "''", 
+                "intersect", 
+                "select", 
+                "t1.lname", 
+                ",", 
+                "t1.fname", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "where", 
+                "t2.medium", 
+                "=", 
+                "``", 
+                "lithograph", 
+                "''"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID WHERE T2.medium  =  \"oil\"", 
+            "SELECT * FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID WHERE T2.medium  =  \"oil\" INTERSECT SELECT * FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID WHERE T2.medium  =  \"lithograph\"", 
+            "SELECT T1.lname ,  T1.fname FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID WHERE T2.medium  =  \"oil\" INTERSECT SELECT T1.lname ,  T1.fname FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID WHERE T2.medium  =  \"lithograph\""
+        ], 
+        "question_tok": [
+            [
+                "which", 
+                "artists", 
+                "have", 
+                "medium", 
+                "oil", 
+                "paintings", 
+                "?"
+            ], 
+            [
+                "of", 
+                "those", 
+                ",", 
+                "who", 
+                "also", 
+                "have", 
+                "paintings", 
+                "with", 
+                "the", 
+                "lithographic", 
+                "medium", 
+                "?"
+            ], 
+            [
+                "what", 
+                "are", 
+                "their", 
+                "first", 
+                "and", 
+                "last", 
+                "names", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Find the ids of the artists who created a painting in 1884.", 
+            "Of those, which are ids of artists that painted the work on canvas?", 
+            "What is his birthyear?"
+        ], 
+        "table_ids": [
+            [
+                "paintings", 
+                "artists"
+            ], 
+            [
+                "paintings", 
+                "artists"
+            ], 
+            [
+                "paintings", 
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "t1.artistid", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "where", 
+                "t2.year", 
+                "=", 
+                "1884"
+            ], 
+            [
+                "select", 
+                "t1.artistid", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "where", 
+                "t2.year", 
+                "=", 
+                "1884", 
+                "and", 
+                "mediumon", 
+                "=", 
+                "``", 
+                "canvas", 
+                "''"
+            ], 
+            [
+                "select", 
+                "t1.birthyear", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "where", 
+                "t2.year", 
+                "=", 
+                "1884", 
+                "and", 
+                "mediumon", 
+                "=", 
+                "``", 
+                "canvas", 
+                "''"
+            ]
+        ], 
+        "query": [
+            "SELECT T1.artistID FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID WHERE T2.year  =  1884", 
+            "SELECT T1.artistID FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID WHERE T2.year  =  1884 AND mediumOn  =  \"canvas\"", 
+            "SELECT T1.birthYear FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID WHERE T2.year  =  1884 AND mediumOn  =  \"canvas\""
+        ], 
+        "question_tok": [
+            [
+                "find", 
+                "the", 
+                "ids", 
+                "of", 
+                "the", 
+                "artists", 
+                "who", 
+                "created", 
+                "a", 
+                "painting", 
+                "in", 
+                "1884", 
+                "."
+            ], 
+            [
+                "of", 
+                "those", 
+                ",", 
+                "which", 
+                "are", 
+                "ids", 
+                "of", 
+                "artists", 
+                "that", 
+                "painted", 
+                "the", 
+                "work", 
+                "on", 
+                "canvas", 
+                "?"
+            ], 
+            [
+                "what", 
+                "is", 
+                "his", 
+                "birthyear", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Find the ids of the artists who have medium oil paintings?", 
+            "Of those artists, who has their oil paintings located in gallery 241?", 
+            "What are the different first names of these artists?"
+        ], 
+        "table_ids": [
+            [
+                "paintings", 
+                "artists"
+            ], 
+            [
+                "paintings", 
+                "artists"
+            ], 
+            [
+                "paintings", 
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "t1.artistid", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "where", 
+                "t2.medium", 
+                "=", 
+                "``", 
+                "oil", 
+                "''"
+            ], 
+            [
+                "select", 
+                "t1.artistid", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "where", 
+                "t2.medium", 
+                "=", 
+                "``", 
+                "oil", 
+                "''", 
+                "and", 
+                "location", 
+                "=", 
+                "``", 
+                "gallery", 
+                "241", 
+                "''"
+            ], 
+            [
+                "select", 
+                "distinct", 
+                "t1.fname", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "where", 
+                "t2.medium", 
+                "=", 
+                "``", 
+                "oil", 
+                "''", 
+                "and", 
+                "location", 
+                "=", 
+                "``", 
+                "gallery", 
+                "241", 
+                "''"
+            ]
+        ], 
+        "query": [
+            "SELECT T1.artistID FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID WHERE T2.medium  =  \"oil\"", 
+            "SELECT T1.artistID FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID WHERE T2.medium  =  \"oil\" AND LOCATION  =  \"Gallery 241\"", 
+            "SELECT DISTINCT T1.fname FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID WHERE T2.medium  =  \"oil\" AND LOCATION  =  \"Gallery 241\""
+        ], 
+        "question_tok": [
+            [
+                "find", 
+                "the", 
+                "ids", 
+                "of", 
+                "the", 
+                "artists", 
+                "who", 
+                "have", 
+                "medium", 
+                "oil", 
+                "paintings", 
+                "?"
+            ], 
+            [
+                "of", 
+                "those", 
+                "artists", 
+                ",", 
+                "who", 
+                "has", 
+                "their", 
+                "oil", 
+                "paintings", 
+                "located", 
+                "in", 
+                "gallery", 
+                "241", 
+                "?"
+            ], 
+            [
+                "what", 
+                "are", 
+                "the", 
+                "different", 
+                "first", 
+                "names", 
+                "of", 
+                "these", 
+                "artists", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "What are the different mediums?", 
+            "How many works are there for each of them?"
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "distinct", 
+                "medium", 
+                "from", 
+                "paintings"
+            ], 
+            [
+                "select", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                ",", 
+                "medium", 
+                "from", 
+                "paintings", 
+                "group", 
+                "by", 
+                "medium"
+            ]
+        ], 
+        "query": [
+            "SELECT DISTINCT medium FROM paintings", 
+            "SELECT count(*) ,  medium FROM paintings GROUP BY medium"
+        ], 
+        "question_tok": [
+            [
+                "what", 
+                "are", 
+                "the", 
+                "different", 
+                "mediums", 
+                "?"
+            ], 
+            [
+                "how", 
+                "many", 
+                "works", 
+                "are", 
+                "there", 
+                "for", 
+                "each", 
+                "of", 
+                "them", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "What are the different medium types for paintings?", 
+            "For each of them, what is the average height of the works in mm?"
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "distinct", 
+                "medium", 
+                "from", 
+                "paintings"
+            ], 
+            [
+                "select", 
+                "avg", 
+                "(", 
+                "height_mm", 
+                ")", 
+                ",", 
+                "medium", 
+                "from", 
+                "paintings", 
+                "group", 
+                "by", 
+                "medium"
+            ]
+        ], 
+        "query": [
+            "SELECT DISTINCT medium FROM paintings", 
+            "SELECT avg(height_mm) ,  medium FROM paintings GROUP BY medium"
+        ], 
+        "question_tok": [
+            [
+                "what", 
+                "are", 
+                "the", 
+                "different", 
+                "medium", 
+                "types", 
+                "for", 
+                "paintings", 
+                "?"
+            ], 
+            [
+                "for", 
+                "each", 
+                "of", 
+                "them", 
+                ",", 
+                "what", 
+                "is", 
+                "the", 
+                "average", 
+                "height", 
+                "of", 
+                "the", 
+                "works", 
+                "in", 
+                "mm", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "How many paintings were created before 1900?", 
+            "How many were shown/collected in different places?"
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                "from", 
+                "paintings", 
+                "where", 
+                "year", 
+                "<", 
+                "1900"
+            ], 
+            [
+                "select", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                ",", 
+                "location", 
+                "from", 
+                "paintings", 
+                "where", 
+                "year", 
+                "<", 
+                "1900", 
+                "group", 
+                "by", 
+                "location"
+            ]
+        ], 
+        "query": [
+            "SELECT count(*) FROM paintings WHERE YEAR  <  1900", 
+            "SELECT count(*) ,  LOCATION FROM paintings WHERE YEAR  <  1900 GROUP BY LOCATION"
+        ], 
+        "question_tok": [
+            [
+                "how", 
+                "many", 
+                "paintings", 
+                "were", 
+                "created", 
+                "before", 
+                "1900", 
+                "?"
+            ], 
+            [
+                "how", 
+                "many", 
+                "were", 
+                "shown/collected", 
+                "in", 
+                "different", 
+                "places", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Which paintings created after 1910?", 
+            "Of those, which have a medium of oil?", 
+            "What are their titles?"
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "paintings", 
+                "where", 
+                "year", 
+                ">", 
+                "1910"
+            ], 
+            [
+                "select", 
+                "*", 
+                "from", 
+                "paintings", 
+                "where", 
+                "year", 
+                ">", 
+                "1910", 
+                "and", 
+                "medium", 
+                "=", 
+                "``", 
+                "oil", 
+                "''"
+            ], 
+            [
+                "select", 
+                "title", 
+                "from", 
+                "paintings", 
+                "where", 
+                "year", 
+                ">", 
+                "1910", 
+                "and", 
+                "medium", 
+                "=", 
+                "``", 
+                "oil", 
+                "''"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM paintings WHERE YEAR  >  1910", 
+            "SELECT * FROM paintings WHERE YEAR  >  1910 AND medium  =  \"oil\"", 
+            "SELECT title FROM paintings WHERE YEAR  >  1910 AND medium  =  \"oil\""
+        ], 
+        "question_tok": [
+            [
+                "which", 
+                "paintings", 
+                "created", 
+                "after", 
+                "1910", 
+                "?"
+            ], 
+            [
+                "of", 
+                "those", 
+                ",", 
+                "which", 
+                "have", 
+                "a", 
+                "medium", 
+                "of", 
+                "oil", 
+                "?"
+            ], 
+            [
+                "what", 
+                "are", 
+                "their", 
+                "titles", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Which painters created works in oil?", 
+            "What is id of every painter who has oil paintings exhibited at gallery 240?"
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "paintings", 
+                "where", 
+                "medium", 
+                "=", 
+                "``", 
+                "oil", 
+                "''"
+            ], 
+            [
+                "select", 
+                "distinct", 
+                "painterid", 
+                "from", 
+                "paintings", 
+                "where", 
+                "medium", 
+                "=", 
+                "``", 
+                "oil", 
+                "''", 
+                "and", 
+                "location", 
+                "=", 
+                "``", 
+                "gallery", 
+                "240", 
+                "''"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM paintings WHERE medium  =  \"oil\"", 
+            "SELECT DISTINCT painterID FROM paintings WHERE medium  =  \"oil\" AND LOCATION  =  \"Gallery 240\""
+        ], 
+        "question_tok": [
+            [
+                "which", 
+                "painters", 
+                "created", 
+                "works", 
+                "in", 
+                "oil", 
+                "?"
+            ], 
+            [
+                "what", 
+                "is", 
+                "id", 
+                "of", 
+                "every", 
+                "painter", 
+                "who", 
+                "has", 
+                "oil", 
+                "paintings", 
+                "exhibited", 
+                "at", 
+                "gallery", 
+                "240", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "What are the heights of all the paintings?", 
+            "Which of these have a longer height than some paintings on canvas?", 
+            "What are their distinct titles?"
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "height_mm", 
+                "from", 
+                "paintings"
+            ], 
+            [
+                "select", 
+                "height_mm", 
+                "from", 
+                "paintings", 
+                "where", 
+                "height_mm", 
+                ">", 
+                "(", 
+                "select", 
+                "min", 
+                "(", 
+                "height_mm", 
+                ")", 
+                "from", 
+                "paintings", 
+                "where", 
+                "mediumon", 
+                "=", 
+                "``", 
+                "canvas", 
+                "''", 
+                ")"
+            ], 
+            [
+                "select", 
+                "distinct", 
+                "title", 
+                "from", 
+                "paintings", 
+                "where", 
+                "height_mm", 
+                ">", 
+                "(", 
+                "select", 
+                "min", 
+                "(", 
+                "height_mm", 
+                ")", 
+                "from", 
+                "paintings", 
+                "where", 
+                "mediumon", 
+                "=", 
+                "``", 
+                "canvas", 
+                "''", 
+                ")"
+            ]
+        ], 
+        "query": [
+            "SELECT height_mm FROM paintings", 
+            "SELECT height_mm FROM paintings WHERE height_mm  >  (SELECT min(height_mm) FROM paintings WHERE mediumOn  =  \"canvas\")", 
+            "SELECT DISTINCT title FROM paintings WHERE height_mm  >  (SELECT min(height_mm) FROM paintings WHERE mediumOn  =  \"canvas\")"
+        ], 
+        "question_tok": [
+            [
+                "what", 
+                "are", 
+                "the", 
+                "heights", 
+                "of", 
+                "all", 
+                "the", 
+                "paintings", 
+                "?"
+            ], 
+            [
+                "which", 
+                "of", 
+                "these", 
+                "have", 
+                "a", 
+                "longer", 
+                "height", 
+                "than", 
+                "some", 
+                "paintings", 
+                "on", 
+                "canvas", 
+                "?"
+            ], 
+            [
+                "what", 
+                "are", 
+                "their", 
+                "distinct", 
+                "titles", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "In what year was the oldest painting in Gallery 240 created?", 
+            "Of these, which are older than one in gallery 240?"
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "max", 
+                "(", 
+                "year", 
+                ")", 
+                "from", 
+                "paintings", 
+                "where", 
+                "location", 
+                "=", 
+                "``", 
+                "gallery", 
+                "240", 
+                "''"
+            ], 
+            [
+                "select", 
+                "paintingid", 
+                "from", 
+                "paintings", 
+                "where", 
+                "year", 
+                "<", 
+                "(", 
+                "select", 
+                "max", 
+                "(", 
+                "year", 
+                ")", 
+                "from", 
+                "paintings", 
+                "where", 
+                "location", 
+                "=", 
+                "``", 
+                "gallery", 
+                "240", 
+                "''", 
+                ")"
+            ]
+        ], 
+        "query": [
+            "SELECT max(YEAR) FROM paintings WHERE LOCATION  =  \"Gallery 240\"", 
+            "SELECT paintingID FROM paintings WHERE YEAR  <  (SELECT max(YEAR) FROM paintings WHERE LOCATION  =  \"Gallery 240\")"
+        ], 
+        "question_tok": [
+            [
+                "in", 
+                "what", 
+                "year", 
+                "was", 
+                "the", 
+                "oldest", 
+                "painting", 
+                "in", 
+                "gallery", 
+                "240", 
+                "created", 
+                "?"
+            ], 
+            [
+                "of", 
+                "these", 
+                ",", 
+                "which", 
+                "are", 
+                "older", 
+                "than", 
+                "one", 
+                "in", 
+                "gallery", 
+                "240", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Find the year of the oldest painting.", 
+            "what is the id of that painting?"
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "year", 
+                "from", 
+                "paintings", 
+                "order", 
+                "by", 
+                "year", 
+                "limit", 
+                "1"
+            ], 
+            [
+                "select", 
+                "paintingid", 
+                "from", 
+                "paintings", 
+                "order", 
+                "by", 
+                "year", 
+                "limit", 
+                "1"
+            ]
+        ], 
+        "query": [
+            "SELECT YEAR FROM paintings ORDER BY YEAR LIMIT 1", 
+            "SELECT paintingID FROM paintings ORDER BY YEAR LIMIT 1"
+        ], 
+        "question_tok": [
+            [
+                "find", 
+                "the", 
+                "year", 
+                "of", 
+                "the", 
+                "oldest", 
+                "painting", 
+                "."
+            ], 
+            [
+                "what", 
+                "is", 
+                "the", 
+                "id", 
+                "of", 
+                "that", 
+                "painting", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Which artists created sculptures?", 
+            "Of these artists, who created ones with a title that has the word \"female\" in it?", 
+            "What is his/her first and last name?"
+        ], 
+        "table_ids": [
+            [
+                "sculptures", 
+                "artists"
+            ], 
+            [
+                "sculptures", 
+                "artists"
+            ], 
+            [
+                "sculptures", 
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "sculptures", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.sculptorid"
+            ], 
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "sculptures", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.sculptorid", 
+                "where", 
+                "t2.title", 
+                "like", 
+                "``", 
+                "%", 
+                "female", 
+                "%", 
+                "''"
+            ], 
+            [
+                "select", 
+                "t1.lname", 
+                ",", 
+                "t1.fname", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "sculptures", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.sculptorid", 
+                "where", 
+                "t2.title", 
+                "like", 
+                "``", 
+                "%", 
+                "female", 
+                "%", 
+                "''"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM artists AS T1 JOIN sculptures AS T2 ON T1.artistID  =  T2.sculptorID", 
+            "SELECT * FROM artists AS T1 JOIN sculptures AS T2 ON T1.artistID  =  T2.sculptorID WHERE T2.title LIKE \"%female%\"", 
+            "SELECT T1.lname ,  T1.fname FROM artists AS T1 JOIN sculptures AS T2 ON T1.artistID  =  T2.sculptorID WHERE T2.title LIKE \"%female%\""
+        ], 
+        "question_tok": [
+            [
+                "which", 
+                "artists", 
+                "created", 
+                "sculptures", 
+                "?"
+            ], 
+            [
+                "of", 
+                "these", 
+                "artists", 
+                ",", 
+                "who", 
+                "created", 
+                "ones", 
+                "with", 
+                "a", 
+                "title", 
+                "that", 
+                "has", 
+                "the", 
+                "word", 
+                "``", 
+                "female", 
+                "''", 
+                "in", 
+                "it", 
+                "?"
+            ], 
+            [
+                "what", 
+                "is", 
+                "his/her", 
+                "first", 
+                "and", 
+                "last", 
+                "name", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "What are the names of all the paintings?", 
+            "List them in alphabetical order."
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "distinct", 
+                "title", 
+                "from", 
+                "paintings"
+            ], 
+            [
+                "select", 
+                "distinct", 
+                "title", 
+                "from", 
+                "paintings", 
+                "order", 
+                "by", 
+                "title"
+            ]
+        ], 
+        "query": [
+            "SELECT DISTINCT title FROM paintings", 
+            "SELECT DISTINCT title FROM paintings ORDER BY title"
+        ], 
+        "question_tok": [
+            [
+                "what", 
+                "are", 
+                "the", 
+                "names", 
+                "of", 
+                "all", 
+                "the", 
+                "paintings", 
+                "?"
+            ], 
+            [
+                "list", 
+                "them", 
+                "in", 
+                "alphabetical", 
+                "order", 
+                "."
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "What are the names of all distinct paintings?", 
+            "Order them by length."
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "distinct", 
+                "title", 
+                "from", 
+                "paintings"
+            ], 
+            [
+                "select", 
+                "distinct", 
+                "title", 
+                "from", 
+                "paintings", 
+                "order", 
+                "by", 
+                "height_mm"
+            ]
+        ], 
+        "query": [
+            "SELECT DISTINCT title FROM paintings", 
+            "SELECT DISTINCT title FROM paintings ORDER BY height_mm"
+        ], 
+        "question_tok": [
+            [
+                "what", 
+                "are", 
+                "the", 
+                "names", 
+                "of", 
+                "all", 
+                "distinct", 
+                "paintings", 
+                "?"
+            ], 
+            [
+                "order", 
+                "them", 
+                "by", 
+                "length", 
+                "."
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Which are the names of all the paintings and sculptures?", 
+            "Which of those were created between 1900 and 1950?"
+        ], 
+        "table_ids": [
+            [
+                "sculptures", 
+                "paintings"
+            ], 
+            [
+                "sculptures", 
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "title", 
+                "from", 
+                "paintings", 
+                "union", 
+                "select", 
+                "title", 
+                "from", 
+                "sculptures"
+            ], 
+            [
+                "select", 
+                "title", 
+                "from", 
+                "paintings", 
+                "where", 
+                "year", 
+                "between", 
+                "1900", 
+                "and", 
+                "1950", 
+                "union", 
+                "select", 
+                "title", 
+                "from", 
+                "sculptures", 
+                "where", 
+                "year", 
+                "between", 
+                "1900", 
+                "and", 
+                "1950"
+            ]
+        ], 
+        "query": [
+            "SELECT title FROM paintings UNION SELECT title FROM sculptures", 
+            "SELECT title FROM paintings WHERE YEAR BETWEEN 1900 AND 1950 UNION SELECT title FROM sculptures WHERE YEAR BETWEEN 1900 AND 1950"
+        ], 
+        "question_tok": [
+            [
+                "which", 
+                "are", 
+                "the", 
+                "names", 
+                "of", 
+                "all", 
+                "the", 
+                "paintings", 
+                "and", 
+                "sculptures", 
+                "?"
+            ], 
+            [
+                "which", 
+                "of", 
+                "those", 
+                "were", 
+                "created", 
+                "between", 
+                "1900", 
+                "and", 
+                "1950", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Which artist has an id of 222?", 
+            "What are the titles of all paintings and sculpture works created by him?"
+        ], 
+        "table_ids": [
+            [
+                "artists"
+            ], 
+            [
+                "sculptures", 
+                "paintings", 
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "where", 
+                "artistid", 
+                "=", 
+                "222"
+            ], 
+            [
+                "select", 
+                "t2.title", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "where", 
+                "t1.artistid", 
+                "=", 
+                "222", 
+                "union", 
+                "select", 
+                "t2.title", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "sculptures", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.sculptorid", 
+                "where", 
+                "t1.artistid", 
+                "=", 
+                "222"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM artists WHERE artistID  =  222", 
+            "SELECT T2.title FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID WHERE T1.artistID  =  222 UNION SELECT T2.title FROM artists AS T1 JOIN sculptures AS T2 ON T1.artistID  =  T2.sculptorID WHERE T1.artistID  =  222"
+        ], 
+        "question_tok": [
+            [
+                "which", 
+                "artist", 
+                "has", 
+                "an", 
+                "id", 
+                "of", 
+                "222", 
+                "?"
+            ], 
+            [
+                "what", 
+                "are", 
+                "the", 
+                "titles", 
+                "of", 
+                "all", 
+                "paintings", 
+                "and", 
+                "sculpture", 
+                "works", 
+                "created", 
+                "by", 
+                "him", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "How many paintings did each artist create?", 
+            "How many did each create before 1900?", 
+            "Who painted the most?"
+        ], 
+        "table_ids": [
+            [
+                "paintings", 
+                "artists"
+            ], 
+            [
+                "paintings", 
+                "artists"
+            ], 
+            [
+                "paintings", 
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                ",", 
+                "t1.artistid", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "group", 
+                "by", 
+                "t1.artistid"
+            ], 
+            [
+                "select", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                ",", 
+                "t1.artistid", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "where", 
+                "t2.year", 
+                "<", 
+                "1900", 
+                "group", 
+                "by", 
+                "t1.artistid"
+            ], 
+            [
+                "select", 
+                "t1.artistid", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "where", 
+                "t2.year", 
+                "<", 
+                "1900", 
+                "group", 
+                "by", 
+                "t1.artistid", 
+                "order", 
+                "by", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                "desc", 
+                "limit", 
+                "1"
+            ]
+        ], 
+        "query": [
+            "SELECT count(*) ,  T1.artistID FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID GROUP BY T1.artistID", 
+            "SELECT count(*) ,  T1.artistID FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID WHERE T2.year  <  1900 GROUP BY T1.artistID", 
+            "SELECT T1.artistID FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID WHERE T2.year  <  1900 GROUP BY T1.artistID ORDER BY count(*) DESC LIMIT 1"
+        ], 
+        "question_tok": [
+            [
+                "how", 
+                "many", 
+                "paintings", 
+                "did", 
+                "each", 
+                "artist", 
+                "create", 
+                "?"
+            ], 
+            [
+                "how", 
+                "many", 
+                "did", 
+                "each", 
+                "create", 
+                "before", 
+                "1900", 
+                "?"
+            ], 
+            [
+                "who", 
+                "painted", 
+                "the", 
+                "most", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "How many sculptures did each artist create?", 
+            "Who created the most?", 
+            "What is their first name?"
+        ], 
+        "table_ids": [
+            [
+                "sculptures", 
+                "artists"
+            ], 
+            [
+                "sculptures", 
+                "artists"
+            ], 
+            [
+                "sculptures", 
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "t2.sculptorid", 
+                ",", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "sculptures", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.sculptorid", 
+                "group", 
+                "by", 
+                "t2.sculptorid"
+            ], 
+            [
+                "select", 
+                "t2.sculptorid", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "sculptures", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.sculptorid", 
+                "group", 
+                "by", 
+                "t2.sculptorid", 
+                "order", 
+                "by", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                "desc", 
+                "limit", 
+                "1"
+            ], 
+            [
+                "select", 
+                "t1.fname", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "sculptures", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.sculptorid", 
+                "group", 
+                "by", 
+                "t2.sculptorid", 
+                "order", 
+                "by", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                "desc", 
+                "limit", 
+                "1"
+            ]
+        ], 
+        "query": [
+            "SELECT T2.sculptorID ,  count(*) FROM artists AS T1 JOIN sculptures AS T2 ON T1.artistID  =  T2.sculptorID GROUP BY T2.sculptorID", 
+            "SELECT T2.sculptorID FROM artists AS T1 JOIN sculptures AS T2 ON T1.artistID  =  T2.sculptorID GROUP BY T2.sculptorID ORDER BY count(*) DESC LIMIT 1", 
+            "SELECT T1.fname FROM artists AS T1 JOIN sculptures AS T2 ON T1.artistID  =  T2.sculptorID GROUP BY T2.sculptorID ORDER BY count(*) DESC LIMIT 1"
+        ], 
+        "question_tok": [
+            [
+                "how", 
+                "many", 
+                "sculptures", 
+                "did", 
+                "each", 
+                "artist", 
+                "create", 
+                "?"
+            ], 
+            [
+                "who", 
+                "created", 
+                "the", 
+                "most", 
+                "?"
+            ], 
+            [
+                "what", 
+                "is", 
+                "their", 
+                "first", 
+                "name", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "What are the names of all the paintings?", 
+            "Which of these have a width less than 600 or a height larger than 800?"
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "title", 
+                "from", 
+                "paintings"
+            ], 
+            [
+                "select", 
+                "title", 
+                "from", 
+                "paintings", 
+                "where", 
+                "width_mm", 
+                "<", 
+                "600", 
+                "or", 
+                "height_mm", 
+                ">", 
+                "800"
+            ]
+        ], 
+        "query": [
+            "SELECT title FROM paintings", 
+            "SELECT title FROM paintings WHERE width_mm  <  600 OR height_mm  >  800"
+        ], 
+        "question_tok": [
+            [
+                "what", 
+                "are", 
+                "the", 
+                "names", 
+                "of", 
+                "all", 
+                "the", 
+                "paintings", 
+                "?"
+            ], 
+            [
+                "which", 
+                "of", 
+                "these", 
+                "have", 
+                "a", 
+                "width", 
+                "less", 
+                "than", 
+                "600", 
+                "or", 
+                "a", 
+                "height", 
+                "larger", 
+                "than", 
+                "800", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Which paintings were created before 1885 or after 1930?", 
+            "Where are they all located?"
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "paintings", 
+                "where", 
+                "year", 
+                "<", 
+                "1885", 
+                "or", 
+                "year", 
+                ">", 
+                "1930"
+            ], 
+            [
+                "select", 
+                "distinct", 
+                "location", 
+                "from", 
+                "paintings", 
+                "where", 
+                "year", 
+                "<", 
+                "1885", 
+                "or", 
+                "year", 
+                ">", 
+                "1930"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM paintings WHERE YEAR  < 1885 OR YEAR  >  1930", 
+            "SELECT DISTINCT LOCATION FROM paintings WHERE YEAR  < 1885 OR YEAR  >  1930"
+        ], 
+        "question_tok": [
+            [
+                "which", 
+                "paintings", 
+                "were", 
+                "created", 
+                "before", 
+                "1885", 
+                "or", 
+                "after", 
+                "1930", 
+                "?"
+            ], 
+            [
+                "where", 
+                "are", 
+                "they", 
+                "all", 
+                "located", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "What are the painting ids that have a height larger than 500?", 
+            "Of these, which also are shorter than 2000?"
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "paintingid", 
+                "from", 
+                "paintings", 
+                "where", 
+                "height_mm", 
+                ">", 
+                "500"
+            ], 
+            [
+                "select", 
+                "paintingid", 
+                "from", 
+                "paintings", 
+                "where", 
+                "height_mm", 
+                ">", 
+                "500", 
+                "and", 
+                "height_mm", 
+                "<", 
+                "2000"
+            ]
+        ], 
+        "query": [
+            "SELECT paintingID FROM paintings WHERE height_mm  >  500", 
+            "SELECT paintingID FROM paintings WHERE height_mm  >  500 AND height_mm  <  2000"
+        ], 
+        "question_tok": [
+            [
+                "what", 
+                "are", 
+                "the", 
+                "painting", 
+                "ids", 
+                "that", 
+                "have", 
+                "a", 
+                "height", 
+                "larger", 
+                "than", 
+                "500", 
+                "?"
+            ], 
+            [
+                "of", 
+                "these", 
+                ",", 
+                "which", 
+                "also", 
+                "are", 
+                "shorter", 
+                "than", 
+                "2000", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Which paintings are on panels?", 
+            "Which paintings are on canvas?", 
+            "Which locations contain both?"
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "paintings", 
+                "where", 
+                "mediumon", 
+                "=", 
+                "``", 
+                "panel", 
+                "''"
+            ], 
+            [
+                "select", 
+                "*", 
+                "from", 
+                "paintings", 
+                "where", 
+                "mediumon", 
+                "=", 
+                "``", 
+                "canvas", 
+                "''"
+            ], 
+            [
+                "select", 
+                "distinct", 
+                "location", 
+                "from", 
+                "paintings", 
+                "where", 
+                "mediumon", 
+                "=", 
+                "``", 
+                "panel", 
+                "''", 
+                "intersect", 
+                "select", 
+                "distinct", 
+                "location", 
+                "from", 
+                "paintings", 
+                "where", 
+                "mediumon", 
+                "=", 
+                "``", 
+                "canvas", 
+                "''"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM paintings WHERE mediumOn  =  \"panel\"", 
+            "SELECT * FROM paintings WHERE mediumOn  =  \"canvas\"", 
+            "SELECT DISTINCT LOCATION FROM paintings WHERE mediumOn  =  \"panel\" INTERSECT SELECT DISTINCT LOCATION FROM paintings WHERE mediumOn  =  \"canvas\""
+        ], 
+        "question_tok": [
+            [
+                "which", 
+                "paintings", 
+                "are", 
+                "on", 
+                "panels", 
+                "?"
+            ], 
+            [
+                "which", 
+                "paintings", 
+                "are", 
+                "on", 
+                "canvas", 
+                "?"
+            ], 
+            [
+                "which", 
+                "locations", 
+                "contain", 
+                "both", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Which paintings were created before 1885?", 
+            "Where were these paintings located?", 
+            "Which of these locations also had paintings created after 1930?"
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "paintings", 
+                "where", 
+                "year", 
+                "<", 
+                "1885"
+            ], 
+            [
+                "select", 
+                "location", 
+                "from", 
+                "paintings", 
+                "where", 
+                "year", 
+                "<", 
+                "1885"
+            ], 
+            [
+                "select", 
+                "distinct", 
+                "location", 
+                "from", 
+                "paintings", 
+                "where", 
+                "year", 
+                "<", 
+                "1885", 
+                "intersect", 
+                "select", 
+                "distinct", 
+                "location", 
+                "from", 
+                "paintings", 
+                "where", 
+                "year", 
+                ">", 
+                "1930"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM paintings WHERE YEAR  <  1885", 
+            "SELECT LOCATION FROM paintings WHERE YEAR  <  1885", 
+            "SELECT DISTINCT LOCATION FROM paintings WHERE YEAR  <  1885 INTERSECT SELECT DISTINCT LOCATION FROM paintings WHERE YEAR  >  1930"
+        ], 
+        "question_tok": [
+            [
+                "which", 
+                "paintings", 
+                "were", 
+                "created", 
+                "before", 
+                "1885", 
+                "?"
+            ], 
+            [
+                "where", 
+                "were", 
+                "these", 
+                "paintings", 
+                "located", 
+                "?"
+            ], 
+            [
+                "which", 
+                "of", 
+                "these", 
+                "locations", 
+                "also", 
+                "had", 
+                "paintings", 
+                "created", 
+                "after", 
+                "1930", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Which paintings are on oil medium?", 
+            "Of these, which are located in gallery 241?", 
+            "What is their average height and width?"
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "paintings", 
+                "where", 
+                "medium", 
+                "=", 
+                "``", 
+                "oil", 
+                "''"
+            ], 
+            [
+                "select", 
+                "*", 
+                "from", 
+                "paintings", 
+                "where", 
+                "medium", 
+                "=", 
+                "``", 
+                "oil", 
+                "''", 
+                "and", 
+                "location", 
+                "=", 
+                "``", 
+                "gallery", 
+                "241", 
+                "''"
+            ], 
+            [
+                "select", 
+                "avg", 
+                "(", 
+                "height_mm", 
+                ")", 
+                ",", 
+                "avg", 
+                "(", 
+                "width_mm", 
+                ")", 
+                "from", 
+                "paintings", 
+                "where", 
+                "medium", 
+                "=", 
+                "``", 
+                "oil", 
+                "''", 
+                "and", 
+                "location", 
+                "=", 
+                "``", 
+                "gallery", 
+                "241", 
+                "''"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM paintings WHERE medium  =  \"oil\"", 
+            "SELECT * FROM paintings WHERE medium  =  \"oil\" AND LOCATION  =  \"Gallery 241\"", 
+            "SELECT avg(height_mm) ,  avg(width_mm) FROM paintings WHERE medium  =  \"oil\" AND LOCATION  =  \"Gallery 241\""
+        ], 
+        "question_tok": [
+            [
+                "which", 
+                "paintings", 
+                "are", 
+                "on", 
+                "oil", 
+                "medium", 
+                "?"
+            ], 
+            [
+                "of", 
+                "these", 
+                ",", 
+                "which", 
+                "are", 
+                "located", 
+                "in", 
+                "gallery", 
+                "241", 
+                "?"
+            ], 
+            [
+                "what", 
+                "is", 
+                "their", 
+                "average", 
+                "height", 
+                "and", 
+                "width", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Which paintings were created before 1900?", 
+            "What is the id of the painting with the maximum height?", 
+            "Also what is that height?"
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "paintings", 
+                "where", 
+                "year", 
+                "<", 
+                "1900"
+            ], 
+            [
+                "select", 
+                "paintingid", 
+                "from", 
+                "paintings", 
+                "where", 
+                "year", 
+                "<", 
+                "1900", 
+                "order", 
+                "by", 
+                "height_mm", 
+                "desc", 
+                "limit", 
+                "1"
+            ], 
+            [
+                "select", 
+                "height_mm", 
+                "from", 
+                "paintings", 
+                "where", 
+                "year", 
+                "<", 
+                "1900", 
+                "order", 
+                "by", 
+                "height_mm", 
+                "desc", 
+                "limit", 
+                "1"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM paintings WHERE YEAR  <  1900", 
+            "SELECT paintingID FROM paintings WHERE YEAR  <  1900 ORDER BY height_mm DESC LIMIT 1", 
+            "SELECT height_mm FROM paintings WHERE YEAR  <  1900 ORDER BY height_mm DESC LIMIT 1"
+        ], 
+        "question_tok": [
+            [
+                "which", 
+                "paintings", 
+                "were", 
+                "created", 
+                "before", 
+                "1900", 
+                "?"
+            ], 
+            [
+                "what", 
+                "is", 
+                "the", 
+                "id", 
+                "of", 
+                "the", 
+                "painting", 
+                "with", 
+                "the", 
+                "maximum", 
+                "height", 
+                "?"
+            ], 
+            [
+                "also", 
+                "what", 
+                "is", 
+                "that", 
+                "height", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Group and order the paintings by year.", 
+            "For each year, what are the maximum height and width?"
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "paintings", 
+                "group", 
+                "by", 
+                "year", 
+                "order", 
+                "by", 
+                "year"
+            ], 
+            [
+                "select", 
+                "max", 
+                "(", 
+                "height_mm", 
+                ")", 
+                ",", 
+                "max", 
+                "(", 
+                "width_mm", 
+                ")", 
+                ",", 
+                "year", 
+                "from", 
+                "paintings", 
+                "group", 
+                "by", 
+                "year", 
+                "order", 
+                "by", 
+                "year"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM paintings GROUP BY YEAR ORDER BY YEAR", 
+            "SELECT max(height_mm) ,  max(width_mm) ,  YEAR FROM paintings GROUP BY YEAR ORDER BY YEAR"
+        ], 
+        "question_tok": [
+            [
+                "group", 
+                "and", 
+                "order", 
+                "the", 
+                "paintings", 
+                "by", 
+                "year", 
+                "."
+            ], 
+            [
+                "for", 
+                "each", 
+                "year", 
+                ",", 
+                "what", 
+                "are", 
+                "the", 
+                "maximum", 
+                "height", 
+                "and", 
+                "width", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "What are the average height and width of the paintings?", 
+            "Order them by their names.", 
+            "Group them by the painters' ids."
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "avg", 
+                "(", 
+                "height_mm", 
+                ")", 
+                ",", 
+                "avg", 
+                "(", 
+                "width_mm", 
+                ")", 
+                "from", 
+                "paintings"
+            ], 
+            [
+                "select", 
+                "avg", 
+                "(", 
+                "height_mm", 
+                ")", 
+                ",", 
+                "avg", 
+                "(", 
+                "width_mm", 
+                ")", 
+                "from", 
+                "paintings", 
+                "order", 
+                "by", 
+                "title"
+            ], 
+            [
+                "select", 
+                "avg", 
+                "(", 
+                "height_mm", 
+                ")", 
+                ",", 
+                "avg", 
+                "(", 
+                "width_mm", 
+                ")", 
+                ",", 
+                "painterid", 
+                "from", 
+                "paintings", 
+                "group", 
+                "by", 
+                "painterid", 
+                "order", 
+                "by", 
+                "title"
+            ]
+        ], 
+        "query": [
+            "SELECT avg(height_mm) ,  avg(width_mm) FROM paintings", 
+            "SELECT avg(height_mm) ,  avg(width_mm) FROM paintings ORDER BY title", 
+            "SELECT avg(height_mm) ,  avg(width_mm) ,  painterID FROM paintings GROUP BY painterID ORDER BY title"
+        ], 
+        "question_tok": [
+            [
+                "what", 
+                "are", 
+                "the", 
+                "average", 
+                "height", 
+                "and", 
+                "width", 
+                "of", 
+                "the", 
+                "paintings", 
+                "?"
+            ], 
+            [
+                "order", 
+                "them", 
+                "by", 
+                "their", 
+                "names", 
+                "."
+            ], 
+            [
+                "group", 
+                "them", 
+                "by", 
+                "the", 
+                "painters", 
+                "'", 
+                "ids", 
+                "."
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Which artists have at least two paintings?", 
+            "What are their first names?", 
+            "Also, how many works did each artist produce?"
+        ], 
+        "table_ids": [
+            [
+                "paintings", 
+                "artists"
+            ], 
+            [
+                "paintings", 
+                "artists"
+            ], 
+            [
+                "paintings", 
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "group", 
+                "by", 
+                "t2.painterid", 
+                "having", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                ">", 
+                "=", 
+                "2"
+            ], 
+            [
+                "select", 
+                "t1.fname", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "group", 
+                "by", 
+                "t2.painterid", 
+                "having", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                ">", 
+                "=", 
+                "2"
+            ], 
+            [
+                "select", 
+                "t1.artistid", 
+                ",", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "group", 
+                "by", 
+                "t2.painterid", 
+                "having", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                ">", 
+                "=", 
+                "2"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID GROUP BY T2.painterID HAVING count(*)  >=  2", 
+            "SELECT T1.fname FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID GROUP BY T2.painterID HAVING count(*)  >=  2", 
+            "SELECT T1.artistID ,  count(*) FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID GROUP BY T2.painterID HAVING count(*)  >=  2"
+        ], 
+        "question_tok": [
+            [
+                "which", 
+                "artists", 
+                "have", 
+                "at", 
+                "least", 
+                "two", 
+                "paintings", 
+                "?"
+            ], 
+            [
+                "what", 
+                "are", 
+                "their", 
+                "first", 
+                "names", 
+                "?"
+            ], 
+            [
+                "also", 
+                ",", 
+                "how", 
+                "many", 
+                "works", 
+                "did", 
+                "each", 
+                "artist", 
+                "produce", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Which artists created less than 4 paintings?", 
+            "When did each one die?"
+        ], 
+        "table_ids": [
+            [
+                "paintings", 
+                "artists"
+            ], 
+            [
+                "paintings", 
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "*", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "group", 
+                "by", 
+                "t2.painterid", 
+                "having", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                "<", 
+                "4"
+            ], 
+            [
+                "select", 
+                "t1.deathyear", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "paintings", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.painterid", 
+                "group", 
+                "by", 
+                "t2.painterid", 
+                "having", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                "<", 
+                "4"
+            ]
+        ], 
+        "query": [
+            "SELECT * FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID GROUP BY T2.painterID HAVING count(*)  <  4", 
+            "SELECT T1.deathYear FROM artists AS T1 JOIN paintings AS T2 ON T1.artistID  =  T2.painterID GROUP BY T2.painterID HAVING count(*)  <  4"
+        ], 
+        "question_tok": [
+            [
+                "which", 
+                "artists", 
+                "created", 
+                "less", 
+                "than", 
+                "4", 
+                "paintings", 
+                "?"
+            ], 
+            [
+                "when", 
+                "did", 
+                "each", 
+                "one", 
+                "die", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "Find the id of all artists who made some scupltures.", 
+            "Of these, who created the fewest?", 
+            "When did he die?"
+        ], 
+        "table_ids": [
+            [
+                "sculptures", 
+                "artists"
+            ], 
+            [
+                "sculptures", 
+                "artists"
+            ], 
+            [
+                "sculptures", 
+                "artists"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "t1.artistid", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "sculptures", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.sculptorid"
+            ], 
+            [
+                "select", 
+                "t1.artistid", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "sculptures", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.sculptorid", 
+                "group", 
+                "by", 
+                "t2.sculptorid", 
+                "order", 
+                "by", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                "limit", 
+                "1"
+            ], 
+            [
+                "select", 
+                "t1.deathyear", 
+                "from", 
+                "artists", 
+                "as", 
+                "t1", 
+                "join", 
+                "sculptures", 
+                "as", 
+                "t2", 
+                "on", 
+                "t1.artistid", 
+                "=", 
+                "t2.sculptorid", 
+                "group", 
+                "by", 
+                "t2.sculptorid", 
+                "order", 
+                "by", 
+                "count", 
+                "(", 
+                "*", 
+                ")", 
+                "limit", 
+                "1"
+            ]
+        ], 
+        "query": [
+            "SELECT T1.artistID FROM artists AS T1 JOIN sculptures AS T2 ON T1.artistID  =  T2.sculptorID", 
+            "SELECT T1.artistID FROM artists AS T1 JOIN sculptures AS T2 ON T1.artistID  =  T2.sculptorID GROUP BY T2.sculptorID ORDER BY count(*) LIMIT 1", 
+            "SELECT T1.deathYear FROM artists AS T1 JOIN sculptures AS T2 ON T1.artistID  =  T2.sculptorID GROUP BY T2.sculptorID ORDER BY count(*) LIMIT 1"
+        ], 
+        "question_tok": [
+            [
+                "find", 
+                "the", 
+                "id", 
+                "of", 
+                "all", 
+                "artists", 
+                "who", 
+                "made", 
+                "some", 
+                "scupltures", 
+                "."
+            ], 
+            [
+                "of", 
+                "these", 
+                ",", 
+                "who", 
+                "created", 
+                "the", 
+                "fewest", 
+                "?"
+            ], 
+            [
+                "when", 
+                "did", 
+                "he", 
+                "die", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "What are all the paintings in gallery 240?", 
+            "Out of those, which is the widest?", 
+            "What is its id and height?"
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "paintingid", 
+                "from", 
+                "paintings", 
+                "where", 
+                "location", 
+                "=", 
+                "'gallery", 
+                "240", 
+                "'"
+            ], 
+            [
+                "select", 
+                "paintingid", 
+                "from", 
+                "paintings", 
+                "where", 
+                "location", 
+                "=", 
+                "'gallery", 
+                "240", 
+                "'", 
+                "order", 
+                "by", 
+                "width_mm", 
+                "desc", 
+                "limit", 
+                "1"
+            ], 
+            [
+                "select", 
+                "paintingid", 
+                ",", 
+                "height_mm", 
+                "from", 
+                "paintings", 
+                "where", 
+                "location", 
+                "=", 
+                "'gallery", 
+                "240", 
+                "'", 
+                "order", 
+                "by", 
+                "width_mm", 
+                "desc", 
+                "limit", 
+                "1"
+            ]
+        ], 
+        "query": [
+            "SELECT paintingID FROM paintings WHERE LOCATION  =  'Gallery 240'", 
+            "SELECT paintingID FROM paintings WHERE LOCATION  =  'Gallery 240' ORDER BY width_mm DESC LIMIT 1", 
+            "SELECT paintingID ,  height_mm FROM paintings WHERE LOCATION  =  'Gallery 240' ORDER BY width_mm DESC LIMIT 1"
+        ], 
+        "question_tok": [
+            [
+                "what", 
+                "are", 
+                "all", 
+                "the", 
+                "paintings", 
+                "in", 
+                "gallery", 
+                "240", 
+                "?"
+            ], 
+            [
+                "out", 
+                "of", 
+                "those", 
+                ",", 
+                "which", 
+                "is", 
+                "the", 
+                "widest", 
+                "?"
+            ], 
+            [
+                "what", 
+                "is", 
+                "its", 
+                "id", 
+                "and", 
+                "height", 
+                "?"
+            ]
+        ]
+    }, 
+    {
+        "database_name": "art_1", 
+        "question": [
+            "When was each painting in gallery 240 created?", 
+            "Which one is the oldest?", 
+            "Select the ids of all paintings older than that one."
+        ], 
+        "table_ids": [
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ], 
+            [
+                "paintings"
+            ]
+        ], 
+        "query_tok": [
+            [
+                "select", 
+                "year", 
+                "from", 
+                "paintings", 
+                "where", 
+                "location", 
+                "=", 
+                "'gallery", 
+                "240", 
+                "'"
+            ], 
+            [
+                "select", 
+                "*", 
+                "from", 
+                "paintings", 
+                "where", 
+                "location", 
+                "=", 
+                "'gallery", 
+                "240", 
+                "'", 
+                "order", 
+                "by", 
+                "year", 
+                "limit", 
+                "1"
+            ], 
+            [
+                "select", 
+                "paintingid", 
+                "from", 
+                "paintings", 
+                "where", 
+                "year", 
+                "<", 
+                "(", 
+                "select", 
+                "min", 
+                "(", 
+                "year", 
+                ")", 
+                "from", 
+                "paintings", 
+                "where", 
+                "location", 
+                "=", 
+                "'gallery", 
+                "240", 
+                "'", 
+                ")"
+            ]
+        ], 
+        "query": [
+            "SELECT YEAR FROM paintings WHERE LOCATION  =  'Gallery 240'", 
+            "SELECT * FROM paintings WHERE LOCATION  =  'Gallery 240' ORDER BY YEAR LIMIT 1", 
+            "SELECT paintingID FROM paintings WHERE YEAR  <   (SELECT min(YEAR) FROM paintings WHERE LOCATION  =  'Gallery 240')"
+        ], 
+        "question_tok": [
+            [
+                "when", 
+                "was", 
+                "each", 
+                "painting", 
+                "in", 
+                "gallery", 
+                "240", 
+                "created", 
+                "?"
+            ], 
+            [
+                "which", 
+                "one", 
+                "is", 
+                "the", 
+                "oldest", 
+                "?"
+            ], 
+            [
+                "select", 
+                "the", 
+                "ids", 
+                "of", 
+                "all", 
+                "paintings", 
+                "older", 
+                "than", 
+                "that", 
+                "one", 
+                "."
+            ]
+        ]
+    }
+]

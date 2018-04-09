@@ -1,0 +1,234 @@
+Loading from nl2sql Yale dataset
+Loading data from New_Data/Initial/train/art_1.json
+Loading data from New_Data/Initial/train/boat_1.json
+Loading data from New_Data/Initial/tables/art_1_table.json
+Loading data from New_Data/Initial/tables/boat_1_table.json
+{
+    "art_1": {
+        "sculptures": {
+            "header_tok": [
+                [
+                    "sculptureid"
+                ], 
+                [
+                    "title"
+                ], 
+                [
+                    "year"
+                ], 
+                [
+                    "medium"
+                ], 
+                [
+                    "location"
+                ], 
+                [
+                    "sculptorid"
+                ]
+            ], 
+            "rows": [], 
+            "page_title": "", 
+            "section_title": "", 
+            "header": [
+                "sculptureid", 
+                "title", 
+                "year", 
+                "medium", 
+                "location", 
+                "sculptorid"
+            ], 
+            "types": [
+                "INTEGER", 
+                "TEXT", 
+                "INTEGER", 
+                "TEXT", 
+                "TEXT", 
+                "INTEGER"
+            ]
+        }, 
+        "paintings": {
+            "header_tok": [
+                [
+                    "paintingid"
+                ], 
+                [
+                    "title"
+                ], 
+                [
+                    "year"
+                ], 
+                [
+                    "height_mm"
+                ], 
+                [
+                    "width_mm"
+                ], 
+                [
+                    "medium"
+                ], 
+                [
+                    "mediumon"
+                ], 
+                [
+                    "location"
+                ], 
+                [
+                    "painterid"
+                ]
+            ], 
+            "rows": [], 
+            "page_title": "", 
+            "section_title": "", 
+            "header": [
+                "paintingid", 
+                "title", 
+                "year", 
+                "height_mm", 
+                "width_mm", 
+                "medium", 
+                "mediumon", 
+                "location", 
+                "painterid"
+            ], 
+            "types": [
+                "INTEGER", 
+                "TEXT", 
+                "INTEGER", 
+                "INTEGER", 
+                "INTEGER", 
+                "TEXT", 
+                "TEXT", 
+                "TEXT", 
+                "INTEGER"
+            ]
+        }, 
+        "artists": {
+            "header_tok": [
+                [
+                    "artistid"
+                ], 
+                [
+                    "lname"
+                ], 
+                [
+                    "fname"
+                ], 
+                [
+                    "birthyear"
+                ], 
+                [
+                    "deathyear"
+                ]
+            ], 
+            "rows": [], 
+            "page_title": "", 
+            "section_title": "", 
+            "header": [
+                "artistid", 
+                "lname", 
+                "fname", 
+                "birthyear", 
+                "deathyear"
+            ], 
+            "types": [
+                "INTEGER", 
+                "TEXT", 
+                "TEXT", 
+                "INTEGER", 
+                "INTEGER"
+            ]
+        }
+    }, 
+    "boat_1": {
+        "sailors": {
+            "header_tok": [
+                [
+                    "sid"
+                ], 
+                [
+                    "name"
+                ], 
+                [
+                    "rating"
+                ], 
+                [
+                    "age"
+                ]
+            ], 
+            "rows": [], 
+            "page_title": "", 
+            "section_title": "", 
+            "header": [
+                "sid", 
+                "name", 
+                "rating", 
+                "age"
+            ], 
+            "types": [
+                "INTEGER", 
+                "TEXT", 
+                "INTEGER", 
+                "INTEGER"
+            ]
+        }, 
+        "boats": {
+            "header_tok": [
+                [
+                    "bid"
+                ], 
+                [
+                    "name"
+                ], 
+                [
+                    "color"
+                ]
+            ], 
+            "rows": [], 
+            "page_title": "", 
+            "section_title": "", 
+            "header": [
+                "bid", 
+                "name", 
+                "color"
+            ], 
+            "types": [
+                "INTEGER", 
+                "TEXT", 
+                "TEXT"
+            ]
+        }, 
+        "reserves": {
+            "header_tok": [
+                [
+                    "sid"
+                ], 
+                [
+                    "bid"
+                ], 
+                [
+                    "day"
+                ]
+            ], 
+            "rows": [], 
+            "page_title": "", 
+            "section_title": "", 
+            "header": [
+                "sid", 
+                "bid", 
+                "day"
+            ], 
+            "types": [
+                "INTEGER", 
+                "INTEGER", 
+                "TEXT"
+            ]
+        }
+    }
+}
+Loading data from New_Data/Initial/dev/pets_1.json
+Loading data from New_Data/Initial/tables/pets_1_table.json
+Loading word embedding from glove/glove.42B.300d.txt
+Using fixed embedding
+Not using column attention on aggregator predicting
+Not using column attention on selection predicting
+Seq2SQL where prediction
