@@ -7,10 +7,20 @@ from os import listdir
 import re
 import sys
 from nltk import word_tokenize
+from enum import Enum
 PATH_NL2SQL = 'New_Data/Initial'
 TRAIN_EXT = '/train'
 DEV_EXT = '/dev'
 TABLE_EXT = '/tables'
+
+class agg(Enum):
+    none = 0
+    mx = 1
+    mn = 2
+    count = 3
+    sm = 4
+    avg = 5
+ 
 
 
 def lower_keys(x):
@@ -64,101 +74,139 @@ def get_table_names_from_query(query_tok, select=False):
     return list(set(table_names))
 
 def clean_table_data(json_data, use_small=False):
+    '''
+    schema:
+    database_name {
+    header: [list of the column names for every table]
+    header_tok: [[each column name tokenized]]
+    table_name: [for each column name, what is the name of the table?]
+    table_name_tok: [tokenize each table_name]
+    foreign_key: [(column_1, column_2), (,), ...]
+    }
+    '''
     table_data = {}
     for database_name in json_data.keys():
         database = {}
+        database['rows'] = []
+        database['page_title'] = ''
+        database['section_title'] = ''
+        database['table_name'] = []
+        database['table_name_tok'] = []
+        database['foreign_key'] = []
+        
+        header = []
+        types = []
+        table_names = []
         for table in json_data[database_name]:
-            table_info = {}
-            table_info['header'] = [col['column_name'].lower() for col in table['col_data']]
-            table_info['header_tok'] = [word_tokenize(col.lower()) for col in table_info['header']]
-            table_info['rows'] = [] #TODO: fill in with database contents
-            table_info['page_title'] = '' #TODO: do I need anything for this?
-            table_info['section_title'] = ''
-            table_info['types'] = [col['data_type'] for col in table['col_data']]
-            database[table['table'].lower()] = table_info
+            for col in table['col_data']:
+                header.append(col['column_name'].lower())
+                types.append(col['data_type'].lower())
+                table_names.append(table['table'].lower())
+        database['header'] = header
+        database['types'] = types 
+        database['header_tok'] = [word_tokenize(col) for col in database['header']]
+        database['table_name'] = table_names
+        database['table_name_tok'] = [word_tokenize(table) for table in database['table_name']]
         table_data[database_name] = database
+    #print json.dumps(table_data, indent=4)
     return table_data
 
-def convert_colnames_colnum(cleaned_data_item, table_data, col_names, select=False):
+def convert_colnames_colnum(cleaned_data_item, table_data, col_names, table_name, select=False):
     # names of columns --> column_numbers!
-    col_num =[]
-    if select:
-        diff_tables = cleaned_data_item['selected_table'][0]
-    else:
-        diff_tables = cleaned_data_item['table_ids'][0]
-    print 'selected_col_names', col_names
-    for table in diff_tables:
-        col_num_small = []
-        table_cols = table_data[table]['header']
-        print 'table_cols, ', table_cols
-        for col in col_names:
-            if col == '*':
-                col_num.append(range(len(table_cols)))
-                break
-            if col in table_cols:
-                col_num_small.append(table_cols.index(col))
-        if len(col_num_small) > 0:
-            col_num.append(col_num_small)
-    print 'col_num', col_num
-    return col_num
+    database_name = cleaned_data_item['table_id']
 
-def get_select_indices(cleaned_data_item, table_data, agg_code=0):
-    query_tok = cleaned_data_item['query_tok'][0]
-    col_names = query_tok[query_tok.index('select') + 1:query_tok.index('from')]
+    column_numbers = []
+    if '*' in col_names: # get all the column indices
+        return range(len(table_data[database_name]['header'])) # number of columns in the database
+    for col in col_names:
+        # get indices that match the name
+        indices = [i for i, x in enumerate(table_data[database_name]['header']) if x == col]
+        for index in indices:
+            # get correct table
+            if table_data[database_name]['table_name'][index] == table_name:
+                column_numbers.append(index)
+                break
+    return column_numbers
+
+
+
+
+def get_select_indices(cleaned_data_item, table_data):
+    query_tok = cleaned_data_item['query_tok']
+    orig_col_names = query_tok[query_tok.index('select') + 1:query_tok.index('from')]
+    table_name =  query_tok[query_tok.index('from') + 1]
     to_delete = ['max', 'min', 'count', 'sum', 'avg', 'distinct', ',', '(', ')']
     for item in to_delete:
         try:
-            col_names.remove(item)
+            orig_col_names.remove(item)
         except ValueError:
             pass
     pattern = re.compile('(t\d+\.)(.*)')
+    col_names = orig_col_names
     for i, item in enumerate(col_names):
         if pattern.search(item) is not None:
             col_names[i] = pattern.search(item).group(2)
-
     # names of columns --> column_numbers!
-    return convert_colnames_colnum(cleaned_data_item, table_data, col_names, select=True)
-    # col_num =[]
-    # diff_tables = cleaned_data_item['selected_table'][0]
-    # for table in diff_tables:
-    #     col_num_small = []
-    #     table_cols = table_data[table]['header']
-    #     print 'table_cols ',table_cols
-    #     for col in col_names:
-    #         if col == '*':
-    #             col_num.append(range(len(table_cols)))
-    #             break
-    #         if col in table_cols:
-    #             col_num_small.append(table_cols.index(col))
-    #     if len(col_num_small) > 0:
-    #         col_num.append(col_num_small)
-    # return col_num
-    #print json.dumps(table_data, indent=4)
+    return orig_col_names, convert_colnames_colnum(cleaned_data_item, table_data, col_names, table_name, select=True)
 
 
 
-    
-
-def check_for_agg(query):
+def get_agg_codes(query, col_names, star=True):
     agg_ops = ['(max)\((.+?)\)', '(min)\((.+?)\)', '(count)\((.+?)\)', '(sum)\((.+?)\)', '(avg)\((.+?)\)']
+
+    new_col = [s.lower() for s in query.split(' ')]
+    new_col = new_col[new_col.index('select') + 1: new_col.index('from')]
+    to_delete = ['distinct', ',', '(', ')', '', ' ']
+    for item in to_delete:
+        try:
+            new_col.remove(item)
+        except ValueError:
+            pass
+    agg_codes = [0] * len(new_col)    
     for x, agg in enumerate(agg_ops):
         pattern = re.compile(agg)
-        if pattern.search(query) is not None:
-            return x + 1
-    return 0
+        for i, col in enumerate(new_col):
+            if pattern.search(query) is not None:
+                agg_codes[i] = x + 1
+    return agg_codes
 
 
 #NOTE: should be only the table_data that is relevant to this question
 def add_sql_item_to_data(cleaned_data_item, table_data):
-    agg_code = check_for_agg(cleaned_data_item['query'][0])
-    select_indices = get_select_indices(cleaned_data_item, table_data, agg_code=agg_code)
-    conds = [] # TODO
-    cleaned_data_item['sql'] = {'conds': conds, 'sel': select_indices, 'agg_code': agg_code}
+    '''sql_format
+    sql : {
+        agg: [0, 1, 0, ... , codes of each select column]
+        sel: [indices of select columns]
+        cond: [[column_index, op_code, value!! will be recursive]]
+        from: [...? what is here now]
+    }
+    '''
+    print cleaned_data_item
+    query = cleaned_data_item['query']
+    col_names, select_indices = get_select_indices(cleaned_data_item, table_data)
+    star = False
+    if '*' in col_names:
+        col_names = table_data[cleaned_data_item['table_id']]['header']
+        star = True
+    agg_codes = get_agg_codes(query, col_names)
+    conds = []
+    cleaned_data_item['sql'] = {'agg': agg_codes[0], 'sel': select_indices[0], 'conds': conds}
     
     
 
 def clean_sql_data(json_data, table_data, use_small=False):
     #NOTE: should only be called after clean_table_data
+    '''
+    sql_data_json_schema: 
+    [{ 
+        'question' : ["question_1", "question_2", "question_3"]
+        'query' : ['sql translation 1', ...]
+        'query_tok' : [['tokenize each query']
+        'table_id' : 'database_name'
+        'question_tok':[['tokenize each question']]
+            
+    }, {list of sql queries}]
+    '''
     sql_data = []
     count = 0
     exit = False
@@ -168,22 +216,26 @@ def clean_sql_data(json_data, table_data, use_small=False):
                 exit = True
                 break
             cleaned_data = {}
-            cleaned_data['database_name'] = database['database_name']
-            cleaned_data['question']= item['sqa']['question']
-            cleaned_data['query']= item['sqa']['sql']
-            cleaned_data['query_tok'] = [word_tokenize(query.lower()) for query in cleaned_data['query']]
-            cleaned_data['table_ids'] = [get_table_names_from_query(query_tok,select=False) for query_tok in cleaned_data['query_tok']]
-            cleaned_data['selected_table'] = [get_table_names_from_query(query_tok, select=True) for query_tok in cleaned_data['query_tok']]
-            cleaned_data['question_tok'] = [word_tokenize(question.lower()) for question in cleaned_data['question']]
+            cleaned_data['table_id'] = database['database_name']
+            cleaned_data['question']= item['sqa']['question'][0] # get first question
+            cleaned_data['query']= item['sqa']['sql'][0] # get first query
+            cleaned_data['query_tok'] = word_tokenize(cleaned_data['query'].lower())
+            #cleaned_data['table_ids'] = [get_table_names_from_query(query_tok,select=False) for query_tok in cleaned_data['query_tok']]
+            #cleaned_data['selected_table'] = [get_table_names_from_query(query_tok, select=True) for query_tok in cleaned_data['query_tok']]
+            cleaned_data['question_tok'] = word_tokenize(cleaned_data['question'].lower())
+            
             sql_data.append(cleaned_data)
+            add_sql_item_to_data(cleaned_data, table_data)
             count += 1
         if exit:
-            break
-    for item in sql_data:
-        specific_table_data = {} 
-        for table in item['table_ids'][0]:
-            specific_table_data[table] = table_data[item['database_name']][table]
-        add_sql_item_to_data(item, specific_table_data)
+            break  
+    # for item in sql_data:
+    #     add_sql_item_to_data(item, table_data) 
+    #     specific_table_data = {} 
+    #     for table in item['table_ids'][0]:
+    #         specific_table_data[table] = table_data[item['database_name']][table]
+    
+    print json.dumps(sql_data, indent=4)
     return sql_data
         #_ed_data['query_2'] = database['data']['sqa']['sql'][1]
         #eaned_data['query_3'] = safe_list_get(database['data']['sqa']['sql'], 2)
@@ -355,16 +407,14 @@ def to_batch_seq(sql_data, table_data, idxes, st, ed, ret_vis_data=False):
     #print json.dumps(sql_data, indent=4)
     for i in range(st, ed):
         sql = sql_data[idxes[i]]
+        #print sql
         #print json.dumps(sql, indent=4)
-        q_seq.append(sql['question_tok'][0]) # getting the first question
-        #get the corresponding column header names
-        header_names = []
-        table_col_length = []
-        for table in table_data[sql['database_name']][sql[table_ids][0]]:
-            header_names.append(table['header_tok'])
-            table_col_length.append(len(table['header']))
-        col_seq.append(header_names) 
-        col_num.append(table_col_length)
+        q_seq.append(sql['question_tok']) # getting the first question
+        #print q_seq
+        table = table_data[sql['table_id']]
+        col_num.append(len(table['header'])) # number of columns per "table" (really db)
+        col_seq.append(table['header_tok']) # get the tokens for each column
+        #get the corresponding column header names 
         ans_seq.append((sql['sql']['agg'],
             sql['sql']['sel'], 
             len(sql['sql']['conds']),
@@ -457,7 +507,6 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry):
     while st < len(sql_data):
         ed = st+batch_size if st+batch_size < len(perm) else len(perm)
         q_seq, col_seq, col_num, ans_seq, query_seq, gt_cond_seq, raw_data = to_batch_seq(sql_data, table_data, perm, st, ed, ret_vis_data=True)
-        #print ('q_seq ', q_seq)
         raw_q_seq = [x[0] for x in raw_data]
         raw_col_seq = [x[1] for x in raw_data]
         query_gt, table_ids = to_batch_query(sql_data, perm, st, ed)
@@ -483,9 +532,7 @@ def epoch_acc(model, batch_size, sql_data, table_data, pred_entry):
     tot_acc_num = 0.0
     while st < len(sql_data):
         ed = st+batch_size if st+batch_size < len(perm) else len(perm)
-        print('ed is ', ed)
         q_seq, col_seq, col_num, ans_seq, query_seq, gt_cond_seq, raw_data = to_batch_seq(sql_data, table_data, perm, st, ed, ret_vis_data=True)
-        print ('q_seq ', q_seq)
         raw_q_seq = [x[0] for x in raw_data]
         raw_col_seq = [x[1] for x in raw_data]
         query_gt, table_ids = to_batch_query(sql_data, perm, st, ed)

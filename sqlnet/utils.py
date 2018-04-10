@@ -61,7 +61,6 @@ def load_data_new(sql_paths, table_paths, use_small=False):
             file_name = get_main_file_name(SQL_PATH)
             if file_name:
                 sql_data[file_name] = lower_keys(json.load(inf))
-    print >> sys.stderr, json.dumps(sql_data, indent=4)
     return sql_data, table_data
 
 def load_data(sql_paths, table_paths, use_small=False, tao=False):
@@ -71,8 +70,6 @@ def load_data(sql_paths, table_paths, use_small=False, tao=False):
         table_paths = (table_paths, )
     sql_data = []
     table_data = {}
-    print sql_paths
-    print table_paths
     max_col_num = 0
     for SQL_PATH in sql_paths:
         print "Loading data from %s"%SQL_PATH
@@ -81,7 +78,6 @@ def load_data(sql_paths, table_paths, use_small=False, tao=False):
                 for idx, line in enumerate(inf):
                     if use_small and idx >= 1000:
                         break
-                    print line
                     sql = json.loads(line.strip())
                     sql_data.append(sql)
             else:
@@ -98,7 +94,6 @@ def load_data(sql_paths, table_paths, use_small=False, tao=False):
             else:
                 tab = json.loads(inf)
                 table_data[tab[u'id']] = tab
-    print json.dumps(table_data, indent=4)
     for sql in sql_data:
         assert sql[u'table_id'] in table_data
 

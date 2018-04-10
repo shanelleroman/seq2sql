@@ -223,6 +223,8 @@ class Seq2SQL(nn.Module):
         agg_ops = ['None', 'MAX', 'MIN', 'COUNT', 'SUM', 'AVG']
         for b, (pred_qry, gt_qry) in enumerate(zip(pred_queries, gt_queries)):
             good = True
+            print 'pred_qry', pred_qry
+            print 'gt_qry', gt_qry
             if pred_agg:
                 agg_pred = pred_qry['agg']
                 agg_gt = gt_qry['agg']
@@ -279,6 +281,7 @@ class Seq2SQL(nn.Module):
 
     def gen_query(self, score, q, col, raw_q, raw_col, pred_entry,
                   reinforce=False, verbose=False):
+        print raw_q
         def merge_tokens(tok_list, raw_tok_str):
             tok_str = raw_tok_str.lower()
             alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789$('
@@ -372,6 +375,9 @@ class Seq2SQL(nn.Module):
                         cur_cond[1] = 0
                     sel_col = cond_toks[st:op]
                     to_idx = [x.lower() for x in raw_col[b]]
+                    print 'sel_col', sel_col
+                    print 'raw_q[b], ', raw_q[b]
+                    print 'raw_col[b]', raw_col[b]
                     pred_col = merge_tokens(sel_col, raw_q[b] + ' || ' + \
                                             ' || '.join(raw_col[b]))
                     if pred_col in to_idx:
