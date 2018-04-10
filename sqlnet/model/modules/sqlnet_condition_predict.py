@@ -174,11 +174,13 @@ class SQLNetCondPredictor(nn.Module):
         #Predict the operator of conditions
         chosen_col_gt = []
         if gt_cond is None:
+            print 'gt_cond not given'
             cond_nums = np.argmax(cond_num_score.data.cpu().numpy(), axis=1)
             col_scores = cond_col_score.data.cpu().numpy()
             chosen_col_gt = [list(np.argsort(-col_scores[b])[:cond_nums[b]])
                     for b in range(len(cond_nums))]
         else:
+            print 'gt_cond given'
             chosen_col_gt = [ [x[0] for x in one_gt_cond] for 
                     one_gt_cond in gt_cond]
 
@@ -225,6 +227,7 @@ class SQLNetCondPredictor(nn.Module):
         col_emb = torch.stack(col_emb)
 
         if gt_where is not None:
+            print 'gt_where given'
             gt_tok_seq, gt_tok_len = self.gen_gt_batch(gt_where)
             g_str_s_flat, _ = self.cond_str_decoder(
                     gt_tok_seq.view(B*4, -1, self.max_tok_num))
@@ -237,10 +240,12 @@ class SQLNetCondPredictor(nn.Module):
             cond_str_score = self.cond_str_out(
                     self.cond_str_out_h(h_ext) + self.cond_str_out_g(g_ext) +
                     self.cond_str_out_col(col_ext)).squeeze()
+            print list(cond_str_score.size())
             for b, num in enumerate(x_len):
                 if num < max_x_len:
                     cond_str_score[b, :, :, num:] = -100
         else:
+            print 'gt_where not given'
             h_ext = h_str_enc.unsqueeze(1).unsqueeze(1)
             col_ext = col_emb.unsqueeze(2).unsqueeze(2)
             scores = []
@@ -282,10 +287,10 @@ class SQLNetCondPredictor(nn.Module):
                 t += 1
 
             cond_str_score = torch.stack(scores, 2)
+            print list(cond_str_score.size())
             for b, num in enumerate(x_len):
                 if num < max_x_len:
                     cond_str_score[b, :, :, num:] = -100  #[B, IDX, T, TOK_NUM]
-
         cond_score = (cond_num_score,
                 cond_col_score, cond_op_score, cond_str_score)
 

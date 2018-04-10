@@ -13,6 +13,7 @@ TRAIN_EXT = '/train'
 DEV_EXT = '/dev'
 TABLE_EXT = '/tables'
 
+
 class agg(Enum):
     none = 0
     mx = 1
@@ -20,8 +21,6 @@ class agg(Enum):
     count = 3
     sm = 4
     avg = 5
- 
-
 
 def lower_keys(x):
     if isinstance(x, list):
@@ -58,6 +57,7 @@ def get_tables_for_sql(orig_path, train=0):
     sql_data = [SQL_PATH + '/' + file + '.json'for file in sql_data]
 
     return sorted(sql_data), sorted(table_data) 
+
 def safe_list_get(lst, index, default=None):
     try:
         return lst[index]
@@ -87,12 +87,12 @@ def clean_table_data(json_data, use_small=False):
     table_data = {}
     for database_name in json_data.keys():
         database = {}
-        database['rows'] = []
-        database['page_title'] = ''
-        database['section_title'] = ''
+        # database['rows'] = []
+        # database['page_title'] = ''
+        # database['section_title'] = ''
         database['table_name'] = []
         database['table_name_tok'] = []
-        database['foreign_key'] = []
+        database['foreign_key'] = [] # info not available yet
         
         header = []
         types = []
@@ -108,7 +108,7 @@ def clean_table_data(json_data, use_small=False):
         database['table_name'] = table_names
         database['table_name_tok'] = [word_tokenize(table) for table in database['table_name']]
         table_data[database_name] = database
-    #print json.dumps(table_data, indent=4)
+    # print 'table data: \n', json.dumps(table_data, indent=4)
     return table_data
 
 def convert_colnames_colnum(cleaned_data_item, table_data, col_names, table_name, select=False):
@@ -128,13 +128,11 @@ def convert_colnames_colnum(cleaned_data_item, table_data, col_names, table_name
                 break
     return column_numbers
 
-
-
-
 def get_select_indices(cleaned_data_item, table_data):
     query_tok = cleaned_data_item['query_tok']
+    print query_tok
     orig_col_names = query_tok[query_tok.index('select') + 1:query_tok.index('from')]
-    table_name =  query_tok[query_tok.index('from') + 1]
+    table_name =  query_tok[query_tok.index('from') + 1] # needs to take all table names, otherwise fails on certain joins
     to_delete = ['max', 'min', 'count', 'sum', 'avg', 'distinct', ',', '(', ')']
     for item in to_delete:
         try:
@@ -148,8 +146,6 @@ def get_select_indices(cleaned_data_item, table_data):
             col_names[i] = pattern.search(item).group(2)
     # names of columns --> column_numbers!
     return orig_col_names, convert_colnames_colnum(cleaned_data_item, table_data, col_names, table_name, select=True)
-
-
 
 def get_agg_codes(query, col_names, star=True):
     agg_ops = ['(max)\((.+?)\)', '(min)\((.+?)\)', '(count)\((.+?)\)', '(sum)\((.+?)\)', '(avg)\((.+?)\)']
@@ -181,7 +177,7 @@ def add_sql_item_to_data(cleaned_data_item, table_data):
         from: [...? what is here now]
     }
     '''
-    print cleaned_data_item
+    # print cleaned_data_item
     query = cleaned_data_item['query']
     col_names, select_indices = get_select_indices(cleaned_data_item, table_data)
     star = False
@@ -189,10 +185,57 @@ def add_sql_item_to_data(cleaned_data_item, table_data):
         col_names = table_data[cleaned_data_item['table_id']]['header']
         star = True
     agg_codes = get_agg_codes(query, col_names)
+
+    #get conds
     conds = []
+    query_tok = cleaned_data_item['query_tok'] + ['<TEMP>']
+    if 'where' in query_tok and 'not' not in query_tok: #temporarily disregard not 
+        where_clause = query_tok[query_tok.index('where') + 1:query_tok.index('<TEMP>')]
+        and_inds = [ind for ind, tok in enumerate(where_clause) if tok == 'and' or tok == 'or']
+        st_inds = [0] + [ind + 1 for ind in and_inds]
+        end_inds = [ind for ind in and_inds] + [len(where_clause)]
+        where_ops = ['=', '>', '<', '>=', '<=', 'in'] #worry about not in later
+
+        pos = 0
+        for (st, ed) in zip(st_inds, end_inds):
+            curr = [0, 0, 0]
+            curr_cond = where_clause[st:ed]
+            # print curr_cond
+
+            op_ind = None
+            for i, op in enumerate(where_ops):
+                try:
+                    temp_ind = curr_cond.index(op)
+                except ValueError:
+                    temp_ind = None
+                if temp_ind is not None:
+                    op_ind = curr_cond.index(op)
+                    curr[1] = i
+                    pos += st + op_ind 
+
+            col = where_clause[st:op_ind] #hopefully just 1 token
+            for c in col:
+                if '.' in c:
+                    per_ind = c.find('.')####
+                    # print c
+                    c = c[per_ind + 1:]
+                    # print c
+
+                if c in table_data[cleaned_data_item['table_id']]['header']:
+                    curr[0] = table_data[cleaned_data_item['table_id']]['header'].index(c) + 1
+                    break
+
+            val = curr_cond[op_ind + 1:] #hopefully just 1 token
+            # print 'val', val
+            curr[2] = ''.join(val)
+
+            conds += [curr]
+            # print conds
+
+    print agg_codes
+    print col_names, select_indices
     cleaned_data_item['sql'] = {'agg': agg_codes[0], 'sel': select_indices[0], 'conds': conds}
-    
-    
+
 
 def clean_sql_data(json_data, table_data, use_small=False):
     #NOTE: should only be called after clean_table_data
@@ -235,7 +278,7 @@ def clean_sql_data(json_data, table_data, use_small=False):
     #     for table in item['table_ids'][0]:
     #         specific_table_data[table] = table_data[item['database_name']][table]
     
-    print json.dumps(sql_data, indent=4)
+    # print json.dumps(sql_data, indent=4)
     return sql_data
         #_ed_data['query_2'] = database['data']['sqa']['sql'][1]
         #eaned_data['query_3'] = safe_list_get(database['data']['sqa']['sql'], 2)
@@ -266,6 +309,7 @@ def load_data_new(sql_paths, table_paths, use_small=False):
             file_name = get_main_table_name(TABLE_PATH)
             if file_name:
                 table_data[file_name] = lower_keys(json.load(inf))
+    # print sql_data, table_data
     return sql_data, table_data
 
 def load_data(sql_paths, table_paths, use_small=False, tao=False):
@@ -435,9 +479,11 @@ def to_batch_query(sql_data, idxes, st, ed):
     for i in range(st, ed):
         query_gt.append(sql_data[idxes[i]]['sql'])
         table_ids.append(sql_data[idxes[i]]['table_id'])
+    # print query_gt
     return query_gt, table_ids
 
 def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
+    print 'training'
     model.train()
     perm=np.random.permutation(len(sql_data))
     cum_loss = 0.0
@@ -449,6 +495,7 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
                 to_batch_seq(sql_data, table_data, perm, st, ed)
         gt_where_seq = model.generate_gt_where_seq(q_seq, col_seq, query_seq)
         gt_sel_seq = [x[1] for x in ans_seq]
+        print q_seq
         score = model.forward(q_seq, col_seq, col_num, pred_entry,
                 gt_where=gt_where_seq, gt_cond=gt_cond_seq, gt_sel=gt_sel_seq)
         loss = model.loss(score, ans_seq, pred_entry, gt_where_seq)
@@ -463,6 +510,7 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
 
 def epoch_exec_acc(model, batch_size, sql_data, table_data, db_path):
     engine = DBEngine(db_path)
+    print 'exec acc'
 
     model.eval()
     perm = list(range(len(sql_data)))
@@ -499,6 +547,7 @@ def epoch_exec_acc(model, batch_size, sql_data, table_data, db_path):
     return tot_acc_num / len(sql_data)
 
 def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry):
+    print 'epoch_acc_new'
     model.eval()
     perm = list(range(len(sql_data)))
     st = 0
@@ -524,7 +573,6 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry):
         st = ed
     return tot_acc_num / len(sql_data), one_acc_num / len(sql_data)
 def epoch_acc(model, batch_size, sql_data, table_data, pred_entry):
-    print 'epoch_acc_new'
     model.eval()
     perm = list(range(len(sql_data)))
     st = 0
@@ -543,6 +591,7 @@ def epoch_acc(model, batch_size, sql_data, table_data, pred_entry):
                 raw_q_seq, raw_col_seq, pred_entry)
         one_err, tot_err = model.check_acc(raw_data,
                 pred_queries, query_gt, pred_entry)
+        # print zip(pred_queries, query_gt)
 
         one_acc_num += (ed-st-one_err)
         tot_acc_num += (ed-st-tot_err)

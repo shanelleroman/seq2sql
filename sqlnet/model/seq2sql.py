@@ -79,8 +79,8 @@ class Seq2SQL(nn.Module):
             connect_col = [tok for col_tok in cur_col for tok in col_tok+[',']]
             all_toks = self.SQL_TOK + connect_col + [None] + cur_q + [None]
             cur_seq = [all_toks.index('<BEG>')]
-            if 'WHERE' in cur_query:
-                cur_where_query = cur_query[cur_query.index('WHERE'):]
+            if 'where' in cur_query:
+                cur_where_query = cur_query[cur_query.index('where'):]
                 cur_seq = cur_seq + map(lambda tok:all_toks.index(tok)
                                         if tok in all_toks else 0, cur_where_query)
             cur_seq.append(all_toks.index('<END>'))
@@ -345,6 +345,7 @@ class Seq2SQL(nn.Module):
                             break
                         cond_toks.append(cond_val)
                 else:
+                    print 'making where'
                     for where_score in cond_score[b].data.cpu().numpy():
                         cond_tok = np.argmax(where_score)
                         cond_val = all_toks[cond_tok]
@@ -359,16 +360,16 @@ class Seq2SQL(nn.Module):
                 st = 0
                 while st < len(cond_toks):
                     cur_cond = [None, None, None]
-                    ed = len(cond_toks) if 'AND' not in cond_toks[st:] \
-                         else cond_toks[st:].index('AND') + st
-                    if 'EQL' in cond_toks[st:ed]:
-                        op = cond_toks[st:ed].index('EQL') + st
+                    ed = len(cond_toks) if 'and' not in cond_toks[st:] \
+                         else cond_toks[st:].index('and') + st
+                    if '=' in cond_toks[st:ed]:
+                        op = cond_toks[st:ed].index('=') + st
                         cur_cond[1] = 0
-                    elif 'GT' in cond_toks[st:ed]:
-                        op = cond_toks[st:ed].index('GT') + st
+                    elif '>' in cond_toks[st:ed]:
+                        op = cond_toks[st:ed].index('>') + st
                         cur_cond[1] = 1
-                    elif 'LT' in cond_toks[st:ed]:
-                        op = cond_toks[st:ed].index('LT') + st
+                    elif '<' in cond_toks[st:ed]:
+                        op = cond_toks[st:ed].index('<') + st
                         cur_cond[1] = 2
                     else:
                         op = st

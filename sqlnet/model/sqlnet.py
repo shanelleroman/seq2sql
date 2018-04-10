@@ -63,18 +63,18 @@ class SQLNet(nn.Module):
         ret_seq = []
         for cur_q, cur_col, cur_query in zip(q, col, query):
             cur_values = []
-            st = cur_query.index(u'WHERE')+1 if \
-                    u'WHERE' in cur_query else len(cur_query)
+            st = cur_query.index(u'where')+1 if \
+                    u'where' in cur_query else len(cur_query)
             all_toks = ['<BEG>'] + cur_q + ['<END>']
             while st < len(cur_query):
-                ed = len(cur_query) if 'AND' not in cur_query[st:]\
-                        else cur_query[st:].index('AND') + st
-                if 'EQL' in cur_query[st:ed]:
-                    op = cur_query[st:ed].index('EQL') + st
-                elif 'GT' in cur_query[st:ed]:
-                    op = cur_query[st:ed].index('GT') + st
-                elif 'LT' in cur_query[st:ed]:
-                    op = cur_query[st:ed].index('LT') + st
+                ed = len(cur_query) if 'and' not in cur_query[st:]\
+                        else cur_query[st:].index('and') + st
+                if '=' in cur_query[st:ed]:
+                    op = cur_query[st:ed].index('=') + st
+                elif '>' in cur_query[st:ed]:
+                    op = cur_query[st:ed].index('>') + st
+                elif '<' in cur_query[st:ed]:
+                    op = cur_query[st:ed].index('<') + st
                 else:
                     raise RuntimeError("No operator in it!")
                 this_str = ['<BEG>'] + cur_query[op+1:ed] + ['<END>']
@@ -83,6 +83,7 @@ class SQLNet(nn.Module):
                 cur_values.append(cur_seq)
                 st = ed+1
             ret_seq.append(cur_values)
+        # print 'ret_seq', ret_seq
         return ret_seq
 
 
@@ -368,6 +369,7 @@ class SQLNet(nn.Module):
                 cond_num_score,cond_col_score,cond_op_score,cond_str_score =\
                         [x.data.cpu().numpy() for x in cond_score]
                 cond_num = np.argmax(cond_num_score[b])
+                # print cond_num
                 all_toks = ['<BEG>'] + q[b] + ['<END>']
                 max_idxes = np.argsort(-cond_col_score[b])[:cond_num]
                 for idx in range(cond_num):

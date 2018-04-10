@@ -36,7 +36,7 @@ if __name__ == '__main__':
         USE_SMALL=False
         GPU=True
         BATCH_SIZE=64
-    TRAIN_ENTRY=(True, True, False)  # (AGG, SEL, COND) # TODDO - change last one to False
+    TRAIN_ENTRY=(True, True, True)  # (AGG, SEL, COND) # TODDO - change last one to False
     TRAIN_AGG, TRAIN_SEL, TRAIN_COND = TRAIN_ENTRY
     learning_rate = 1e-4 if args.rl else 1e-3
 
