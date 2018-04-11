@@ -99,7 +99,7 @@ class Seq2SQL(nn.Module):
 
         if self.trainable_emb:
             if pred_agg:
-                x_emb_var, x_len = self.agg_embed_layer.gen_x_batch(q, col)
+                x_emb_var, x_len = self.agg_embed_layer.gen_x_batch(q, col) # get the word embeddings
                 batch = self.agg_embed_layer.gen_col_batch(col)
                 col_inp_var, col_name_len, col_len = batch
                 max_x_len = max(x_len)
@@ -143,28 +143,45 @@ class Seq2SQL(nn.Module):
         return (agg_score, sel_score, cond_score)
 
     def loss(self, score, truth_num, pred_entry, gt_where):
+        # print 'score', score
+        #print 'truth_num', truth_num
+        # print 'pred_entry', pred_entry
+        # print 'gt_where', gt_where
+        # print 'loss called'
         pred_agg, pred_sel, pred_cond = pred_entry
         agg_score, sel_score, cond_score = score
         loss = 0
         if pred_agg:
             agg_truth = map(lambda x:x[0], truth_num)
-            data = torch.from_numpy(np.array(agg_truth))
+            
+            #agg_truth=np.array([np.array(xi) for xi in agg_truth])
+            data = torch.from_numpy(np.array(agg_truth)) #TODO: change
+            #data = torch.from_numpy(np.array(agg_truth))
             if self.gpu:
                 agg_truth_var = Variable(data.cuda())
             else:
                 agg_truth_var = Variable(data)
-
             loss += self.CE(agg_score, agg_truth_var)
 
         if pred_sel:
             sel_truth = map(lambda x:x[1], truth_num)
-            data = torch.from_numpy(np.array(sel_truth))
+            max_len = len(max(sel_truth,key=len))
+            sel_truth_new = np.zeros([len(sel_truth),len(max(sel_truth,key = lambda x: len(x)))],  dtype=np.int64)
+            for i,j in enumerate(sel_truth):
+                sel_truth_new[i][0:len(j)] = j
+            # print 'truth_num', truth_num
+            data = torch.from_numpy(sel_truth_new)
             if self.gpu:
                 sel_truth_var = Variable(data).cuda()
             else:
                 sel_truth_var = Variable(data)
+            # print 'sel_truth_var.size()', sel_truth_var.size()
 
-            loss += self.CE(sel_score, sel_truth_var)
+            for i in range(sel_truth_var.size()[1]):
+                loss += self.CE(sel_score, sel_truth_var[:,i])
+            # for row in sel_truth_var:
+            #     loss += self.CE(sel_score, row)
+            #loss += self.CE(sel_score, sel_truth_var)
 
         if pred_cond:
             for b in range(len(gt_where)):
@@ -223,18 +240,20 @@ class Seq2SQL(nn.Module):
         agg_ops = ['None', 'MAX', 'MIN', 'COUNT', 'SUM', 'AVG']
         for b, (pred_qry, gt_qry) in enumerate(zip(pred_queries, gt_queries)):
             good = True
-            print 'pred_qry', pred_qry
-            print 'gt_qry', gt_qry
+            # print 'pred_qry', pred_qry
+            # print 'gt_qry', gt_qry
             if pred_agg:
                 agg_pred = pred_qry['agg']
                 agg_gt = gt_qry['agg']
-                if agg_pred != agg_gt:
+                if [agg_pred] != agg_gt:
                     agg_err += 1
                     good = False
 
             if pred_sel:
                 sel_pred = pred_qry['sel']
                 sel_gt = gt_qry['sel']
+                # print "predicted ", sel_pred
+                # print sel_gt
                 if sel_pred != sel_gt:
                     sel_err += 1
                     good = False
@@ -281,7 +300,8 @@ class Seq2SQL(nn.Module):
 
     def gen_query(self, score, q, col, raw_q, raw_col, pred_entry,
                   reinforce=False, verbose=False):
-        print raw_q
+        k = 2 #hyperparameter
+        #print raw_q
         def merge_tokens(tok_list, raw_tok_str):
             tok_str = raw_tok_str.lower()
             alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789$('
@@ -326,9 +346,19 @@ class Seq2SQL(nn.Module):
         for b in range(B):
             cur_query = {}
             if pred_agg:
+                #agg_score_arr = agg_score[b].data.cpu().numpy().argsort()[]
                 cur_query['agg'] = np.argmax(agg_score[b].data.cpu().numpy())
             if pred_sel:
-                cur_query['sel'] = np.argmax(sel_score[b].data.cpu().numpy())
+                sel_score_lst = sel_score[b].data.cpu().numpy().tolist()
+                print 'sel_score_lst', sel_score_lst 
+                indices = [i for i, x in enumerate(sel_score_lst) if x > 0.15] # doesn't really work
+
+                cur_query['sel'] = [sel_score_lst[i] for i in indices]
+                print cur_query['sel']
+                if not cur_query['sel']:
+                    cur_query['sel'] = [np.argmax(sel_score[b].data.cpu().numpy())]
+                print 'index_column_selected', cur_query['sel']
+                # cur_query['sel'] = sel_score[b].data.cpu().numpy().argsort()[:k].tolist() # this is where they pick the best column
             if pred_cond:
                 cur_query['conds'] = []
                 all_toks = self.SQL_TOK + \
@@ -345,7 +375,7 @@ class Seq2SQL(nn.Module):
                             break
                         cond_toks.append(cond_val)
                 else:
-                    print 'making where'
+                    #print 'making where'
                     for where_score in cond_score[b].data.cpu().numpy():
                         cond_tok = np.argmax(where_score)
                         cond_val = all_toks[cond_tok]
@@ -376,9 +406,9 @@ class Seq2SQL(nn.Module):
                         cur_cond[1] = 0
                     sel_col = cond_toks[st:op]
                     to_idx = [x.lower() for x in raw_col[b]]
-                    print 'sel_col', sel_col
-                    print 'raw_q[b], ', raw_q[b]
-                    print 'raw_col[b]', raw_col[b]
+                    # print 'sel_col', sel_col
+                    # print 'raw_q[b], ', raw_q[b]
+                    # print 'raw_col[b]', raw_col[b]
                     pred_col = merge_tokens(sel_col, raw_q[b] + ' || ' + \
                                             ' || '.join(raw_col[b]))
                     if pred_col in to_idx:
@@ -388,6 +418,7 @@ class Seq2SQL(nn.Module):
                     cur_cond[2] = merge_tokens(cond_toks[op+1:ed], raw_q[b])
                     cur_query['conds'].append(cur_cond)
                     st = ed + 1
+                    print cur_query
             ret_queries.append(cur_query)
 
         return ret_queries

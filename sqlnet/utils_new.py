@@ -84,6 +84,7 @@ def clean_table_data(json_data, use_small=False):
     foreign_key: [(column_1, column_2), (,), ...]
     }
     '''
+    print 'clean_table_data'
     table_data = {}
     for database_name in json_data.keys():
         database = {}
@@ -232,13 +233,15 @@ def add_sql_item_to_data(cleaned_data_item, table_data):
             conds += [curr]
             # print conds
 
-    print agg_codes
-    print col_names, select_indices
-    cleaned_data_item['sql'] = {'agg': agg_codes[0], 'sel': select_indices[0], 'conds': conds}
+    # print agg_codes
+    # print col_names, select_indices
+    # print 'agg_codes'
+    cleaned_data_item['sql'] = {'agg': agg_codes[0], 'sel': select_indices, 'conds': conds}
 
 
 def clean_sql_data(json_data, table_data, use_small=False):
-    #NOTE: should only be called after clean_table_data
+    #print 'clean_sql_data'
+    #NOTE: should only be reaalled after clean_table_data
     '''
     sql_data_json_schema: 
     [{ 
@@ -266,10 +269,13 @@ def clean_sql_data(json_data, table_data, use_small=False):
             #cleaned_data['table_ids'] = [get_table_names_from_query(query_tok,select=False) for query_tok in cleaned_data['query_tok']]
             #cleaned_data['selected_table'] = [get_table_names_from_query(query_tok, select=True) for query_tok in cleaned_data['query_tok']]
             cleaned_data['question_tok'] = word_tokenize(cleaned_data['question'].lower())
-            
+            # try:
+                # if cleaned_data['query_tok'].index('where')  ==  cleaned_data['query_tok'].index('from') + 1:
             sql_data.append(cleaned_data)
             add_sql_item_to_data(cleaned_data, table_data)
             count += 1
+            # except ValueError:
+            #     continue
         if exit:
             break  
     # for item in sql_data:
@@ -279,6 +285,7 @@ def clean_sql_data(json_data, table_data, use_small=False):
     #         specific_table_data[table] = table_data[item['database_name']][table]
     
     # print json.dumps(sql_data, indent=4)
+    #print len(sql_data)
     return sql_data
         #_ed_data['query_2'] = database['data']['sqa']['sql'][1]
         #eaned_data['query_3'] = safe_list_get(database['data']['sqa']['sql'], 2)
@@ -495,9 +502,15 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
                 to_batch_seq(sql_data, table_data, perm, st, ed)
         gt_where_seq = model.generate_gt_where_seq(q_seq, col_seq, query_seq)
         gt_sel_seq = [x[1] for x in ans_seq]
-        print q_seq
+        #print q_seq
         score = model.forward(q_seq, col_seq, col_num, pred_entry,
                 gt_where=gt_where_seq, gt_cond=gt_cond_seq, gt_sel=gt_sel_seq)
+        
+        # print 'score', score
+        # print 'ans_seq', ans_seq
+        # print 'pred_entry', pred_entry
+        # print 'gt_where_seq', gt_where_seq
+        # print 'loss about to called'
         loss = model.loss(score, ans_seq, pred_entry, gt_where_seq)
         cum_loss += loss.data.cpu().numpy()[0]*(ed - st)
         optimizer.zero_grad()

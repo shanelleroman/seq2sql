@@ -1,0 +1,3015 @@
+Loading from original dataset
+Loading data from data/train_tok.jsonl
+Loading data from data/train_tok.tables.jsonl
+Loading data from data/dev_tok.jsonl
+Loading data from data/dev_tok.tables.jsonl
+Loading data from data/test_tok.jsonl
+Loading data from data/test_tok.tables.jsonl
+Loading word embedding from glove/glove.42B.300d.txt
+Using fixed embedding
+Not using column attention on aggregator predicting
+Not using column attention on selection predicting
+Seq2SQL where prediction
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [0, 5]
+3
+predicted  [0, 5]
+5
+predicted  [0, 5]
+5
+predicted  [0, 5]
+0
+predicted  [0, 5]
+0
+predicted  [0, 5]
+0
+predicted  [0, 5]
+5
+predicted  [0, 5]
+1
+predicted  [0, 5]
+3
+predicted  [0, 5]
+2
+predicted  [0, 5]
+5
+predicted  [5, 0]
+2
+predicted  [5, 0]
+0
+predicted  [5, 4]
+0
+predicted  [5, 4]
+4
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [5, 6]
+3
+predicted  [5, 6]
+3
+predicted  [5, 6]
+1
+predicted  [5, 6]
+3
+predicted  [7, 8]
+5
+predicted  [7, 8]
+1
+predicted  [3, 4]
+5
+predicted  [5, 6]
+4
+predicted  [5, 6]
+4
+predicted  [5, 6]
+0
+predicted  [5, 6]
+4
+predicted  [5, 6]
+1
+predicted  [5, 6]
+0
+predicted  [6, 5]
+2
+predicted  [6, 7]
+5
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [6, 3]
+1
+predicted  [6, 3]
+5
+predicted  [6, 3]
+4
+predicted  [6, 3]
+4
+predicted  [0, 2]
+5
+predicted  [0, 2]
+6
+predicted  [0, 2]
+1
+predicted  [0, 2]
+1
+predicted  [0, 2]
+2
+predicted  [0, 2]
+4
+predicted  [4, 5]
+0
+predicted  [4, 5]
+4
+predicted  [4, 5]
+6
+predicted  [4, 5]
+0
+predicted  [4, 5]
+5
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [7, 8]
+3
+predicted  [6, 7]
+8
+predicted  [6, 7]
+0
+predicted  [6, 7]
+5
+predicted  [6, 7]
+8
+predicted  [6, 7]
+6
+predicted  [7, 8]
+0
+predicted  [7, 8]
+5
+predicted  [7, 8]
+4
+predicted  [7, 8]
+1
+predicted  [7, 8]
+3
+predicted  [5, 6]
+2
+predicted  [6, 7]
+4
+predicted  [6, 7]
+4
+predicted  [6, 7]
+4
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [5, 6]
+0
+predicted  [5, 6]
+2
+predicted  [5, 6]
+0
+predicted  [5, 6]
+0
+predicted  [5, 6]
+0
+predicted  [5, 6]
+0
+predicted  [2, 8]
+3
+predicted  [2, 8]
+6
+predicted  [2, 8]
+4
+predicted  [2, 8]
+7
+predicted  [6, 7]
+1
+predicted  [6, 7]
+5
+predicted  [6, 7]
+0
+predicted  [6, 7]
+3
+predicted  [6, 7]
+0
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [6, 5]
+2
+predicted  [6, 1]
+3
+predicted  [5, 6]
+2
+predicted  [5, 6]
+3
+predicted  [5, 6]
+0
+predicted  [0, 4]
+5
+predicted  [0, 4]
+1
+predicted  [0, 4]
+1
+predicted  [5, 6]
+3
+predicted  [5, 6]
+3
+predicted  [5, 6]
+2
+predicted  [5, 6]
+2
+predicted  [5, 6]
+0
+predicted  [6, 0]
+2
+predicted  [6, 0]
+5
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [6, 0]
+4
+predicted  [6, 0]
+1
+predicted  [0, 4]
+6
+predicted  [0, 4]
+2
+predicted  [0, 4]
+0
+predicted  [0, 4]
+6
+predicted  [0, 4]
+2
+predicted  [0, 4]
+3
+predicted  [0, 6]
+6
+predicted  [0, 6]
+3
+predicted  [0, 6]
+2
+predicted  [0, 6]
+3
+predicted  [0, 6]
+4
+predicted  [4, 5]
+0
+predicted  [4, 5]
+4
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [7, 8]
+6
+predicted  [7, 8]
+3
+predicted  [5, 6]
+4
+predicted  [5, 6]
+3
+predicted  [5, 6]
+4
+predicted  [5, 6]
+1
+predicted  [5, 6]
+0
+predicted  [7, 8]
+0
+predicted  [7, 8]
+3
+predicted  [7, 8]
+3
+predicted  [7, 8]
+4
+predicted  [7, 8]
+5
+predicted  [7, 8]
+2
+predicted  [8, 5]
+4
+predicted  [8, 5]
+3
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [4, 8]
+5
+predicted  [4, 8]
+8
+predicted  [6, 7]
+4
+predicted  [6, 7]
+5
+predicted  [6, 7]
+1
+predicted  [6, 7]
+0
+predicted  [6, 7]
+1
+predicted  [6, 7]
+2
+predicted  [6, 7]
+2
+predicted  [6, 7]
+5
+predicted  [5, 6]
+3
+predicted  [5, 6]
+1
+predicted  [7, 8]
+1
+predicted  [7, 8]
+4
+predicted  [7, 8]
+6
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [6, 3]
+4
+predicted  [6, 3]
+3
+predicted  [6, 3]
+3
+predicted  [6, 3]
+3
+predicted  [6, 3]
+4
+predicted  [6, 3]
+3
+predicted  [1, 6]
+5
+predicted  [1, 6]
+2
+predicted  [1, 6]
+5
+predicted  [6, 5]
+3
+predicted  [6, 5]
+3
+predicted  [6, 5]
+1
+predicted  [6, 5]
+3
+predicted  [6, 5]
+3
+predicted  [6, 5]
+4
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [0, 1]
+5
+predicted  [0, 1]
+2
+predicted  [0, 1]
+4
+predicted  [0, 1]
+3
+predicted  [0, 1]
+0
+predicted  [0, 1]
+1
+predicted  [0, 1]
+2
+predicted  [5, 1]
+0
+predicted  [5, 1]
+2
+predicted  [5, 1]
+0
+predicted  [5, 1]
+1
+predicted  [5, 0]
+2
+predicted  [5, 4]
+3
+predicted  [5, 4]
+2
+predicted  [5, 4]
+0
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [5, 6]
+0
+predicted  [5, 6]
+4
+predicted  [5, 6]
+1
+predicted  [2, 8]
+1
+predicted  [2, 8]
+4
+predicted  [2, 8]
+2
+predicted  [2, 8]
+2
+predicted  [0, 4]
+7
+predicted  [0, 4]
+7
+predicted  [0, 4]
+2
+predicted  [0, 4]
+2
+predicted  [0, 4]
+1
+predicted  [0, 4]
+4
+predicted  [0, 4]
+6
+predicted  [0, 4]
+1
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [0, 4]
+5
+predicted  [0, 4]
+3
+predicted  [0, 4]
+7
+predicted  [2, 4]
+7
+predicted  [2, 4]
+0
+predicted  [2, 4]
+8
+predicted  [6, 7]
+4
+predicted  [6, 7]
+1
+predicted  [6, 7]
+5
+predicted  [6, 7]
+1
+predicted  [0, 2]
+6
+predicted  [0, 2]
+5
+predicted  [0, 2]
+0
+predicted  [0, 2]
+4
+predicted  [0, 2]
+0
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [0, 2]
+2
+predicted  [6, 7]
+1
+predicted  [6, 7]
+3
+predicted  [6, 7]
+4
+predicted  [6, 7]
+1
+predicted  [6, 7]
+4
+predicted  [6, 7]
+5
+predicted  [6, 7]
+1
+predicted  [6, 7]
+2
+predicted  [6, 7]
+2
+predicted  [6, 7]
+2
+predicted  [6, 7]
+1
+predicted  [7, 8]
+6
+predicted  [7, 8]
+5
+predicted  [6, 7]
+2
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [6, 7]
+0
+predicted  [6, 7]
+4
+predicted  [6, 7]
+1
+predicted  [6, 7]
+2
+predicted  [6, 7]
+0
+predicted  [9, 3]
+8
+predicted  [9, 3]
+7
+predicted  [9, 3]
+6
+predicted  [9, 3]
+1
+predicted  [0, 9]
+4
+predicted  [0, 9]
+3
+predicted  [0, 9]
+6
+predicted  [0, 9]
+4
+predicted  [0, 6]
+8
+predicted  [0, 6]
+9
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [0, 6]
+0
+predicted  [0, 6]
+7
+predicted  [0, 6]
+2
+predicted  [5, 6]
+3
+predicted  [5, 6]
+4
+predicted  [5, 6]
+1
+predicted  [5, 6]
+1
+predicted  [5, 6]
+2
+predicted  [5, 6]
+2
+predicted  [5, 6]
+2
+predicted  [5, 6]
+0
+predicted  [5, 6]
+0
+predicted  [5, 6]
+3
+predicted  [5, 6]
+3
+predicted  [5, 6]
+3
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [5, 6]
+4
+predicted  [5, 6]
+0
+predicted  [5, 6]
+2
+predicted  [5, 6]
+2
+predicted  [1, 9]
+0
+predicted  [1, 9]
+0
+predicted  [1, 9]
+0
+predicted  [6, 7]
+1
+predicted  [6, 7]
+2
+predicted  [7, 8]
+6
+predicted  [7, 8]
+4
+predicted  [7, 8]
+6
+predicted  [7, 8]
+3
+predicted  [7, 8]
+0
+predicted  [7, 8]
+5
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [7, 8]
+2
+predicted  [7, 8]
+5
+predicted  [7, 8]
+5
+predicted  [5, 6]
+3
+predicted  [5, 6]
+0
+predicted  [5, 6]
+0
+predicted  [5, 6]
+1
+predicted  [12, 0]
+9
+predicted  [12, 0]
+10
+predicted  [12, 0]
+6
+predicted  [12, 0]
+8
+predicted  [12, 0]
+8
+predicted  [12, 0]
+10
+predicted  [5, 3]
+4
+predicted  [5, 3]
+0
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [5, 3]
+12
+predicted  [7, 8]
+4
+predicted  [7, 8]
+5
+predicted  [7, 8]
+2
+predicted  [7, 8]
+4
+predicted  [7, 8]
+0
+predicted  [6, 7]
+0
+predicted  [6, 7]
+1
+predicted  [6, 7]
+0
+predicted  [10, 11]
+4
+predicted  [10, 11]
+8
+predicted  [10, 11]
+7
+predicted  [10, 11]
+6
+predicted  [10, 11]
+2
+predicted  [7, 8]
+5
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [2, 0]
+1
+predicted  [2, 0]
+5
+predicted  [2, 0]
+0
+predicted  [2, 0]
+3
+predicted  [2, 3]
+0
+predicted  [2, 3]
+2
+predicted  [2, 3]
+5
+predicted  [2, 3]
+2
+predicted  [2, 3]
+4
+predicted  [2, 3]
+5
+predicted  [2, 3]
+0
+predicted  [2, 3]
+0
+predicted  [2, 3]
+4
+predicted  [2, 3]
+5
+predicted  [2, 3]
+4
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [6, 2]
+0
+predicted  [6, 2]
+0
+predicted  [6, 2]
+3
+predicted  [6, 2]
+4
+predicted  [6, 2]
+0
+predicted  [6, 4]
+2
+predicted  [6, 4]
+1
+predicted  [6, 4]
+2
+predicted  [6, 4]
+5
+predicted  [6, 4]
+2
+predicted  [6, 2]
+5
+predicted  [6, 2]
+2
+predicted  [6, 2]
+2
+predicted  [6, 2]
+0
+predicted  [6, 2]
+4
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [2, 3]
+0
+predicted  [2, 3]
+5
+predicted  [2, 3]
+4
+predicted  [2, 3]
+3
+predicted  [2, 3]
+5
+predicted  [2, 3]
+5
+predicted  [2, 3]
+2
+predicted  [2, 3]
+3
+predicted  [2, 3]
+2
+predicted  [2, 3]
+1
+predicted  [2, 3]
+0
+predicted  [2, 3]
+3
+predicted  [2, 3]
+2
+predicted  [2, 3]
+5
+predicted  [2, 3]
+3
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [2, 3]
+1
+predicted  [2, 3]
+5
+predicted  [2, 3]
+5
+predicted  [2, 3]
+3
+predicted  [2, 3]
+4
+predicted  [2, 3]
+4
+predicted  [2, 3]
+2
+predicted  [2, 3]
+5
+predicted  [2, 3]
+0
+predicted  [2, 3]
+5
+predicted  [2, 3]
+1
+predicted  [2, 3]
+4
+predicted  [2, 3]
+3
+predicted  [2, 3]
+0
+predicted  [2, 3]
+2
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [2, 3]
+1
+predicted  [2, 3]
+2
+predicted  [2, 3]
+2
+predicted  [2, 3]
+3
+predicted  [2, 3]
+2
+predicted  [2, 3]
+2
+predicted  [2, 3]
+3
+predicted  [2, 3]
+3
+predicted  [2, 3]
+0
+predicted  [2, 3]
+0
+predicted  [2, 3]
+3
+predicted  [2, 3]
+5
+predicted  [2, 3]
+4
+predicted  [2, 3]
+5
+predicted  [2, 3]
+2
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [6, 7]
+2
+predicted  [6, 7]
+4
+predicted  [6, 7]
+0
+predicted  [6, 7]
+0
+predicted  [6, 7]
+0
+predicted  [6, 7]
+5
+predicted  [6, 7]
+2
+predicted  [6, 7]
+4
+predicted  [6, 7]
+4
+predicted  [6, 7]
+5
+predicted  [6, 7]
+3
+predicted  [6, 7]
+2
+predicted  [2, 8]
+7
+predicted  [7, 8]
+1
+predicted  [7, 8]
+4
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [7, 8]
+5
+predicted  [7, 8]
+4
+predicted  [5, 6]
+3
+predicted  [5, 6]
+2
+predicted  [5, 6]
+4
+predicted  [5, 6]
+3
+predicted  [0, 1]
+0
+predicted  [0, 1]
+11
+predicted  [0, 1]
+8
+predicted  [9, 10]
+4
+predicted  [9, 10]
+0
+predicted  [6, 7]
+0
+predicted  [6, 7]
+3
+predicted  [6, 7]
+5
+predicted  [6, 7]
+3
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [9, 2]
+3
+predicted  [9, 2]
+3
+predicted  [9, 2]
+2
+predicted  [9, 2]
+0
+predicted  [9, 2]
+6
+predicted  [9, 2]
+5
+predicted  [9, 2]
+7
+predicted  [9, 2]
+1
+predicted  [6, 7]
+5
+predicted  [6, 7]
+3
+predicted  [6, 7]
+0
+predicted  [6, 7]
+3
+predicted  [6, 7]
+5
+predicted  [6, 7]
+1
+predicted  [4, 9]
+1
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [10, 11]
+8
+predicted  [10, 11]
+6
+predicted  [10, 11]
+5
+predicted  [11, 7]
+4
+predicted  [11, 7]
+5
+predicted  [11, 7]
+5
+predicted  [11, 7]
+5
+predicted  [11, 7]
+6
+predicted  [0, 1]
+2
+predicted  [0, 1]
+0
+predicted  [0, 1]
+10
+predicted  [0, 1]
+6
+predicted  [0, 1]
+11
+predicted  [0, 1]
+2
+predicted  [11, 7]
+6
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [11, 7]
+3
+predicted  [11, 7]
+0
+predicted  [5, 6]
+2
+predicted  [5, 6]
+0
+predicted  [5, 6]
+2
+predicted  [7, 8]
+4
+predicted  [6, 7]
+4
+predicted  [6, 7]
+2
+predicted  [6, 7]
+2
+predicted  [6, 7]
+0
+predicted  [6, 7]
+1
+predicted  [7, 8]
+0
+predicted  [7, 8]
+2
+predicted  [7, 8]
+5
+predicted  [7, 8]
+4
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [6, 0]
+4
+predicted  [6, 0]
+5
+predicted  [6, 0]
+5
+predicted  [6, 0]
+5
+predicted  [6, 2]
+5
+predicted  [6, 2]
+3
+predicted  [6, 2]
+1
+predicted  [6, 2]
+4
+predicted  [6, 2]
+2
+predicted  [6, 1]
+4
+predicted  [6, 1]
+5
+predicted  [6, 1]
+1
+predicted  [2, 3]
+2
+predicted  [2, 3]
+4
+predicted  [2, 3]
+6
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [5, 6]
+0
+predicted  [5, 6]
+1
+predicted  [5, 6]
+0
+predicted  [5, 6]
+4
+predicted  [5, 6]
+0
+predicted  [5, 6]
+3
+predicted  [3, 0]
+0
+predicted  [3, 0]
+3
+predicted  [3, 0]
+4
+predicted  [3, 0]
+3
+predicted  [4, 0]
+3
+predicted  [4, 0]
+2
+predicted  [4, 0]
+3
+predicted  [4, 0]
+4
+predicted  [4, 0]
+6
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [4, 0]
+3
+predicted  [4, 0]
+4
+predicted  [4, 0]
+3
+predicted  [4, 0]
+5
+predicted  [4, 0]
+5
+predicted  [4, 0]
+3
+predicted  [5, 6]
+1
+predicted  [5, 6]
+4
+predicted  [5, 6]
+2
+predicted  [5, 6]
+4
+predicted  [5, 6]
+4
+predicted  [5, 6]
+0
+predicted  [1, 0]
+4
+predicted  [1, 0]
+4
+predicted  [1, 0]
+1
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [7, 5]
+4
+predicted  [5, 6]
+3
+predicted  [5, 6]
+2
+predicted  [5, 6]
+4
+predicted  [5, 6]
+0
+predicted  [5, 6]
+0
+predicted  [7, 4]
+2
+predicted  [7, 4]
+1
+predicted  [7, 4]
+2
+predicted  [7, 4]
+4
+predicted  [7, 4]
+3
+predicted  [6, 7]
+0
+predicted  [6, 7]
+1
+predicted  [6, 7]
+1
+predicted  [6, 7]
+5
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [6, 7]
+0
+predicted  [6, 7]
+4
+predicted  [6, 7]
+5
+predicted  [6, 7]
+2
+predicted  [6, 7]
+1
+predicted  [6, 7]
+4
+predicted  [4, 2]
+6
+predicted  [4, 2]
+4
+predicted  [4, 2]
+0
+predicted  [4, 2]
+1
+predicted  [4, 2]
+6
+predicted  [7, 5]
+6
+predicted  [7, 5]
+2
+predicted  [7, 5]
+3
+predicted  [1, 7]
+0
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [8, 1]
+1
+predicted  [6, 7]
+1
+predicted  [6, 7]
+2
+predicted  [6, 7]
+5
+predicted  [6, 7]
+1
+predicted  [6, 7]
+0
+predicted  [6, 7]
+1
+predicted  [6, 7]
+4
+predicted  [2, 1]
+6
+predicted  [2, 1]
+5
+predicted  [8, 1]
+2
+predicted  [8, 1]
+2
+predicted  [8, 1]
+3
+predicted  [8, 1]
+6
+predicted  [8, 1]
+1
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [7, 0]
+4
+predicted  [7, 0]
+5
+predicted  [7, 0]
+6
+predicted  [7, 0]
+1
+predicted  [6, 7]
+3
+predicted  [6, 7]
+1
+predicted  [6, 7]
+0
+predicted  [6, 7]
+4
+predicted  [6, 7]
+3
+predicted  [6, 7]
+0
+predicted  [6, 7]
+4
+predicted  [6, 7]
+4
+predicted  [6, 7]
+4
+predicted  [1, 6]
+0
+predicted  [1, 6]
+7
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [1, 6]
+0
+predicted  [1, 6]
+0
+predicted  [6, 7]
+4
+predicted  [6, 7]
+5
+predicted  [6, 7]
+4
+predicted  [6, 7]
+5
+predicted  [6, 7]
+1
+predicted  [6, 7]
+3
+predicted  [7, 4]
+0
+predicted  [7, 4]
+2
+predicted  [7, 4]
+4
+predicted  [7, 4]
+5
+predicted  [7, 2]
+1
+predicted  [5, 6]
+4
+predicted  [5, 6]
+4
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [5, 6]
+1
+predicted  [5, 6]
+0
+predicted  [5, 6]
+0
+predicted  [6, 7]
+0
+predicted  [6, 7]
+0
+predicted  [6, 7]
+1
+predicted  [6, 7]
+0
+predicted  [6, 7]
+4
+predicted  [6, 7]
+5
+predicted  [6, 7]
+1
+predicted  [6, 7]
+4
+predicted  [6, 7]
+5
+predicted  [6, 7]
+0
+predicted  [10, 6]
+0
+predicted  [10, 6]
+10
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [10, 6]
+10
+predicted  [10, 6]
+10
+predicted  [8, 9]
+5
+predicted  [8, 9]
+0
+predicted  [8, 9]
+3
+predicted  [8, 9]
+5
+predicted  [8, 9]
+2
+predicted  [6, 7]
+0
+predicted  [6, 7]
+0
+predicted  [6, 7]
+0
+predicted  [6, 7]
+0
+predicted  [6, 7]
+3
+predicted  [6, 7]
+5
+predicted  [6, 7]
+4
+predicted  [6, 7]
+4
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [6, 7]
+1
+predicted  [6, 7]
+2
+predicted  [8, 6]
+7
+predicted  [8, 6]
+5
+predicted  [8, 6]
+1
+predicted  [8, 6]
+0
+predicted  [7, 8]
+3
+predicted  [7, 8]
+4
+predicted  [7, 8]
+0
+predicted  [7, 8]
+3
+predicted  [7, 8]
+2
+predicted  [7, 8]
+0
+predicted  [7, 8]
+6
+predicted  [8, 7]
+0
+predicted  [8, 7]
+3
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [9, 10]
+7
+predicted  [9, 10]
+0
+predicted  [9, 10]
+1
+predicted  [8, 9]
+2
+predicted  [8, 9]
+2
+predicted  [10, 11]
+7
+predicted  [10, 11]
+2
+predicted  [10, 11]
+7
+predicted  [8, 9]
+2
+predicted  [8, 9]
+0
+predicted  [8, 9]
+5
+predicted  [8, 9]
+1
+predicted  [8, 9]
+1
+predicted  [0, 1]
+2
+predicted  [0, 1]
+2
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [0, 1]
+11
+predicted  [0, 1]
+7
+predicted  [0, 1]
+7
+predicted  [6, 7]
+1
+predicted  [6, 7]
+5
+predicted  [6, 7]
+0
+predicted  [6, 7]
+1
+predicted  [6, 7]
+1
+predicted  [5, 6]
+4
+predicted  [5, 6]
+2
+predicted  [5, 6]
+2
+predicted  [5, 6]
+2
+predicted  [6, 7]
+1
+predicted  [6, 7]
+0
+predicted  [6, 7]
+0
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [6, 4]
+1
+predicted  [6, 4]
+2
+predicted  [6, 4]
+3
+predicted  [6, 4]
+2
+predicted  [6, 4]
+1
+predicted  [6, 4]
+5
+predicted  [6, 4]
+2
+predicted  [6, 4]
+2
+predicted  [6, 4]
+4
+predicted  [3, 0]
+4
+predicted  [3, 0]
+4
+predicted  [3, 0]
+0
+predicted  [3, 0]
+3
+predicted  [3, 0]
+2
+predicted  [0, 6]
+1
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [7, 8]
+2
+predicted  [7, 8]
+6
+predicted  [7, 8]
+5
+predicted  [2, 8]
+0
+predicted  [2, 8]
+4
+predicted  [5, 6]
+1
+predicted  [5, 6]
+2
+predicted  [5, 6]
+1
+predicted  [5, 6]
+4
+predicted  [5, 6]
+0
+predicted  [5, 6]
+0
+predicted  [6, 7]
+2
+predicted  [6, 7]
+0
+predicted  [6, 7]
+4
+predicted  [6, 7]
+5
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [6, 7]
+2
+predicted  [6, 7]
+4
+predicted  [6, 7]
+1
+predicted  [6, 7]
+0
+predicted  [6, 7]
+5
+predicted  [6, 7]
+3
+predicted  [2, 8]
+1
+predicted  [8, 1]
+1
+predicted  [8, 1]
+1
+predicted  [8, 1]
+1
+predicted  [8, 1]
+5
+predicted  [6, 7]
+5
+predicted  [6, 7]
+3
+predicted  [6, 7]
+4
+predicted  [6, 7]
+0
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [6, 7]
+0
+predicted  [7, 0]
+5
+predicted  [7, 8]
+5
+predicted  [6, 7]
+1
+predicted  [6, 7]
+5
+predicted  [6, 7]
+4
+predicted  [6, 7]
+2
+predicted  [6, 7]
+3
+predicted  [6, 7]
+5
+predicted  [6, 7]
+3
+predicted  [6, 7]
+1
+predicted  [6, 7]
+3
+predicted  [6, 7]
+4
+predicted  [6, 7]
+1
+predicted  [6, 7]
+1
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [5, 6]
+7
+predicted  [5, 6]
+2
+predicted  [5, 6]
+5
+predicted  [6, 7]
+1
+predicted  [6, 7]
+2
+predicted  [6, 7]
+2
+predicted  [5, 6]
+3
+predicted  [5, 6]
+3
+predicted  [5, 6]
+1
+predicted  [5, 6]
+4
+predicted  [5, 6]
+4
+predicted  [7, 6]
+5
+predicted  [7, 6]
+0
+predicted  [7, 6]
+3
+predicted  [6, 7]
+3
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [6, 7]
+1
+predicted  [6, 7]
+0
+predicted  [6, 7]
+1
+predicted  [6, 7]
+2
+predicted  [0, 4]
+7
+predicted  [0, 4]
+4
+predicted  [0, 4]
+3
+predicted  [0, 4]
+0
+predicted  [0, 4]
+7
+predicted  [0, 4]
+3
+predicted  [7, 5]
+3
+predicted  [7, 5]
+4
+predicted  [7, 5]
+3
+predicted  [0, 1]
+4
+predicted  [0, 1]
+4
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [8, 9]
+7
+predicted  [7, 8]
+5
+predicted  [7, 8]
+6
+predicted  [7, 8]
+3
+predicted  [11, 10]
+9
+predicted  [11, 10]
+0
+predicted  [6, 7]
+4
+predicted  [6, 7]
+3
+predicted  [6, 7]
+4
+predicted  [6, 7]
+1
+predicted  [6, 7]
+5
+predicted  [5, 6]
+3
+predicted  [5, 6]
+0
+predicted  [5, 6]
+1
+predicted  [5, 6]
+0
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [5, 6]
+4
+predicted  [5, 6]
+4
+predicted  [3, 2]
+4
+predicted  [5, 6]
+4
+predicted  [5, 6]
+1
+predicted  [5, 6]
+1
+predicted  [5, 6]
+2
+predicted  [6, 7]
+3
+predicted  [6, 7]
+3
+predicted  [6, 7]
+1
+predicted  [6, 7]
+5
+predicted  [6, 7]
+3
+predicted  [6, 7]
+1
+predicted  [6, 7]
+4
+predicted  [6, 7]
+3
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [6, 7]
+2
+predicted  [6, 7]
+5
+predicted  [6, 7]
+3
+predicted  [6, 7]
+5
+predicted  [6, 7]
+3
+predicted  [6, 7]
+1
+predicted  [6, 7]
+3
+predicted  [6, 7]
+3
+predicted  [4, 7]
+7
+predicted  [4, 7]
+5
+predicted  [4, 7]
+3
+predicted  [4, 7]
+0
+predicted  [4, 7]
+5
+predicted  [5, 6]
+1
+predicted  [5, 6]
+2
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [5, 6]
+0
+predicted  [7, 8]
+6
+predicted  [7, 8]
+2
+predicted  [7, 8]
+0
+predicted  [7, 8]
+2
+predicted  [7, 5]
+2
+predicted  [7, 5]
+6
+predicted  [7, 5]
+7
+predicted  [7, 5]
+0
+predicted  [6, 1]
+5
+predicted  [6, 1]
+1
+predicted  [9, 10]
+7
+predicted  [9, 10]
+6
+predicted  [0, 4]
+6
+predicted  [0, 4]
+4
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [0, 4]
+10
+predicted  [0, 4]
+7
+predicted  [0, 4]
+1
+predicted  [0, 4]
+1
+predicted  [9, 10]
+7
+predicted  [9, 10]
+6
+predicted  [9, 10]
+5
+predicted  [6, 7]
+0
+predicted  [9, 10]
+2
+predicted  [9, 10]
+1
+predicted  [5, 6]
+0
+predicted  [5, 6]
+3
+predicted  [5, 6]
+2
+predicted  [5, 6]
+3
+predicted  [5, 6]
+1
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [5, 6]
+4
+predicted  [5, 6]
+2
+predicted  [5, 6]
+1
+predicted  [3, 1]
+6
+predicted  [3, 1]
+4
+predicted  [3, 1]
+2
+predicted  [3, 1]
+3
+predicted  [3, 1]
+3
+predicted  [2, 8]
+8
+predicted  [2, 8]
+1
+predicted  [2, 8]
+4
+predicted  [2, 8]
+1
+predicted  [2, 8]
+5
+predicted  [2, 8]
+1
+predicted  [2, 8]
+8
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [2, 8]
+8
+predicted  [3, 1]
+6
+predicted  [3, 1]
+1
+predicted  [3, 1]
+6
+predicted  [3, 1]
+0
+predicted  [3, 1]
+2
+predicted  [2, 8]
+6
+predicted  [2, 8]
+6
+predicted  [2, 8]
+3
+predicted  [2, 8]
+4
+predicted  [2, 8]
+2
+predicted  [2, 8]
+4
+predicted  [2, 8]
+1
+predicted  [2, 8]
+3
+predicted  [2, 8]
+4
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [9, 2]
+6
+predicted  [9, 2]
+3
+predicted  [9, 2]
+6
+predicted  [9, 2]
+2
+predicted  [9, 2]
+8
+predicted  [6, 7]
+4
+predicted  [6, 7]
+2
+predicted  [6, 7]
+3
+predicted  [2, 1]
+3
+predicted  [2, 1]
+9
+predicted  [2, 1]
+5
+predicted  [2, 1]
+1
+predicted  [2, 1]
+0
+predicted  [2, 1]
+2
+predicted  [6, 7]
+0
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [1, 2]
+5
+predicted  [3, 5]
+4
+predicted  [3, 5]
+5
+predicted  [3, 5]
+0
+predicted  [3, 5]
+4
+predicted  [3, 5]
+3
+predicted  [3, 5]
+5
+predicted  [5, 0]
+3
+predicted  [5, 0]
+0
+predicted  [5, 0]
+3
+predicted  [5, 0]
+5
+predicted  [5, 0]
+3
+predicted  [5, 4]
+3
+predicted  [5, 4]
+1
+predicted  [5, 0]
+4
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [0, 1]
+1
+predicted  [0, 1]
+0
+predicted  [0, 1]
+0
+predicted  [0, 2]
+0
+predicted  [0, 2]
+2
+predicted  [0, 2]
+4
+predicted  [0, 2]
+4
+predicted  [0, 2]
+4
+predicted  [0, 2]
+2
+predicted  [0, 2]
+2
+predicted  [0, 2]
+2
+predicted  [4, 3]
+1
+predicted  [4, 3]
+3
+predicted  [4, 3]
+1
+predicted  [4, 3]
+0
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [5, 6]
+2
+predicted  [7, 8]
+3
+predicted  [7, 8]
+4
+predicted  [7, 8]
+1
+predicted  [5, 6]
+1
+predicted  [5, 6]
+3
+predicted  [5, 6]
+1
+predicted  [8, 9]
+5
+predicted  [8, 9]
+7
+predicted  [8, 9]
+3
+predicted  [8, 9]
+1
+predicted  [1, 0]
+5
+predicted  [1, 0]
+2
+predicted  [1, 0]
+2
+predicted  [1, 0]
+9
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [7, 8]
+1
+predicted  [7, 8]
+0
+predicted  [6, 7]
+0
+predicted  [6, 7]
+5
+predicted  [6, 7]
+4
+predicted  [6, 7]
+2
+predicted  [6, 7]
+5
+predicted  [6, 7]
+0
+predicted  [4, 12]
+3
+predicted  [4, 12]
+2
+predicted  [4, 12]
+7
+predicted  [4, 12]
+11
+predicted  [4, 12]
+9
+predicted  [13, 14]
+12
+predicted  [8, 9]
+6
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [6, 4]
+0
+predicted  [6, 4]
+5
+predicted  [6, 4]
+3
+predicted  [7, 5]
+6
+predicted  [7, 5]
+6
+predicted  [7, 5]
+0
+predicted  [7, 5]
+3
+predicted  [5, 6]
+4
+predicted  [5, 6]
+4
+predicted  [6, 7]
+4
+predicted  [6, 7]
+5
+predicted  [6, 7]
+2
+predicted  [6, 7]
+5
+predicted  [6, 7]
+1
+predicted  [6, 7]
+4
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [6, 7]
+2
+predicted  [6, 7]
+1
+predicted  [6, 7]
+2
+predicted  [7, 8]
+6
+predicted  [7, 8]
+0
+predicted  [7, 8]
+6
+predicted  [7, 8]
+0
+predicted  [7, 8]
+1
+predicted  [7, 0]
+2
+predicted  [7, 0]
+6
+predicted  [7, 0]
+7
+predicted  [7, 0]
+3
+predicted  [7, 0]
+5
+predicted  [6, 7]
+5
+predicted  [6, 7]
+5
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [6, 0]
+4
+predicted  [6, 0]
+3
+predicted  [6, 0]
+5
+predicted  [1, 0]
+0
+predicted  [4, 1]
+5
+predicted  [4, 1]
+2
+predicted  [4, 1]
+0
+predicted  [4, 1]
+5
+predicted  [6, 0]
+2
+predicted  [6, 0]
+2
+predicted  [6, 0]
+5
+predicted  [6, 0]
+3
+predicted  [6, 0]
+0
+predicted  [6, 0]
+5
+predicted  [6, 0]
+3
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [6, 7]
+4
+predicted  [6, 7]
+4
+predicted  [6, 7]
+5
+predicted  [5, 6]
+1
+predicted  [6, 7]
+0
+predicted  [7, 8]
+3
+predicted  [7, 8]
+2
+predicted  [7, 8]
+3
+predicted  [7, 8]
+5
+predicted  [7, 8]
+4
+predicted  [7, 8]
+3
+predicted  [2, 5]
+9
+predicted  [2, 5]
+2
+predicted  [8, 9]
+5
+predicted  [8, 9]
+4
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [8, 2]
+1
+predicted  [8, 2]
+6
+predicted  [8, 2]
+0
+predicted  [8, 2]
+4
+predicted  [8, 2]
+0
+predicted  [8, 2]
+1
+predicted  [8, 2]
+1
+predicted  [8, 2]
+7
+predicted  [7, 8]
+6
+predicted  [7, 8]
+6
+predicted  [7, 8]
+5
+predicted  [1, 2]
+0
+predicted  [1, 2]
+1
+predicted  [1, 2]
+3
+predicted  [1, 2]
+1
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [1, 2]
+5
+predicted  [1, 2]
+6
+predicted  [1, 0]
+0
+predicted  [1, 0]
+3
+predicted  [4, 8]
+6
+predicted  [4, 8]
+1
+predicted  [4, 8]
+1
+predicted  [4, 8]
+6
+predicted  [6, 7]
+3
+predicted  [6, 7]
+2
+predicted  [6, 7]
+1
+predicted  [6, 7]
+3
+predicted  [6, 7]
+2
+predicted  [5, 6]
+2
+predicted  [5, 6]
+0
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+making where
+predicted  [7, 2]
+3
+predicted  [7, 2]
+1
+predicted  [7, 2]
+2
+predicted  [7, 2]
+6
+predicted  [7, 2]
+4
+predicted  [6, 0]
+6
+predicted  [6, 0]
+5
+predicted  [6, 7]
+0
+predicted  [6, 7]
+2
+predicted  [6, 7]
+1
+Init dev acc_qm: 0.0
+  breakdown on (agg, sel, where): [ 0.  0.  0.]
+Epoch 1 @ 2018-04-10 22:55:31.216388
