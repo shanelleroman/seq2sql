@@ -15,6 +15,11 @@ from modules.seq2sql_condition_predict import Seq2SQLCondPredictor
 # Seq2SQL: Generating Structured Queries from Natural Language using
 # Reinforcement Learning. arXiv:1709.00103
 
+def debug_print(var_name, var_val):
+    print var_name + ": " 
+    print var_val
+
+
 class Seq2SQL(nn.Module):
     def __init__(self, word_emb, N_word, N_h=100, N_depth=2,
                  gpu=False, trainable_emb=False):
@@ -131,7 +136,7 @@ class Seq2SQL(nn.Module):
                 agg_score = self.agg_pred(x_emb_var, x_len)
 
             if pred_sel:
-                sel_score = self.sel_pred(x_emb_var, x_len, col_inp_var,
+                sel_score = self.sel_pred.forward_mult(x_emb_var, x_len, col_inp_var,
                                           col_name_len, col_len, col_num)
 
             if pred_cond:
@@ -142,9 +147,8 @@ class Seq2SQL(nn.Module):
 
         return (agg_score, sel_score, cond_score)
 
+    #TODO: change score sel
     def loss(self, score, truth_num, pred_entry, gt_where):
-        # print 'score', score
-        #print 'truth_num', truth_num
         # print 'pred_entry', pred_entry
         # print 'gt_where', gt_where
         # print 'loss called'
@@ -164,24 +168,38 @@ class Seq2SQL(nn.Module):
             loss += self.CE(agg_score, agg_truth_var)
 
         if pred_sel:
-            sel_truth = map(lambda x:x[1], truth_num)
-            max_len = len(max(sel_truth,key=len))
-            sel_truth_new = np.zeros([len(sel_truth),len(max(sel_truth,key = lambda x: len(x)))],  dtype=np.int64)
-            for i,j in enumerate(sel_truth):
-                sel_truth_new[i][0:len(j)] = j
-            # print 'truth_num', truth_num
-            data = torch.from_numpy(sel_truth_new)
+            #TODO: need to fix this now!! 
+            n_sel_score, col_sel_score = sel_score
+            #number of select - loss
+            B = len(truth_num) # number of items in the batch 
+            n_sel_truth = map(lambda x: len(x[1]), truth_num) # get the number of columns selected
+            data = torch.from_numpy(np.array(n_sel_truth))
             if self.gpu:
-                sel_truth_var = Variable(data).cuda()
+                n_sel_truth_var = Variable(data.cuda())
             else:
-                sel_truth_var = Variable(data)
-            # print 'sel_truth_var.size()', sel_truth_var.size()
+                n_sel_truth_var = Variable(data)
+            loss += self.CE(n_sel_score, n_sel_truth_var)
+            
+            # select columns - loss
+            T = max([len(x) for x in col_sel_score])
+            #T = len(col_sel_score[0])
+            truth_prob = np.zeros((B, T), dtype=np.float32)
+            for b in range(B):
+                if len(truth_num[b][1]) > 0:
+                    truth_prob[b][list(truth_num[b][1])] = 1
+            data = torch.from_numpy(truth_prob)
+            if self.gpu:
+                sel_col_truth_var = Variable(data.cuda()) #.cuda()
+            else:
+                sel_col_truth_var = Variable(data)
 
-            for i in range(sel_truth_var.size()[1]):
-                loss += self.CE(sel_score, sel_truth_var[:,i])
-            # for row in sel_truth_var:
-            #     loss += self.CE(sel_score, row)
-            #loss += self.CE(sel_score, sel_truth_var)
+            sigm = nn.Sigmoid()
+            sel_col_prob = sigm(col_sel_score)
+            bce_loss = -torch.mean( 3*(sel_col_truth_var * \
+                    torch.log(sel_col_prob+1e-10)) + \
+                    (1-sel_col_truth_var) * torch.log(1-sel_col_prob+1e-10) )
+            loss += bce_loss
+
 
         if pred_cond:
             for b in range(len(gt_where)):
@@ -349,14 +367,14 @@ class Seq2SQL(nn.Module):
                 #agg_score_arr = agg_score[b].data.cpu().numpy().argsort()[]
                 cur_query['agg'] = np.argmax(agg_score[b].data.cpu().numpy())
             if pred_sel:
-                sel_score_lst = sel_score[b].data.cpu().numpy().tolist()
-                print 'sel_score_lst', sel_score_lst 
-                indices = [i for i, x in enumerate(sel_score_lst) if x > 0.15] # doesn't really work
+                # sel_score_lst = sel_score[b].data.cpu().numpy().tolist()
+                # print 'sel_score_lst', sel_score_lst 
+                # indices = [i for i, x in enumerate(sel_score_lst) if x > 0.15] # doesn't really work
 
-                cur_query['sel'] = [sel_score_lst[i] for i in indices]
-                print cur_query['sel']
-                if not cur_query['sel']:
-                    cur_query['sel'] = [np.argmax(sel_score[b].data.cpu().numpy())]
+                # cur_query['sel'] = [sel_score_lst[i] for i in indices]
+                # print cur_query['sel']
+                # if not cur_query['sel']:
+                cur_query['sel'] = [np.argmax(sel_score[1][b].data.cpu().numpy())]
                 print 'index_column_selected', cur_query['sel']
                 # cur_query['sel'] = sel_score[b].data.cpu().numpy().argsort()[:k].tolist() # this is where they pick the best column
             if pred_cond:

@@ -30,6 +30,9 @@ def lower_keys(x):
     else:
         return x
 
+def debug_print(var_name, var_val):
+    print var_name + ": " + var_val
+
 def get_main_file_name(file_path):
     prefix_pattern = re.compile('(New_Data/Initial/.*/)(.*)(\.json)')
     if prefix_pattern.search(file_path):

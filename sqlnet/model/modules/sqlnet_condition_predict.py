@@ -14,6 +14,7 @@ class SQLNetCondPredictor(nn.Module):
         self.max_col_num = max_col_num
         self.gpu = gpu
         self.use_ca = use_ca
+        # [=, > , <, None?]
 
         self.cond_num_lstm = nn.LSTM(input_size=N_word, hidden_size=N_h/2,
                 num_layers=N_depth, batch_first=True,
