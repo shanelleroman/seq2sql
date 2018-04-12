@@ -39,7 +39,7 @@ class SelPredictor(nn.Module):
         self.sel_out_K = nn.Linear(N_h, N_h)
         self.sel_out_col = nn.Linear(N_h, N_h)
         self.sel_num_out = nn.Sequential(nn.Linear(N_h, N_h),
-                nn.Tanh(), nn.Linear(N_h, 5)) # NOTE: might have to change the third dimension
+                nn.Tanh(), nn.Linear(N_h, 21)) # NOTE: might have to change the third dimension
         self.sel_col_out = nn.Sequential(nn.Tanh(), nn.Linear(N_h, 1))
         self.softmax = nn.Softmax()
         self.col_num_lstm = nn.LSTM(input_size=N_word, hidden_size=N_h/2, num_layers=N_depth, batch_first=True,
@@ -92,6 +92,7 @@ class SelPredictor(nn.Module):
                     att_val[idx, num:] = -100
             att = self.softmax(att_val.view((-1, max_x_len))).view(
                     B, -1, max_x_len)
+
             K_sel_expand = (h_enc.unsqueeze(1) * att.unsqueeze(3)).sum(2)
         else:
             # col_att_val = self.cond_col_att(h_col_enc).squeeze()
@@ -106,8 +107,10 @@ class SelPredictor(nn.Module):
                 if num < max_x_len:
                     sel_att_val[idx, num:] = -100
             sel_att = self.softmax(sel_att_val)
+            # print 'att_probabilities', sel_att
             K_sel_col = (h_col_enc * sel_att_val.unsqueeze(2)).sum(1).unsqueeze(1)
         sel_col_score = self.sel_col_out(self.sel_out_K(K_sel_col) + self.sel_out_col(e_sel_col)).squeeze()
+        # print 'sel_col_score', sel_col_score
         max_col_num = max(col_num)
         for b, num in enumerate(col_num):
             if num < max_col_num:

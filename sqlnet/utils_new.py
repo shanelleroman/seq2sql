@@ -134,7 +134,6 @@ def convert_colnames_colnum(cleaned_data_item, table_data, col_names, table_name
 
 def get_select_indices(cleaned_data_item, table_data):
     query_tok = cleaned_data_item['query_tok']
-    print query_tok
     orig_col_names = query_tok[query_tok.index('select') + 1:query_tok.index('from')]
     table_name =  query_tok[query_tok.index('from') + 1] # needs to take all table names, otherwise fails on certain joins
     to_delete = ['max', 'min', 'count', 'sum', 'avg', 'distinct', ',', '(', ')']

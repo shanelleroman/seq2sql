@@ -172,12 +172,19 @@ class Seq2SQL(nn.Module):
             n_sel_score, col_sel_score = sel_score
             #number of select - loss
             B = len(truth_num) # number of items in the batch 
+            # print 'truth_num', truth_num
             n_sel_truth = map(lambda x: len(x[1]), truth_num) # get the number of columns selected
+            # n_sel_truth = map(lambda x: 0, truth_num)
             data = torch.from_numpy(np.array(n_sel_truth))
+            # print 'data.size()', data.size()
+            # data = np.zeros(data.size())
+
             if self.gpu:
                 n_sel_truth_var = Variable(data.cuda())
             else:
                 n_sel_truth_var = Variable(data)
+            print 'n_sel_score.size()', n_sel_score.size()
+            print 'n_sel_truth_var.size()', n_sel_truth_var.size()
             loss += self.CE(n_sel_score, n_sel_truth_var)
             
             # select columns - loss
@@ -187,11 +194,12 @@ class Seq2SQL(nn.Module):
             for b in range(B):
                 if len(truth_num[b][1]) > 0:
                     truth_prob[b][list(truth_num[b][1])] = 1
-            data = torch.from_numpy(truth_prob)
+            new_data = torch.from_numpy(np.array(truth_prob)).squeeze()
+            # print 'new_data', new_data
             if self.gpu:
-                sel_col_truth_var = Variable(data.cuda()) #.cuda()
+                sel_col_truth_var = Variable(new_data.cuda()) #.cuda()
             else:
-                sel_col_truth_var = Variable(data)
+                sel_col_truth_var = Variable(new_data)
 
             sigm = nn.Sigmoid()
             sel_col_prob = sigm(col_sel_score)
@@ -270,8 +278,8 @@ class Seq2SQL(nn.Module):
             if pred_sel:
                 sel_pred = pred_qry['sel']
                 sel_gt = gt_qry['sel']
-                # print "predicted ", sel_pred
-                # print sel_gt
+                print "predicted ", sel_pred
+                print "actual", sel_gt
                 if sel_pred != sel_gt:
                     sel_err += 1
                     good = False
@@ -374,7 +382,15 @@ class Seq2SQL(nn.Module):
                 # cur_query['sel'] = [sel_score_lst[i] for i in indices]
                 # print cur_query['sel']
                 # if not cur_query['sel']:
-                cur_query['sel'] = [np.argmax(sel_score[1][b].data.cpu().numpy())]
+                n_sel_score, col_sel_score = sel_score
+                
+                n_sel_probab = self.softmax(n_sel_score)
+                print 'n_sel_probab[b]', n_sel_probab[b] # I think the issue is that 
+                num_col = [np.argmax(n_sel_probab[b].data.cpu().numpy())][0]
+                print 'num_col', num_col
+
+                col_sel_probab = self.softmax(col_sel_score)
+                cur_query['sel'] = col_sel_probab[b].data.cpu().numpy().argsort()[:num_col].tolist()
                 print 'index_column_selected', cur_query['sel']
                 # cur_query['sel'] = sel_score[b].data.cpu().numpy().argsort()[:k].tolist() # this is where they pick the best column
             if pred_cond:
