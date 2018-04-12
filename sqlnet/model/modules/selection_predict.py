@@ -11,7 +11,7 @@ def debug_print(var_name, var_val):
     print var_val
 
 class SelPredictor(nn.Module):
-    def __init__(self, N_word, N_h, N_depth, max_tok_num, use_ca):
+    def __init__(self, N_word, N_h, N_depth, max_col_num, max_tok_num, use_ca):
         super(SelPredictor, self).__init__()
         self.use_ca = use_ca
         self.max_tok_num = max_tok_num
@@ -24,6 +24,8 @@ class SelPredictor(nn.Module):
         else:
             print "Not using column attention on selection predicting"
             self.sel_att = nn.Linear(N_h, 1)
+
+        self.max_col_num = max_col_num
         self.sel_col_name_enc = nn.LSTM(input_size=N_word, hidden_size=N_h/2,
                 num_layers=N_depth, batch_first=True,
                 dropout=0.3, bidirectional=True)
@@ -39,7 +41,7 @@ class SelPredictor(nn.Module):
         self.sel_out_K = nn.Linear(N_h, N_h)
         self.sel_out_col = nn.Linear(N_h, N_h)
         self.sel_num_out = nn.Sequential(nn.Linear(N_h, N_h),
-                nn.Tanh(), nn.Linear(N_h, 21)) # NOTE: might have to change the third dimension
+                nn.Tanh(), nn.Linear(N_h, max_col_num)) # NOTE: might have to change the third dimension
         self.sel_col_out = nn.Sequential(nn.Tanh(), nn.Linear(N_h, 1))
         self.softmax = nn.Softmax()
         self.col_num_lstm = nn.LSTM(input_size=N_word, hidden_size=N_h/2, num_layers=N_depth, batch_first=True,
@@ -62,7 +64,6 @@ class SelPredictor(nn.Module):
         num_col_att = self.softmax(num_col_att_val)
         K_num_col = (e_num_col * num_col_att.unsqueeze(2)).sum(1) # not really sure what this is doing
 
-        # exit(1)
         sel_num_h1 = self.sel_num_col2hid1(K_num_col).view(
                 B, -1, self.N_h/2).transpose(0, 1).contiguous() # not really sure what the second dimension should be - previously was 4
         sel_num_h2 = self.sel_num_col2hid2(K_num_col).view(

@@ -57,7 +57,7 @@ class Seq2SQL(nn.Module):
         self.agg_pred = AggPredictor(N_word, N_h, N_depth, use_ca=False)
 
         #Predict selected column
-        self.sel_pred = SelPredictor(N_word, N_h, N_depth, self.max_tok_num,
+        self.sel_pred = SelPredictor(N_word, N_h, N_depth, self.max_col_num, self.max_tok_num,
                                      use_ca=False)
 
         #Predict number of cond
