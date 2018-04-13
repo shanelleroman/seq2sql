@@ -14,14 +14,6 @@ DEV_EXT = '/dev'
 TABLE_EXT = '/tables'
 
 
-class agg(Enum):
-    none = 0
-    mx = 1
-    mn = 2
-    count = 3
-    sm = 4
-    avg = 5
-
 def lower_keys(x):
     if isinstance(x, list):
         return [lower_keys(v) for v in x]
@@ -234,11 +226,11 @@ def add_sql_item_to_data(cleaned_data_item, table_data):
 
             conds += [curr]
             # print conds
-
+    print 'conds', conds
     # print agg_codes
     # print col_names, select_indices
     # print 'agg_codes'
-    cleaned_data_item['sql'] = {'agg': agg_codes[0], 'sel': select_indices, 'conds': conds}
+    cleaned_data_item['sql'] = {'agg': agg_codes, 'sel': select_indices, 'conds': conds}
 
 
 def clean_sql_data(json_data, table_data, use_small=False):
@@ -504,7 +496,7 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
                 to_batch_seq(sql_data, table_data, perm, st, ed)
         gt_where_seq = model.generate_gt_where_seq(q_seq, col_seq, query_seq)
         gt_sel_seq = [x[1] for x in ans_seq]
-        #print q_seq
+        print 'gt_where_seq', gt_where_seq
         score = model.forward(q_seq, col_seq, col_num, pred_entry,
                 gt_where=gt_where_seq, gt_cond=gt_cond_seq, gt_sel=gt_sel_seq)
         

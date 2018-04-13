@@ -52,6 +52,10 @@ class SelPredictor(nn.Module):
         # First use column embeddings to calculate the initial hidden unit
         # Then run the LSTM and predict condition number.
         # exit(1)
+        # debug_print('col_inp_var', col_inp_var)
+        # debug_print('col_name_len', col_name_len)
+        # debug_print('col_len', col_len)
+        # debug_print('col_num', col_num)
         B = len(x_len)
         max_x_len = max(x_len)
         e_num_col, col_num = col_name_encode(col_inp_var, col_name_len,

@@ -54,7 +54,7 @@ class Seq2SQL(nn.Module):
                                              trainable=trainable_emb)
 
         #Predict aggregator
-        self.agg_pred = AggPredictor(N_word, N_h, N_depth, use_ca=False)
+        self.agg_pred = AggPredictor(N_word, N_h, N_depth,self.max_col_num,  use_ca=False)
 
         #Predict selected column
         self.sel_pred = SelPredictor(N_word, N_h, N_depth, self.max_col_num, self.max_tok_num,
@@ -133,7 +133,8 @@ class Seq2SQL(nn.Module):
             col_inp_var, col_name_len, col_len = batch
             max_x_len = max(x_len)
             if pred_agg:
-                agg_score = self.agg_pred(x_emb_var, x_len)
+                agg_score = self.agg_pred(x_emb_var, x_len, col_inp_var,
+                                          col_name_len, col_len, col_num)
 
             if pred_sel:
                 sel_score = self.sel_pred.forward_mult(x_emb_var, x_len, col_inp_var,
@@ -144,31 +145,61 @@ class Seq2SQL(nn.Module):
                                             col_name_len, col_len, col_num,
                                             gt_where, gt_cond,
                                             reinforce=reinforce)
-
+        print 'cond_score', cond_score
         return (agg_score, sel_score, cond_score)
 
     #TODO: change score sel
     def loss(self, score, truth_num, pred_entry, gt_where):
-        # print 'pred_entry', pred_entry
         # print 'gt_where', gt_where
         # print 'loss called'
         pred_agg, pred_sel, pred_cond = pred_entry
         agg_score, sel_score, cond_score = score
         loss = 0
         if pred_agg:
-            agg_truth = map(lambda x:x[0], truth_num)
-            
-            #agg_truth=np.array([np.array(xi) for xi in agg_truth])
-            data = torch.from_numpy(np.array(agg_truth)) #TODO: change
-            #data = torch.from_numpy(np.array(agg_truth))
+            n_agg_score, agg_sel_score = agg_score
+            B = len(truth_num) # number of items in the batch
+            # get the number of columns selected -> equivalent to the number of aggs! 
+            n_agg_truth = map(lambda x: len(x[1]), truth_num)
+            data = torch.from_numpy(np.array(n_agg_truth))
+
             if self.gpu:
-                agg_truth_var = Variable(data.cuda())
+                n_agg_truth_var = Variable(data.cuda())
             else:
-                agg_truth_var = Variable(data)
-            loss += self.CE(agg_score, agg_truth_var)
+                 n_agg_truth_var = Variable(data)
+            agg_truth = map(lambda x:x[0], truth_num)
+            loss += self.CE(n_agg_score, n_agg_truth_var)
+
+            # get the columns selected 
+            T = max([len(x) for x in agg_sel_score])
+            truth_prob = np.zeros((B, T), dtype=np.float32)
+            for b in range(B):
+                if len(truth_num[b][0]) > 0:
+                    truth_prob[b][list(truth_num[b][0])] = 1
+            new_data = torch.from_numpy(np.array(truth_prob)).squeeze()
+
+            if self.gpu:
+                sel_agg_truth_var = Variable(new_data.cuda()) #.cuda()
+            else:
+                sel_agg_truth_var = Variable(new_data)
+
+            sigm = nn.Sigmoid()
+            agg_col_prob = sigm(agg_sel_score)
+            bce_loss = -torch.mean( 3*(sel_agg_truth_var * \
+                    torch.log(agg_col_prob+1e-10)) + \
+                    (1-sel_agg_truth_var) * torch.log(1-agg_col_prob+1e-10) )
+            loss += bce_loss
+
+            
+            # #agg_truth=np.array([np.array(xi) for xi in agg_truth])
+            # data = torch.from_numpy(np.array(agg_truth)) #TODO: change
+            # #data = torch.from_numpy(np.array(agg_truth))
+            # if self.gpu:
+            #     agg_truth_var = Variable(data.cuda())
+            # else:
+            #     agg_truth_var = Variable(data)
+            # loss += self.CE(agg_score, agg_truth_var)
 
         if pred_sel:
-            #TODO: need to fix this now!! 
             n_sel_score, col_sel_score = sel_score
             #number of select - loss
             B = len(truth_num) # number of items in the batch 
@@ -176,26 +207,21 @@ class Seq2SQL(nn.Module):
             n_sel_truth = map(lambda x: len(x[1]), truth_num) # get the number of columns selected
             # n_sel_truth = map(lambda x: 0, truth_num)
             data = torch.from_numpy(np.array(n_sel_truth))
-            # print 'data.size()', data.size()
-            # data = np.zeros(data.size())
 
             if self.gpu:
                 n_sel_truth_var = Variable(data.cuda())
             else:
                 n_sel_truth_var = Variable(data)
-            print 'n_sel_score.size()', n_sel_score.size()
-            print 'n_sel_truth_var.size()', n_sel_truth_var.size()
             loss += self.CE(n_sel_score, n_sel_truth_var)
             
             # select columns - loss
             T = max([len(x) for x in col_sel_score])
-            #T = len(col_sel_score[0])
             truth_prob = np.zeros((B, T), dtype=np.float32)
             for b in range(B):
                 if len(truth_num[b][1]) > 0:
                     truth_prob[b][list(truth_num[b][1])] = 1
             new_data = torch.from_numpy(np.array(truth_prob)).squeeze()
-            # print 'new_data', new_data
+
             if self.gpu:
                 sel_col_truth_var = Variable(new_data.cuda()) #.cuda()
             else:
@@ -271,15 +297,17 @@ class Seq2SQL(nn.Module):
             if pred_agg:
                 agg_pred = pred_qry['agg']
                 agg_gt = gt_qry['agg']
-                if [agg_pred] != agg_gt:
+                print "predicted_agg", agg_pred
+                print "actual_agg", agg_gt
+                if agg_pred != agg_gt:
                     agg_err += 1
                     good = False
 
             if pred_sel:
-                sel_pred = pred_qry['sel']
-                sel_gt = gt_qry['sel']
-                print "predicted ", sel_pred
-                print "actual", sel_gt
+                sel_pred = set(pred_qry['sel'])
+                sel_gt = set(gt_qry['sel'])
+                print "predicted_sel", sel_pred
+                print "actual_sel", sel_gt
                 if sel_pred != sel_gt:
                     sel_err += 1
                     good = False
@@ -287,6 +315,8 @@ class Seq2SQL(nn.Module):
             if pred_cond:
                 cond_pred = pred_qry['conds']
                 cond_gt = gt_qry['conds']
+                print "predicted_cond", cond_pred
+                print "actual_cond", cond_gt
                 flag = True
                 if len(cond_pred) != len(cond_gt):
                     flag = False
@@ -320,7 +350,7 @@ class Seq2SQL(nn.Module):
 
             if not good:
                 tot_err += 1
-
+        print '----------\n'
         return np.array((agg_err, sel_err, cond_err)), tot_err
 
 
@@ -373,7 +403,16 @@ class Seq2SQL(nn.Module):
             cur_query = {}
             if pred_agg:
                 #agg_score_arr = agg_score[b].data.cpu().numpy().argsort()[]
-                cur_query['agg'] = np.argmax(agg_score[b].data.cpu().numpy())
+                # cur_query['agg'] = np.argmax(agg_score[b].data.cpu().numpy())
+                n_agg_score, agg_sel_score = agg_score
+                
+                n_agg_probab = self.softmax(n_agg_score)
+                # print 'n_sel_probab[b]', n_sel_probab[b] # I think the issue is that 
+                num_agg = [np.argmax(n_agg_probab[b].data.cpu().numpy())][0]
+                # print 'num_col', num_col
+
+                agg_sel_probab = self.softmax(agg_sel_score)
+                cur_query['agg'] = agg_sel_probab[b].data.cpu().numpy().argsort()[:num_agg].tolist()
             if pred_sel:
                 # sel_score_lst = sel_score[b].data.cpu().numpy().tolist()
                 # print 'sel_score_lst', sel_score_lst 
@@ -385,13 +424,13 @@ class Seq2SQL(nn.Module):
                 n_sel_score, col_sel_score = sel_score
                 
                 n_sel_probab = self.softmax(n_sel_score)
-                print 'n_sel_probab[b]', n_sel_probab[b] # I think the issue is that 
+                # print 'n_sel_probab[b]', n_sel_probab[b] # I think the issue is that 
                 num_col = [np.argmax(n_sel_probab[b].data.cpu().numpy())][0]
-                print 'num_col', num_col
+                # print 'num_col', num_col
 
                 col_sel_probab = self.softmax(col_sel_score)
                 cur_query['sel'] = col_sel_probab[b].data.cpu().numpy().argsort()[:num_col].tolist()
-                print 'index_column_selected', cur_query['sel']
+                # print 'index_column_selected', cur_query['sel']
                 # cur_query['sel'] = sel_score[b].data.cpu().numpy().argsort()[:k].tolist() # this is where they pick the best column
             if pred_cond:
                 cur_query['conds'] = []
@@ -440,9 +479,6 @@ class Seq2SQL(nn.Module):
                         cur_cond[1] = 0
                     sel_col = cond_toks[st:op]
                     to_idx = [x.lower() for x in raw_col[b]]
-                    # print 'sel_col', sel_col
-                    # print 'raw_q[b], ', raw_q[b]
-                    # print 'raw_col[b]', raw_col[b]
                     pred_col = merge_tokens(sel_col, raw_q[b] + ' || ' + \
                                             ' || '.join(raw_col[b]))
                     if pred_col in to_idx:
@@ -452,7 +488,7 @@ class Seq2SQL(nn.Module):
                     cur_cond[2] = merge_tokens(cond_toks[op+1:ed], raw_q[b])
                     cur_query['conds'].append(cur_cond)
                     st = ed + 1
-                    print cur_query
+                    # print cur_query
             ret_queries.append(cur_query)
 
         return ret_queries

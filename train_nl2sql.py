@@ -124,10 +124,10 @@ if __name__ == '__main__':
             print ' Loss = %s'%epoch_train(
                     model, optimizer, BATCH_SIZE, 
                     sql_data, table_data, TRAIN_ENTRY)
-            print ' Train acc_qm: %s\n   breakdown result: %s'%epoch_acc(
+            print ' Train acc_qm: %s\n   breakdown result: %s'%epoch_acc_new(
                     model, BATCH_SIZE, sql_data, table_data, TRAIN_ENTRY)
             #val_acc = epoch_token_acc(model, BATCH_SIZE, val_sql_data, val_table_data, TRAIN_ENTRY)
-            val_acc = epoch_acc(model,
+            val_acc = epoch_acc_new(model,
                     BATCH_SIZE, val_sql_data, val_table_data, TRAIN_ENTRY)
             print ' Dev acc_qm: %s\n   breakdown result: %s'%val_acc
             if TRAIN_AGG:
