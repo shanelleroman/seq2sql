@@ -33,11 +33,12 @@ class AggPredictor(nn.Module):
             col_len=None, col_num=None, gt_sel=None):
         B = len(x_emb_var)
         max_x_len = max(x_len)
+        h_enc, _ = run_lstm(self.agg_lstm, x_emb_var, x_len) # this is the hidden state for each token in the question
 
-        h_enc, _ = run_lstm(self.agg_lstm, x_emb_var, x_len)
         if self.use_ca:
             e_col, _ = col_name_encode(col_inp_var, col_name_len, 
-                    col_len, self.agg_col_name_enc)
+                    col_len, self.agg_col_name_enc) 
+            # the rest is the decoder portion correct??
             chosen_sel_idx = torch.LongTensor(gt_sel)
             aux_range = torch.LongTensor(range(len(gt_sel)))
             if x_emb_var.is_cuda:
@@ -51,7 +52,7 @@ class AggPredictor(nn.Module):
 
         for idx, num in enumerate(x_len):
             if num < max_x_len:
-                att_val[idx, num:] = -100
+                att_val[idx, num:] = -100 # make sure the padded numbers have softmax ~= 0
         att = self.softmax(att_val)
 
         K_agg = (h_enc * att.unsqueeze(2).expand_as(h_enc)).sum(1)

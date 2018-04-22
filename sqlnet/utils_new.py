@@ -6,9 +6,10 @@ import numpy as np
 from os import listdir
 import re
 import sys
+import time
 from nltk import word_tokenize
 from enum import Enum
-PATH_NL2SQL = 'New_Data/Initial'
+PATH_NL2SQL = 'New_Data/preprocessed'
 TRAIN_EXT = '/train'
 DEV_EXT = '/dev'
 TABLE_EXT = '/tables'
@@ -31,13 +32,13 @@ def lower_keys(x):
         return x
 
 def get_main_file_name(file_path):
-    prefix_pattern = re.compile('(New_Data/Initial/.*/)(.*)(\.json)')
+    prefix_pattern = re.compile('(New_Data/preprocessed/.*/)(.*)(\.json)')
     if prefix_pattern.search(file_path):
         return prefix_pattern.search(file_path).group(2)
     return None
 
 def get_main_table_name(file_path):
-    prefix_pattern = re.compile('(New_Data/Initial/.*/)(.*)(_table\.json)')
+    prefix_pattern = re.compile('(New_Data/preprocessed/.*/)(.*)(_table\.json)')
     if prefix_pattern.search(file_path):
         return prefix_pattern.search(file_path).group(2)
     return None
@@ -47,11 +48,18 @@ def get_tables_for_sql(orig_path, train=0):
     tables = [TABLE_PATH + '/' + file for file in listdir(TABLE_PATH)]
     table_names  = [get_main_table_name(file) for file in tables]
 
+    # print tables
+    # schema = {}
+    # for table, name in zip(tables, table_names):
+    #     data = json.load(open(table))
+    #     schema[name] = data 
+
     if train == 0:
         SQL_PATH = PATH_NL2SQL + TRAIN_EXT
     else:
         SQL_PATH = PATH_NL2SQL + DEV_EXT
     sql_data = [get_main_file_name(SQL_PATH + '/' + file) for file in listdir(SQL_PATH)]
+    # print 'sql_data', sql_data
 
     table_data = [TABLE_PATH + '/' + file  + '_table.json' for file in table_names if file in sql_data]
     sql_data = [SQL_PATH + '/' + file + '.json'for file in sql_data]
@@ -128,7 +136,7 @@ def convert_colnames_colnum(cleaned_data_item, table_data, col_names, table_name
                 break
     return column_numbers
 
-def get_select_indices(cleaned_data_item, table_data):
+def get_select_indices(cleaned_data_item, table_data): #TODO: do for all table names
     query_tok = cleaned_data_item['query_tok']
     print query_tok
     orig_col_names = query_tok[query_tok.index('select') + 1:query_tok.index('from')]
@@ -211,7 +219,7 @@ def add_sql_item_to_data(cleaned_data_item, table_data):
                 if temp_ind is not None:
                     op_ind = curr_cond.index(op)
                     curr[1] = i
-                    pos += st + op_ind 
+                    # pos += st + op_ind 
 
             col = where_clause[st:op_ind] #hopefully just 1 token
             for c in col:
@@ -232,8 +240,11 @@ def add_sql_item_to_data(cleaned_data_item, table_data):
             conds += [curr]
             # print conds
 
-    print agg_codes
-    print col_names, select_indices
+    # need group by/having, order by, limit, from/join, etc
+
+
+    # print agg_codes
+    # print col_names, select_indices
     cleaned_data_item['sql'] = {'agg': agg_codes[0], 'sel': select_indices[0], 'conds': conds}
 
 
@@ -263,8 +274,6 @@ def clean_sql_data(json_data, table_data, use_small=False):
             cleaned_data['question']= item['sqa']['question'][0] # get first question
             cleaned_data['query']= item['sqa']['sql'][0] # get first query
             cleaned_data['query_tok'] = word_tokenize(cleaned_data['query'].lower())
-            #cleaned_data['table_ids'] = [get_table_names_from_query(query_tok,select=False) for query_tok in cleaned_data['query_tok']]
-            #cleaned_data['selected_table'] = [get_table_names_from_query(query_tok, select=True) for query_tok in cleaned_data['query_tok']]
             cleaned_data['question_tok'] = word_tokenize(cleaned_data['question'].lower())
             
             sql_data.append(cleaned_data)
@@ -272,16 +281,7 @@ def clean_sql_data(json_data, table_data, use_small=False):
             count += 1
         if exit:
             break  
-    # for item in sql_data:
-    #     add_sql_item_to_data(item, table_data) 
-    #     specific_table_data = {} 
-    #     for table in item['table_ids'][0]:
-    #         specific_table_data[table] = table_data[item['database_name']][table]
-    
-    # print json.dumps(sql_data, indent=4)
     return sql_data
-        #_ed_data['query_2'] = database['data']['sqa']['sql'][1]
-        #eaned_data['query_3'] = safe_list_get(database['data']['sqa']['sql'], 2)
 
 
 def load_data_new(sql_paths, table_paths, use_small=False):
@@ -298,8 +298,8 @@ def load_data_new(sql_paths, table_paths, use_small=False):
         with open(SQL_PATH) as inf:
             file_name = get_main_file_name(SQL_PATH)
             if file_name:
-                sql_data.append(lower_keys(json.load(inf)))
-                sql_data[i]['database_name'] = file_name
+                data = lower_keys(json.load(inf))
+                sql_data += data
                 
     for i, TABLE_PATH in enumerate(table_paths):
         if use_small and i >= 2:
@@ -309,43 +309,6 @@ def load_data_new(sql_paths, table_paths, use_small=False):
             file_name = get_main_table_name(TABLE_PATH)
             if file_name:
                 table_data[file_name] = lower_keys(json.load(inf))
-    # print sql_data, table_data
-    return sql_data, table_data
-
-def load_data(sql_paths, table_paths, use_small=False, tao=False):
-    if not isinstance(sql_paths, list):
-        sql_paths = (sql_paths, )
-    if not isinstance(table_paths, list):
-        table_paths = (table_paths, )
-    sql_data = []
-    table_data = {}
-    max_col_num = 0
-    for SQL_PATH in sql_paths:
-        print "Loading data from %s"%SQL_PATH
-        with open(SQL_PATH) as inf:
-            if not tao: 
-                for idx, line in enumerate(inf):
-                    if use_small and idx >= 1000:
-                        break
-                    sql = json.loads(line.strip())
-                    sql_data.append(sql)
-            else:
-                sql = json.loads(inf)
-                sql_data.append(sql)
-
-    for TABLE_PATH in table_paths:
-        print "Loading data from %s"%TABLE_PATH
-        with open(TABLE_PATH) as inf:
-            if not tao:
-                for line in inf:
-                    tab = json.loads(line.strip())
-                    table_data[tab[u'id']] = tab
-            else:
-                tab = json.loads(inf)
-                table_data[tab[u'id']] = tab
-
-    for sql in sql_data:
-        assert sql[u'table_id'] in table_data
     return sql_data, table_data
 
 def load_dataset_new(dataset_id, use_small=False):
@@ -354,14 +317,14 @@ def load_dataset_new(dataset_id, use_small=False):
     sql_paths_train, table_paths_train  = get_tables_for_sql(PATH_NL2SQL, train=0)
     train_sql_data, train_table_data = load_data_new(sql_paths_train, table_paths_train, \
         use_small=use_small)
-    train_table_data = clean_table_data(train_table_data, use_small=use_small)
-    train_sql_data = clean_sql_data(train_sql_data, train_table_data, use_small=use_small)
+    # train_table_data = clean_table_data(train_table_data, use_small=use_small)
+    # train_sql_data = clean_sql_data(train_sql_data, train_table_data, use_small=use_small)
     # Load Dev Data
-    sql_paths_val, table_paths_val  = get_tables_for_sql(PATH_NL2SQL, train=1)
+    sql_paths_val, table_paths_val  = get_tables_for_sql(PATH_NL2SQL, train=0)
     val_sql_data, val_table_data = load_data_new(sql_paths_val, table_paths_val, \
         use_small=use_small)
-    val_table_data = clean_table_data(val_table_data, use_small=use_small)
-    val_sql_data = clean_sql_data(val_sql_data, val_table_data, use_small=use_small)
+    # val_table_data = clean_table_data(val_table_data, use_small=use_small)
+    # val_sql_data = clean_sql_data(val_sql_data, val_table_data, use_small=use_small)
     
     ##TODO
     test_sql_data, test_table_data = {}, {}
@@ -447,27 +410,27 @@ def to_batch_seq(sql_data, table_data, idxes, st, ed, ret_vis_data=False):
     query_seq = []
     gt_cond_seq = []
     vis_seq = []
-    #print json.dumps(table_data, indent=4)
-    #print json.dumps(sql_data, indent=4)
+    # print json.dumps(table_data, indent=4)
+    # print json.dumps(sql_data, indent=4)
+    # print sql_data
     for i in range(st, ed):
         sql = sql_data[idxes[i]]
-        #print sql
+
         #print json.dumps(sql, indent=4)
-        q_seq.append(sql['question_tok']) # getting the first question
+        q_seq.append(sql['question_tok']) 
         #print q_seq
         table = table_data[sql['table_id']]
-        col_num.append(len(table['header'])) # number of columns per "table" (really db)
-        col_seq.append(table['header_tok']) # get the tokens for each column
-        #get the corresponding column header names 
-        ans_seq.append((sql['sql']['agg'],
-            sql['sql']['sel'], 
-            len(sql['sql']['conds']),
-            tuple(x[0] for x in sql['sql']['conds']),
-            tuple(x[1] for x in sql['sql']['conds'])))
+        col_num.append(len(table['col_map']))
+        tab_cols = [col[1] for col in table['col_map']]
+        col_seq.append([word_tokenize(col) for col in tab_cols]) 
+        ans_seq.append((sql['sql1']['agg'], 
+            sql['sql1']['sel'], 
+            len(sql['sql1']['cond']), 
+            tuple(x[1] for x in sql['sql1']['cond']), 
+            tuple(x[2] for x in sql['sql1']['cond']))) 
         query_seq.append(sql['query_tok'])
-        gt_cond_seq.append(sql['sql']['conds'])
-        vis_seq.append((sql['question'],
-            table_data[sql['table_id']]['header'], sql['query']))
+        gt_cond_seq.append(sql['sql1']['cond'])
+        vis_seq.append((sql['question'], tab_cols, sql['query']))
     if ret_vis_data:
         return q_seq, col_seq, col_num, ans_seq, query_seq, gt_cond_seq, vis_seq
     else:
@@ -477,7 +440,7 @@ def to_batch_query(sql_data, idxes, st, ed):
     query_gt = []
     table_ids = []
     for i in range(st, ed):
-        query_gt.append(sql_data[idxes[i]]['sql'])
+        query_gt.append(sql_data[idxes[i]]['sql1'])
         table_ids.append(sql_data[idxes[i]]['table_id'])
     # print query_gt
     return query_gt, table_ids
@@ -485,7 +448,7 @@ def to_batch_query(sql_data, idxes, st, ed):
 def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
     print 'training'
     model.train()
-    perm=np.random.permutation(len(sql_data))
+    perm=list(range(len(sql_data)))#np.random.permutation(len(sql_data))
     cum_loss = 0.0
     st = 0
     while st < len(sql_data):
@@ -495,7 +458,7 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
                 to_batch_seq(sql_data, table_data, perm, st, ed)
         gt_where_seq = model.generate_gt_where_seq(q_seq, col_seq, query_seq)
         gt_sel_seq = [x[1] for x in ans_seq]
-        print q_seq
+        # print q_seq
         score = model.forward(q_seq, col_seq, col_num, pred_entry,
                 gt_where=gt_where_seq, gt_cond=gt_cond_seq, gt_sel=gt_sel_seq)
         loss = model.loss(score, ans_seq, pred_entry, gt_where_seq)
@@ -523,9 +486,11 @@ def epoch_exec_acc(model, batch_size, sql_data, table_data, db_path):
             to_batch_seq(sql_data, table_data, perm, st, ed, ret_vis_data=True)
         raw_q_seq = [x[0] for x in raw_data]
         raw_col_seq = [x[1] for x in raw_data]
+        model.generate_gt_sel_seq(q_seq, col_seq, query_seq)
         gt_where_seq = model.generate_gt_where_seq(q_seq, col_seq, query_seq)
         query_gt, table_ids = to_batch_query(sql_data, perm, st, ed)
         gt_sel_seq = [x[1] for x in ans_seq]
+        print 'gt_sel_seq', gt_sel_seq
         score = model.forward(q_seq, col_seq, col_num,
                 (True, True, True), gt_sel=gt_sel_seq)
         pred_queries = model.gen_query(score, q_seq, col_seq,
@@ -561,9 +526,12 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry):
         query_gt, table_ids = to_batch_query(sql_data, perm, st, ed)
         gt_sel_seq = [x[1] for x in ans_seq]
         score = model.forward(q_seq, col_seq, col_num,
-                pred_entry, gt_sel = gt_sel_seq)
+                pred_entry)
+
         pred_queries = model.gen_query(score, q_seq, col_seq,
-                raw_q_seq, raw_col_seq, pred_entry)
+                raw_q_seq, raw_col_seq, pred_entry) # is this the decoder portion??
+        # pred_queries = model.gen_query(score, q_seq, col_seq,
+        #         raw_q_seq, raw_col_seq, pred_entry, gt_cond = gt_cond_seq)
         one_err, tot_err = model.check_acc(raw_data,
                 pred_queries, query_gt, pred_entry)
 
@@ -572,6 +540,7 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry):
 
         st = ed
     return tot_acc_num / len(sql_data), one_acc_num / len(sql_data)
+
 def epoch_acc(model, batch_size, sql_data, table_data, pred_entry):
     model.eval()
     perm = list(range(len(sql_data)))
@@ -591,7 +560,7 @@ def epoch_acc(model, batch_size, sql_data, table_data, pred_entry):
                 raw_q_seq, raw_col_seq, pred_entry)
         one_err, tot_err = model.check_acc(raw_data,
                 pred_queries, query_gt, pred_entry)
-        # print zip(pred_queries, query_gt)
+        print zip(pred_queries, query_gt)
 
         one_acc_num += (ed-st-one_err)
         tot_acc_num += (ed-st-tot_err)

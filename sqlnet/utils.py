@@ -36,6 +36,8 @@ def get_tables_for_sql(orig_path, train=0):
     else:
         SQL_PATH = PATH_NL2SQL + DEV_EXT
     sql_data = [get_main_file_name(SQL_PATH + '/' + file) for file in listdir(SQL_PATH)]
+    print sql_data
+    exit(1)
     table_data = [TABLE_PATH + '/' + file for file in table_names if file in sql_data]
     sql_data = [SQL_PATH + '/' + file + '.json'for file in sql_data]
     return sql_data, table_data 

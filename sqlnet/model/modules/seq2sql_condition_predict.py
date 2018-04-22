@@ -32,11 +32,14 @@ class Seq2SQLCondPredictor(nn.Module):
     def gen_gt_batch(self, tok_seq, gen_inp=True):
         # If gen_inp: generate the input token sequence (removing <END>)
         # Otherwise: generate the output token sequence (removing <BEG>)
+        print('WHERE tok_seq', tok_seq)
         B = len(tok_seq)
         ret_len = np.array([len(one_tok_seq)-1 for one_tok_seq in tok_seq])
         max_len = max(ret_len)
         ret_array = np.zeros((B, max_len, self.max_tok_num), dtype=np.float32)
         for b, one_tok_seq in enumerate(tok_seq):
+            print('one_tok_seq', one_tok_seq)
+            print('gen_inp', gen_inp)
             out_one_tok_seq = one_tok_seq[:-1] if gen_inp else one_tok_seq[1:]
             for t, tok_id in enumerate(out_one_tok_seq):
                 ret_array[b, t, tok_id] = 1
@@ -45,7 +48,6 @@ class Seq2SQLCondPredictor(nn.Module):
         if self.gpu:
             ret_inp = ret_inp.cuda()
         ret_inp_var = Variable(ret_inp) #[B, max_len, max_tok_num]
-
         return ret_inp_var, ret_len
 
 
@@ -64,6 +66,7 @@ class Seq2SQLCondPredictor(nn.Module):
 
             h_enc_expand = h_enc.unsqueeze(1)
             g_s_expand = g_s.unsqueeze(2)
+            #
             cond_score = self.cond_out( self.cond_out_h(h_enc_expand) +
                     self.cond_out_g(g_s_expand) ).squeeze()
             for idx, num in enumerate(x_len):
@@ -77,7 +80,7 @@ class Seq2SQLCondPredictor(nn.Module):
 
             t = 0
             init_inp = np.zeros((B, 1, self.max_tok_num), dtype=np.float32)
-            init_inp[:,0,7] = 1  #Set the <BEG> token
+            init_inp[:,0,7] = 1   #Set the <BEG> token - this needs to change
             if self.gpu:
                 cur_inp = Variable(torch.from_numpy(init_inp).cuda())
             else:
