@@ -1,3 +1,4 @@
+# *- coding: utf-8 -*-
 import json
 import torch
 import torch.nn as nn
@@ -5,11 +6,12 @@ import torch.nn.functional as F
 from torch.autograd import Variable
 import numpy as np
 from net_utils import run_lstm
+import logging
 
 class Seq2SQLCondPredictor(nn.Module):
     def __init__(self, N_word, N_h, N_depth, max_col_num, max_tok_num, gpu):
         super(Seq2SQLCondPredictor, self).__init__()
-        print "Seq2SQL where prediction"
+        logging.info("Seq2SQL where prediction")
         self.N_h = N_h
         self.max_tok_num = max_tok_num
         self.max_col_num = max_col_num
@@ -32,15 +34,16 @@ class Seq2SQLCondPredictor(nn.Module):
     def gen_gt_batch(self, tok_seq, gen_inp=True):
         # If gen_inp: generate the input token sequence (removing <END>)
         # Otherwise: generate the output token sequence (removing <BEG>)
-        print('WHERE tok_seq', tok_seq)
+        # print('WHERE tok_seq', tok_seq)
         B = len(tok_seq)
         ret_len = np.array([len(one_tok_seq)-1 for one_tok_seq in tok_seq])
         max_len = max(ret_len)
         ret_array = np.zeros((B, max_len, self.max_tok_num), dtype=np.float32)
         for b, one_tok_seq in enumerate(tok_seq):
-            print('one_tok_seq', one_tok_seq)
-            print('gen_inp', gen_inp)
+            # print('one_tok_seq', one_tok_seq)
+            # print('gen_inp', gen_inp)
             out_one_tok_seq = one_tok_seq[:-1] if gen_inp else one_tok_seq[1:]
+            logging.warning('generated_decoder_seq {0}'.format(out_one_tok_seq))
             for t, tok_id in enumerate(out_one_tok_seq):
                 ret_array[b, t, tok_id] = 1
 
@@ -61,8 +64,10 @@ class Seq2SQLCondPredictor(nn.Module):
                 for hid in hidden)
         if gt_where is not None:
             gt_tok_seq, gt_tok_len = self.gen_gt_batch(gt_where, gen_inp=True)
+            
             g_s, _ = run_lstm(self.cond_decoder,
                     gt_tok_seq, gt_tok_len, decoder_hidden)
+            logging.warning('pred_decoder_seq {0}'.format(g_s))
 
             h_enc_expand = h_enc.unsqueeze(1)
             g_s_expand = g_s.unsqueeze(2)
@@ -80,7 +85,7 @@ class Seq2SQLCondPredictor(nn.Module):
 
             t = 0
             init_inp = np.zeros((B, 1, self.max_tok_num), dtype=np.float32)
-            init_inp[:,0,7] = 1   #Set the <BEG> token - this needs to change
+            init_inp[:,0,1] = 1   #Set the WHERE token as the input - this needs to change
             if self.gpu:
                 cur_inp = Variable(torch.from_numpy(init_inp).cuda())
             else:
@@ -113,7 +118,7 @@ class Seq2SQLCondPredictor(nn.Module):
                 cur_inp = cur_inp.unsqueeze(1)
 
                 for idx, tok in enumerate(ans_tok.squeeze()):
-                    if tok == 1:  #Find the <END> token
+                    if tok == 4:  #Find the <END> token
                         done_set.add(idx)
                 t += 1
 

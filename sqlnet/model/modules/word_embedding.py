@@ -1,9 +1,11 @@
+# *- coding: utf-8 -*-
 import json
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
 import numpy as np
+import logging
 
 class WordEmbedding(nn.Module):
     def __init__(self, word_emb, N_word, gpu, SQL_TOK,
@@ -13,19 +15,18 @@ class WordEmbedding(nn.Module):
         self.N_word = N_word
         self.our_model = our_model
         self.gpu = gpu
-        self.AGG_SQL_TOK = ['', 'MAX', 'MIN', 'COUNT', 'SUM', 'AVG']
-        self.SEL_SQL_TOK = ['<UNK>', '<END>', ',', 'SEL'] # w
+        self.SEL_SQL_TOK = ['SELECT', '<END>', ',', 'MAX', 'MIN', 'COUNT', 'SUM', 'AVG'] # w
         self.SQL_TOK = SQL_TOK
 
         if trainable:
-            print "Using trainable embedding"
+            logging.info("Using trainable embedding")
             self.w2i, word_emb_val = word_emb
             self.embedding = nn.Embedding(len(self.w2i), N_word)
             self.embedding.weight = nn.Parameter(
                     torch.from_numpy(word_emb_val.astype(np.float32)))
         else:
             self.word_emb = word_emb
-            print "Using fixed embedding"
+            logging.info("Using fixed embedding")
 
 
     def gen_x_batch(self, q, col, sel=False):
@@ -41,8 +42,8 @@ class WordEmbedding(nn.Module):
                 if self.trainable:
                     val_embs.append([1] + q_val + [2])  #<BEG> and <END> #TODO: 
                 else:
-                    print 'self.our_model'
-                    print ('appending', [np.zeros(self.N_word, dtype=np.float32)] + q_val + [np.zeros(self.N_word, dtype=np.float32)])
+                    logging.info('self.our_model')
+                    # print ('appending', [np.zeros(self.N_word, dtype=np.float32)] + q_val + [np.zeros(self.N_word, dtype=np.float32)])
                     val_embs.append([np.zeros(self.N_word, dtype=np.float32)] + q_val + [np.zeros(self.N_word, dtype=np.float32)])  #<BEG> and <END>
                 val_len[i] = 1 + len(q_val) + 1
             else:
@@ -56,7 +57,7 @@ class WordEmbedding(nn.Module):
                         val_embs.append( [np.zeros(self.N_word, dtype=np.float32) for _ in self.SQL_TOK] + col_val + [np.zeros(self.N_word, dtype=np.float32)] + q_val+ [np.zeros(self.N_word, dtype=np.float32)])
                     else:
                         val_embs.append( [np.zeros(self.N_word, dtype=np.float32) for _ in self.SEL_SQL_TOK] + \
-                        [np.zeros(self.N_word, dtype=np.float32) for _ in self.AGG_SQL_TOK] + col_val + [np.zeros(self.N_word, dtype=np.float32)] + q_val+ [np.zeros(self.N_word, dtype=np.float32)])
+                        col_val + [np.zeros(self.N_word, dtype=np.float32)] + q_val+ [np.zeros(self.N_word, dtype=np.float32)])
                 val_len[i] = len(self.SQL_TOK) + len(col_val) + 1 + len(q_val) + 1
         max_len = max(val_len)
 
@@ -79,8 +80,6 @@ class WordEmbedding(nn.Module):
             if self.gpu:
                 val_inp = val_inp.cuda()
             val_inp_var = Variable(val_inp)
-        print ('val_len', val_len)
-        print ('val_inp_var.size()',val_inp_var.size())
         return val_inp_var, val_len
 
     def gen_col_batch(self, cols):

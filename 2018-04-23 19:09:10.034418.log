@@ -1,0 +1,80 @@
+INFO:root:about to load dataset
+INFO:root:Loading data from New_Data/preprocessed/train/art_1.json
+INFO:root:Loading data from New_Data/preprocessed/train/boat_1.json
+INFO:root:Loading data from New_Data/preprocessed/tables/art_1_table.json
+INFO:root:Loading data from New_Data/preprocessed/tables/boat_1_table.json
+INFO:root:Loading data from New_Data/preprocessed/train/art_1.json
+INFO:root:Loading data from New_Data/preprocessed/train/boat_1.json
+INFO:root:Loading data from New_Data/preprocessed/tables/art_1_table.json
+INFO:root:Loading data from New_Data/preprocessed/tables/boat_1_table.json
+INFO:root:data loaded
+INFO:root:glove loaded
+INFO:root:SQLNet loaded
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+WARNING:root:len sel_query: 1 len_agg_query: 99
+INFO:root:Init dev acc_qm: 0.0
+  breakdown on (agg, sel, where): [ 0.21978022  0.05494505  0.34065934]
+INFO:root:Epoch 1 @ 2018-04-23 19:09:16.209854
+INFO:root: Loss = 8.00558485304
+INFO:root: Train acc_qm: 0.0
+   breakdown result: [ 0.          0.          0.34065934]
+INFO:root: Dev acc_qm: 0.0
+   breakdown result: [ 0.          0.          0.34065934]
+INFO:root:Best_agg_acc = 0 on epoch 0 
+INFO:root:best_sel_acc = 0 on epoch 0 
+INFO:root:best_cond_acc = 0 on epoch 0 
+INFO:root:Epoch 2 @ 2018-04-23 19:09:20.297459
+INFO:root: Loss = 7.74651165847
+INFO:root: Train acc_qm: 0.0
+   breakdown result: [ 0.          0.          0.34065934]
