@@ -85,7 +85,7 @@ class Seq2SQLCondPredictor(nn.Module):
 
             t = 0
             init_inp = np.zeros((B, 1, self.max_tok_num), dtype=np.float32)
-            init_inp[:,0,1] = 1   #Set the WHERE token as the input - this needs to change
+            init_inp[:,0,13] = 1   #Set the WHERE token as the input - this needs to change
             if self.gpu:
                 cur_inp = Variable(torch.from_numpy(init_inp).cuda())
             else:
@@ -118,7 +118,7 @@ class Seq2SQLCondPredictor(nn.Module):
                 cur_inp = cur_inp.unsqueeze(1)
 
                 for idx, tok in enumerate(ans_tok.squeeze()):
-                    if tok == 4:  #Find the <END> token
+                    if tok == 16:  #Find the <END> token
                         done_set.add(idx)
                 t += 1
 

@@ -568,10 +568,10 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry):
         one_err, tot_err = model.check_acc(raw_data,
                 pred_queries, query_gt, pred_entry)
 
-        one_acc_num += (ed-st-one_err)
+        one_acc_num += (ed-st-one_err) # 5 - 0 - 2
         tot_acc_num += (ed-st-tot_err)
-        # logging.warning('one_acc_num: {0}'.format(one_acc_num))
-        # logging.warning('tot_acc_num: {0}'.format(tot_acc_num))
+        logging.warning('one_acc_num: {0}'.format(one_acc_num)) # should be 3
+        logging.warning('tot_acc_num: {0}'.format(tot_acc_num))
         # exit(1)
 
         st = ed

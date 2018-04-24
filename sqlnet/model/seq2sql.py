@@ -33,6 +33,9 @@ class Seq2SQL(nn.Module):
         self.AGG_SQL_TOK= ['MAX', 'MIN', 'AVG', 'COUNT', 'SUM']
         self.SEL_SQL_TOK = ['SELECT', '<END>', ','] + self.AGG_SQL_TOK # w
         #gt_sel_seq = [0, ..., 1]
+        self.SQL_TOK = ['NT', 'BTWN', 'EQL', 'GT', 'LT', 'GTEQL', 'LTEQL', 'NTEQL', 'IN', 'LKE', 'IS', 'XST']\
+         + ['WHERE', 'AND', 'OR', '<END>']
+         #WHERE = 13, END = 16
         self.SQL_TOK = ['EQL', 'WHERE', 'AND', 'OR', # what is the <UNK> stand for???
                        '<END>' , 'GT', 'LT', 'NT'] # EQL = , GT > , LT <, <=, >=, != # should be all the SQL tokens #TODO: add back <UNK>
         # gt_where_seq == [2, 1] or [2, 0, 10, 0, 42, 0, 36, 18, 1]
@@ -158,13 +161,13 @@ class Seq2SQL(nn.Module):
                 cur_where_query = cur_query[cur_query.index('where') + 1:]
                 # logging.debug('cur_where_query: %s', cur_where_query)
                 cur_where_query = self.clean_where_query(cur_where_query)
-                # logging.warning('cur_where_query: %s', cur_where_query)
+                logging.warning('cur_where_query: %s', cur_where_query)
                 # logging.warning('all_toks: {0}'.format(all_toks))
                 for item in cur_where_query:
                     if item in all_toks:
                         
                         cur_seq += [all_toks.index(item.lower())]
-                        # logging.warning('item: {0} index:{1}'.format(item, all_toks.index(item.lower())))
+                        logging.warning('item: {0} index:{1}'.format(item, all_toks.index(item.lower())))
                     else:
                         logging.warning('Not found in all_toks {0}'.format(item))
                         # assert False, "%s" % item
@@ -429,8 +432,8 @@ class Seq2SQL(nn.Module):
 
         if verbose:
             print cond_toks
-        if len(cond_toks) > 0:
-            cond_toks = cond_toks[1:] # get rid of the WHERE
+        # if len(cond_toks) > 0:
+        #     cond_toks = cond_toks[1:] # get rid of the WHERE
         st = 0
         logging.warning('cond_toks: %s', str(cond_toks))
         while st < len(cond_toks):
@@ -439,19 +442,26 @@ class Seq2SQL(nn.Module):
             ed = len(cond_toks) if 'and' not in cond_toks[st:] \
                  else cond_toks[st:].index('and') + st
             print ('ed', ed)
-            if 'EQL' in cond_toks[st:ed]:
-                op = cond_toks[st:ed].index('EQL') + st
-                cur_cond[1] = 0
-            elif 'GT' in cond_toks[st:ed]:
-                op = cond_toks[st:ed].index('GT') + st
-                cur_cond[1] = 1
-            elif 'LT' in cond_toks[st:ed]:
-                op = cond_toks[st:ed].index('LT') + st
+            if 'NT' in cond_toks[st:ed] and 'EQL' in cond_toks[st:ed]:
+                op_prev = cond_toks[st:ed].index('NT') + st
+                op = op_prev + 1
+                cur_cond[1] = 8
+            elif 'EQL' in cond_toks[st:ed]:
+                op_prev = cond_toks[st:ed].index('EQL') + st
                 cur_cond[1] = 2
+                op = op_prev
+            elif 'GT' in cond_toks[st:ed]:
+                op_prev = cond_toks[st:ed].index('GT') + st
+                cur_cond[1] = 3
+                op = op_prev
+            elif 'LT' in cond_toks[st:ed]:
+                op_prev = cond_toks[st:ed].index('LT') + st
+                cur_cond[1] = 4
+                op = op_prev
             else:
-                op = st
+                op_prev = op = st
                 cur_cond[1] = 0
-            sel_col = cond_toks[st:op]
+            sel_col = cond_toks[st:op_prev]
             logging.warning('sel_col: %s', str(sel_col))
             to_idx = [x.lower() for x in raw_col[b]]
             pred_col = self.merge_tokens(sel_col, raw_q[b] + ' || ' + \
@@ -574,12 +584,14 @@ class Seq2SQL(nn.Module):
                 if len(cond_pred) != len(cond_gt): # penalize if they predict the wrong number of conditions
                     flag = False
                     cond_num_err += 1
+                    logging.warning('wrong number of columns')
                 # print('cond_num_err', cond_num_err)
 
                 if flag and set(
                         x[0] for x in cond_pred) != set(x[0] for x in cond_gt): # penalize if they predict the different columns
                     flag = False
                     cond_col_err += 1
+                    logging.warning('wrong column selected')
                 # print('cond_col_err', cond_col_err)
 
                 for idx in range(len(cond_pred)):
@@ -590,6 +602,7 @@ class Seq2SQL(nn.Module):
                     if flag and cond_gt[gt_idx][1] != cond_pred[idx][1]:
                         flag = False
                         cond_op_err += 1
+                        logging.warning('Wrong condition op')
                 # print('cond_op_err', cond_op_err)
 
                 for idx in range(len(cond_pred)):
@@ -600,19 +613,21 @@ class Seq2SQL(nn.Module):
                        unicode(cond_pred[idx][2]).lower():
                         flag = False
                         cond_val_err += 1
+                        logging.warning('Wrong values!!')
                 # print('cond_val_err', cond_val_err)
                 
 
                 if not flag:
                     cond_err += 1
-                    
+                    logging.warning('Error increased by one')     
                     good = False
                 # cond_err += cond_val_err + cond_op_err + cond_col_err + cond_num_err
                 # print('cond_err', cond_err)
  
             if not good:
                 tot_err += 1
-        logging.debug('tot_err: %d', tot_err)
+        logging.warning('tot_err: %d', tot_err)
+        logging.warning('cond_err: {0}'.format(cond_err)) # should be 2! 
         return np.array((agg_err, sel_err, cond_err)), tot_err
 
     
