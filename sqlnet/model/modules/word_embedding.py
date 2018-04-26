@@ -15,7 +15,7 @@ class WordEmbedding(nn.Module):
         self.N_word = N_word
         self.our_model = our_model
         self.gpu = gpu
-        self.SEL_SQL_TOK = ['SELECT', '<END>', ',', 'MAX', 'MIN', 'COUNT', 'SUM', 'AVG'] # w
+        self.SEL_SQL_TOK = ['SELECT', '<END>', ',', 'MAX', 'MIN', 'AVG', 'COUNT', 'SUM']
         self.SQL_TOK = SQL_TOK
 
         if trainable:

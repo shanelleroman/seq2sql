@@ -1,0 +1,470 @@
+2018-04-24 13:28:56,151 [MainThread  ] [WARNI]  about to load dataset
+2018-04-24 13:28:56,159 [MainThread  ] [WARNI]  Loading data from New_Data/preprocessed/train/art_1.json
+2018-04-24 13:28:56,189 [MainThread  ] [WARNI]  Loading data from New_Data/preprocessed/train/art_1.json
+2018-04-24 13:28:56,199 [MainThread  ] [WARNI]  data loaded
+2018-04-24 13:28:56,922 [MainThread  ] [WARNI]  glove loaded
+2018-04-24 13:29:00,818 [MainThread  ] [WARNI]  SQLNet loaded
+2018-04-24 13:29:01,823 [MainThread  ] [WARNI]  cond_toks: [u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name']
+2018-04-24 13:29:01,824 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:01,824 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:01,824 [MainThread  ] [WARNI]  cur_cond: [0, 0, u'name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name']
+2018-04-24 13:29:01,825 [MainThread  ] [WARNI]  cond_toks: [u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name']
+2018-04-24 13:29:01,825 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:01,826 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:01,826 [MainThread  ] [WARNI]  cur_cond: [0, 0, u'name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name']
+2018-04-24 13:29:01,827 [MainThread  ] [WARNI]  cond_toks: [u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name']
+2018-04-24 13:29:01,827 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:01,827 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:01,828 [MainThread  ] [WARNI]  cur_cond: [0, 0, u'name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name']
+2018-04-24 13:29:01,829 [MainThread  ] [WARNI]  cond_toks: [u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name']
+2018-04-24 13:29:01,829 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:01,829 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:01,830 [MainThread  ] [WARNI]  cur_cond: [0, 0, u'name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name']
+2018-04-24 13:29:01,831 [MainThread  ] [WARNI]  cond_toks: [u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name', u'name']
+2018-04-24 13:29:01,831 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:01,831 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:01,831 [MainThread  ] [WARNI]  cur_cond: [0, 0, u'name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name']
+2018-04-24 13:29:01,832 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 0, u'name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name']]
+2018-04-24 13:29:01,832 [MainThread  ] [WARNI]  cond_gt_qry: [[6, 2, u'80']]
+2018-04-24 13:29:01,832 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:01,832 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:01,832 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 0, u'name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name']]
+2018-04-24 13:29:01,832 [MainThread  ] [WARNI]  cond_gt_qry: [[4, 3, u'1850']]
+2018-04-24 13:29:01,832 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:01,832 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:01,832 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 0, u'name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name']]
+2018-04-24 13:29:01,832 [MainThread  ] [WARNI]  cond_gt_qry: [[13, 8, u'gallery 226']]
+2018-04-24 13:29:01,832 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:01,832 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:01,833 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 0, u'name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name']]
+2018-04-24 13:29:01,833 [MainThread  ] [WARNI]  cond_gt_qry: [[17, 4, u'1900']]
+2018-04-24 13:29:01,833 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:01,833 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:01,833 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 0, u'name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name name']]
+2018-04-24 13:29:01,833 [MainThread  ] [WARNI]  cond_gt_qry: [[17, 3, u'1920']]
+2018-04-24 13:29:01,833 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:01,833 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:01,833 [MainThread  ] [WARNI]  tot_err: 5
+2018-04-24 13:29:01,833 [MainThread  ] [WARNI]  cond_err: 5.0
+2018-04-24 13:29:01,834 [MainThread  ] [WARNI]  one_acc_num: [ 2.  0.  0.]
+2018-04-24 13:29:01,834 [MainThread  ] [WARNI]  tot_acc_num: 0.0
+2018-04-24 13:29:01,840 [MainThread  ] [WARNI]  init_acc: (0.0, array([ 0.4,  0. ,  0. ]))
+2018-04-24 13:29:01,840 [MainThread  ] [WARNI]  Init dev acc_qm: 0.0
+  breakdown on (agg, sel, where): [ 0.4  0.   0. ]
+2018-04-24 13:29:01,911 [MainThread  ] [WARNI]  Epoch 1 @ 2018-04-24 13:29:01.910995
+2018-04-24 13:29:01,927 [MainThread  ] [WARNI]  cur_where_query: [u'painting', u'id', 'eql', u'80']
+2018-04-24 13:29:01,927 [MainThread  ] [WARNI]  item: painting index:25
+2018-04-24 13:29:01,927 [MainThread  ] [WARNI]  item: id index:11
+2018-04-24 13:29:01,927 [MainThread  ] [WARNI]  item: eql index:0
+2018-04-24 13:29:01,927 [MainThread  ] [WARNI]  item: 80 index:74
+2018-04-24 13:29:01,928 [MainThread  ] [WARNI]  cur_where_query: [u'birth', u'year', 'gt', u'1850']
+2018-04-24 13:29:01,928 [MainThread  ] [WARNI]  item: birth index:19
+2018-04-24 13:29:01,928 [MainThread  ] [WARNI]  item: year index:20
+2018-04-24 13:29:01,928 [MainThread  ] [WARNI]  item: gt index:5
+2018-04-24 13:29:01,928 [MainThread  ] [WARNI]  item: 1850 index:76
+2018-04-24 13:29:01,928 [MainThread  ] [WARNI]  cur_where_query: [u'location', 'nt', 'eql', u'gallery', u'226']
+2018-04-24 13:29:01,928 [MainThread  ] [WARNI]  item: location index:43
+2018-04-24 13:29:01,928 [MainThread  ] [WARNI]  item: nt index:7
+2018-04-24 13:29:01,929 [MainThread  ] [WARNI]  item: eql index:0
+2018-04-24 13:29:01,929 [MainThread  ] [WARNI]  item: gallery index:76
+2018-04-24 13:29:01,929 [MainThread  ] [WARNI]  item: 226 index:77
+2018-04-24 13:29:01,929 [MainThread  ] [WARNI]  cur_where_query: [u'year', 'lt', u'1900']
+2018-04-24 13:29:01,929 [MainThread  ] [WARNI]  item: year index:20
+2018-04-24 13:29:01,929 [MainThread  ] [WARNI]  item: lt index:6
+2018-04-24 13:29:01,929 [MainThread  ] [WARNI]  item: 1900 index:78
+2018-04-24 13:29:01,930 [MainThread  ] [WARNI]  cur_where_query: [u'year', 'gt', u'1920']
+2018-04-24 13:29:01,930 [MainThread  ] [WARNI]  item: year index:20
+2018-04-24 13:29:01,930 [MainThread  ] [WARNI]  item: gt index:5
+2018-04-24 13:29:01,930 [MainThread  ] [WARNI]  item: 1920 index:75
+2018-04-24 13:29:01,930 [MainThread  ] [WARNI]  generate_gt_where_seq: [[1, 25, 11, 0, 74, 4], [1, 19, 20, 5, 76, 4], [1, 43, 7, 0, 76, 77, 4], [1, 20, 6, 78, 4], [1, 20, 5, 75, 4]]
+2018-04-24 13:29:01,948 [MainThread  ] [WARNI]  generated_decoder_seq [1, 25, 11, 0, 74]
+2018-04-24 13:29:01,949 [MainThread  ] [WARNI]  generated_decoder_seq [1, 19, 20, 5, 76]
+2018-04-24 13:29:01,949 [MainThread  ] [WARNI]  generated_decoder_seq [1, 43, 7, 0, 76, 77]
+2018-04-24 13:29:01,949 [MainThread  ] [WARNI]  generated_decoder_seq [1, 20, 6, 78]
+2018-04-24 13:29:01,949 [MainThread  ] [WARNI]  generated_decoder_seq [1, 20, 5, 75]
+2018-04-24 13:29:02,016 [MainThread  ] [WARNI]  pred_decoder_seq Variable containing:
+( 0 ,.,.) = 
+  0.0240  0.0187 -0.0003  ...   0.0703 -0.0067 -0.0058
+  0.0398  0.0340  0.0018  ...   0.0661 -0.0105 -0.0087
+  0.0560  0.0288  0.0141  ...   0.0714 -0.0099 -0.0146
+  0.0557  0.0138  0.0157  ...   0.0684 -0.0016 -0.0110
+  0.0630 -0.0109  0.0204  ...   0.0766 -0.0115 -0.0091
+  0.0000  0.0000  0.0000  ...   0.0000  0.0000  0.0000
+
+( 1 ,.,.) = 
+  0.0197 -0.0017 -0.0060  ...   0.0537 -0.0191 -0.0181
+  0.0308  0.0108  0.0001  ...   0.0660 -0.0297 -0.0219
+  0.0352  0.0134  0.0058  ...   0.0587 -0.0305 -0.0199
+  0.0408  0.0089  0.0171  ...   0.0634 -0.0212 -0.0217
+  0.0435 -0.0019  0.0123  ...   0.0701 -0.0219 -0.0267
+  0.0000  0.0000  0.0000  ...   0.0000  0.0000  0.0000
+
+( 2 ,.,.) = 
+  0.0135  0.0080  0.0012  ...   0.0687 -0.0072 -0.0093
+  0.0237  0.0217  0.0026  ...   0.0665 -0.0192 -0.0081
+  0.0324  0.0151 -0.0026  ...   0.0622 -0.0330 -0.0098
+  0.0344  0.0107 -0.0030  ...   0.0644 -0.0211 -0.0113
+  0.0471  0.0009  0.0003  ...   0.0668 -0.0172 -0.0134
+  0.0523 -0.0013  0.0056  ...   0.0684 -0.0060 -0.0216
+
+( 3 ,.,.) = 
+  0.0198  0.0086 -0.0057  ...   0.0625 -0.0201 -0.0118
+  0.0380  0.0202  0.0067  ...   0.0686 -0.0295 -0.0179
+  0.0460  0.0212  0.0114  ...   0.0705 -0.0230 -0.0178
+  0.0524  0.0132  0.0098  ...   0.0684 -0.0289 -0.0210
+  0.0000  0.0000  0.0000  ...   0.0000  0.0000  0.0000
+  0.0000  0.0000  0.0000  ...   0.0000  0.0000  0.0000
+
+( 4 ,.,.) = 
+  0.0332  0.0017 -0.0033  ...   0.0661 -0.0072 -0.0043
+  0.0345  0.0159  0.0083  ...   0.0629 -0.0171 -0.0095
+  0.0419  0.0172  0.0100  ...   0.0674 -0.0141 -0.0153
+  0.0516  0.0078  0.0182  ...   0.0666 -0.0194 -0.0291
+  0.0000  0.0000  0.0000  ...   0.0000  0.0000  0.0000
+  0.0000  0.0000  0.0000  ...   0.0000  0.0000  0.0000
+[torch.cuda.FloatTensor of size 5x6x100 (GPU 0)]
+
+2018-04-24 13:29:02,069 [MainThread  ] [WARNI]  gt_where[b][1:] [25, 11, 0, 74, 4]
+2018-04-24 13:29:02,071 [MainThread  ] [WARNI]  gt_where[b][1:] [19, 20, 5, 76, 4]
+2018-04-24 13:29:02,072 [MainThread  ] [WARNI]  gt_where[b][1:] [43, 7, 0, 76, 77, 4]
+2018-04-24 13:29:02,073 [MainThread  ] [WARNI]  gt_where[b][1:] [20, 6, 78, 4]
+2018-04-24 13:29:02,075 [MainThread  ] [WARNI]  gt_where[b][1:] [20, 5, 75, 4]
+2018-04-24 13:29:02,216 [MainThread  ] [WARNI]   Loss = 8.73419189453
+2018-04-24 13:29:02,966 [MainThread  ] [WARNI]  cond_toks: ['EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL']
+2018-04-24 13:29:02,966 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:02,966 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:02,966 [MainThread  ] [WARNI]  cur_cond: [0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']
+2018-04-24 13:29:02,968 [MainThread  ] [WARNI]  cond_toks: ['EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL']
+2018-04-24 13:29:02,968 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:02,968 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:02,968 [MainThread  ] [WARNI]  cur_cond: [0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']
+2018-04-24 13:29:02,969 [MainThread  ] [WARNI]  cond_toks: ['EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL']
+2018-04-24 13:29:02,969 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:02,969 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:02,970 [MainThread  ] [WARNI]  cur_cond: [0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']
+2018-04-24 13:29:02,971 [MainThread  ] [WARNI]  cond_toks: ['EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL']
+2018-04-24 13:29:02,971 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:02,971 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:02,971 [MainThread  ] [WARNI]  cur_cond: [0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']
+2018-04-24 13:29:02,972 [MainThread  ] [WARNI]  cond_toks: ['EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL']
+2018-04-24 13:29:02,973 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:02,973 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:02,973 [MainThread  ] [WARNI]  cur_cond: [0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']
+2018-04-24 13:29:02,973 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']]
+2018-04-24 13:29:02,973 [MainThread  ] [WARNI]  cond_gt_qry: [[6, 2, u'80']]
+2018-04-24 13:29:02,973 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:02,973 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:02,973 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']]
+2018-04-24 13:29:02,973 [MainThread  ] [WARNI]  cond_gt_qry: [[4, 3, u'1850']]
+2018-04-24 13:29:02,974 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:02,974 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:02,974 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']]
+2018-04-24 13:29:02,974 [MainThread  ] [WARNI]  cond_gt_qry: [[13, 8, u'gallery 226']]
+2018-04-24 13:29:02,974 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:02,974 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:02,974 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']]
+2018-04-24 13:29:02,974 [MainThread  ] [WARNI]  cond_gt_qry: [[17, 4, u'1900']]
+2018-04-24 13:29:02,974 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:02,974 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:02,974 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']]
+2018-04-24 13:29:02,974 [MainThread  ] [WARNI]  cond_gt_qry: [[17, 3, u'1920']]
+2018-04-24 13:29:02,974 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:02,975 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:02,975 [MainThread  ] [WARNI]  tot_err: 5
+2018-04-24 13:29:02,975 [MainThread  ] [WARNI]  cond_err: 5.0
+2018-04-24 13:29:02,975 [MainThread  ] [WARNI]  one_acc_num: [ 2.  0.  0.]
+2018-04-24 13:29:02,975 [MainThread  ] [WARNI]  tot_acc_num: 0.0
+2018-04-24 13:29:02,982 [MainThread  ] [WARNI]   Train acc_qm: 0.0
+   breakdown result: [ 0.4  0.   0. ]
+2018-04-24 13:29:03,693 [MainThread  ] [WARNI]  cond_toks: ['EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL']
+2018-04-24 13:29:03,694 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:03,694 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:03,694 [MainThread  ] [WARNI]  cur_cond: [0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']
+2018-04-24 13:29:03,695 [MainThread  ] [WARNI]  cond_toks: ['EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL']
+2018-04-24 13:29:03,695 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:03,695 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:03,696 [MainThread  ] [WARNI]  cur_cond: [0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']
+2018-04-24 13:29:03,697 [MainThread  ] [WARNI]  cond_toks: ['EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL']
+2018-04-24 13:29:03,697 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:03,697 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:03,697 [MainThread  ] [WARNI]  cur_cond: [0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']
+2018-04-24 13:29:03,699 [MainThread  ] [WARNI]  cond_toks: ['EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL']
+2018-04-24 13:29:03,699 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:03,699 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:03,699 [MainThread  ] [WARNI]  cur_cond: [0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']
+2018-04-24 13:29:03,700 [MainThread  ] [WARNI]  cond_toks: ['EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL']
+2018-04-24 13:29:03,700 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:03,700 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:03,701 [MainThread  ] [WARNI]  cur_cond: [0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']
+2018-04-24 13:29:03,701 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']]
+2018-04-24 13:29:03,701 [MainThread  ] [WARNI]  cond_gt_qry: [[6, 2, u'80']]
+2018-04-24 13:29:03,701 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:03,701 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:03,701 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']]
+2018-04-24 13:29:03,701 [MainThread  ] [WARNI]  cond_gt_qry: [[4, 3, u'1850']]
+2018-04-24 13:29:03,701 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:03,701 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:03,701 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']]
+2018-04-24 13:29:03,702 [MainThread  ] [WARNI]  cond_gt_qry: [[13, 8, u'gallery 226']]
+2018-04-24 13:29:03,702 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:03,702 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:03,702 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']]
+2018-04-24 13:29:03,702 [MainThread  ] [WARNI]  cond_gt_qry: [[17, 4, u'1900']]
+2018-04-24 13:29:03,702 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:03,702 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:03,702 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']]
+2018-04-24 13:29:03,702 [MainThread  ] [WARNI]  cond_gt_qry: [[17, 3, u'1920']]
+2018-04-24 13:29:03,702 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:03,702 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:03,702 [MainThread  ] [WARNI]  tot_err: 5
+2018-04-24 13:29:03,702 [MainThread  ] [WARNI]  cond_err: 5.0
+2018-04-24 13:29:03,703 [MainThread  ] [WARNI]  one_acc_num: [ 2.  0.  0.]
+2018-04-24 13:29:03,703 [MainThread  ] [WARNI]  tot_acc_num: 0.0
+2018-04-24 13:29:03,708 [MainThread  ] [WARNI]  Epoch 2 @ 2018-04-24 13:29:03.708587
+2018-04-24 13:29:03,718 [MainThread  ] [WARNI]  cur_where_query: [u'painting', u'id', 'eql', u'80']
+2018-04-24 13:29:03,718 [MainThread  ] [WARNI]  item: painting index:25
+2018-04-24 13:29:03,719 [MainThread  ] [WARNI]  item: id index:11
+2018-04-24 13:29:03,719 [MainThread  ] [WARNI]  item: eql index:0
+2018-04-24 13:29:03,719 [MainThread  ] [WARNI]  item: 80 index:74
+2018-04-24 13:29:03,719 [MainThread  ] [WARNI]  cur_where_query: [u'birth', u'year', 'gt', u'1850']
+2018-04-24 13:29:03,719 [MainThread  ] [WARNI]  item: birth index:19
+2018-04-24 13:29:03,719 [MainThread  ] [WARNI]  item: year index:20
+2018-04-24 13:29:03,719 [MainThread  ] [WARNI]  item: gt index:5
+2018-04-24 13:29:03,719 [MainThread  ] [WARNI]  item: 1850 index:76
+2018-04-24 13:29:03,719 [MainThread  ] [WARNI]  cur_where_query: [u'location', 'nt', 'eql', u'gallery', u'226']
+2018-04-24 13:29:03,719 [MainThread  ] [WARNI]  item: location index:43
+2018-04-24 13:29:03,719 [MainThread  ] [WARNI]  item: nt index:7
+2018-04-24 13:29:03,720 [MainThread  ] [WARNI]  item: eql index:0
+2018-04-24 13:29:03,720 [MainThread  ] [WARNI]  item: gallery index:76
+2018-04-24 13:29:03,720 [MainThread  ] [WARNI]  item: 226 index:77
+2018-04-24 13:29:03,720 [MainThread  ] [WARNI]  cur_where_query: [u'year', 'lt', u'1900']
+2018-04-24 13:29:03,720 [MainThread  ] [WARNI]  item: year index:20
+2018-04-24 13:29:03,720 [MainThread  ] [WARNI]  item: lt index:6
+2018-04-24 13:29:03,720 [MainThread  ] [WARNI]  item: 1900 index:78
+2018-04-24 13:29:03,720 [MainThread  ] [WARNI]  cur_where_query: [u'year', 'gt', u'1920']
+2018-04-24 13:29:03,720 [MainThread  ] [WARNI]  item: year index:20
+2018-04-24 13:29:03,720 [MainThread  ] [WARNI]  item: gt index:5
+2018-04-24 13:29:03,720 [MainThread  ] [WARNI]  item: 1920 index:75
+2018-04-24 13:29:03,720 [MainThread  ] [WARNI]  generate_gt_where_seq: [[1, 25, 11, 0, 74, 4], [1, 19, 20, 5, 76, 4], [1, 43, 7, 0, 76, 77, 4], [1, 20, 6, 78, 4], [1, 20, 5, 75, 4]]
+2018-04-24 13:29:03,734 [MainThread  ] [WARNI]  generated_decoder_seq [1, 25, 11, 0, 74]
+2018-04-24 13:29:03,734 [MainThread  ] [WARNI]  generated_decoder_seq [1, 19, 20, 5, 76]
+2018-04-24 13:29:03,734 [MainThread  ] [WARNI]  generated_decoder_seq [1, 43, 7, 0, 76, 77]
+2018-04-24 13:29:03,734 [MainThread  ] [WARNI]  generated_decoder_seq [1, 20, 6, 78]
+2018-04-24 13:29:03,734 [MainThread  ] [WARNI]  generated_decoder_seq [1, 20, 5, 75]
+2018-04-24 13:29:03,779 [MainThread  ] [WARNI]  pred_decoder_seq Variable containing:
+( 0 ,.,.) = 
+  0.0210  0.0104 -0.0021  ...   0.0658 -0.0122 -0.0145
+  0.0299  0.0209  0.0067  ...   0.0718 -0.0249 -0.0137
+  0.0417  0.0166  0.0096  ...   0.0670 -0.0175 -0.0259
+  0.0481  0.0124  0.0105  ...   0.0726 -0.0168 -0.0292
+  0.0496  0.0011  0.0146  ...   0.0720 -0.0121 -0.0353
+  0.0000  0.0000  0.0000  ...   0.0000  0.0000  0.0000
+
+( 1 ,.,.) = 
+  0.0228  0.0252 -0.0017  ...   0.0643 -0.0306 -0.0183
+  0.0309  0.0307  0.0064  ...   0.0614 -0.0253 -0.0256
+  0.0390  0.0177  0.0140  ...   0.0619 -0.0360 -0.0274
+  0.0412  0.0161  0.0174  ...   0.0591 -0.0314 -0.0267
+  0.0551  0.0110  0.0219  ...   0.0636 -0.0228 -0.0272
+  0.0000  0.0000  0.0000  ...   0.0000  0.0000  0.0000
+
+( 2 ,.,.) = 
+  0.0159  0.0065 -0.0014  ...   0.0575 -0.0278 -0.0207
+  0.0273  0.0291  0.0045  ...   0.0522 -0.0373 -0.0222
+  0.0288  0.0300  0.0054  ...   0.0585 -0.0391 -0.0230
+  0.0322  0.0224  0.0082  ...   0.0543 -0.0281 -0.0262
+  0.0387  0.0252  0.0119  ...   0.0584 -0.0153 -0.0318
+  0.0482  0.0202  0.0169  ...   0.0656 -0.0094 -0.0308
+
+( 3 ,.,.) = 
+  0.0250  0.0159 -0.0112  ...   0.0526 -0.0195 -0.0150
+  0.0450  0.0265 -0.0005  ...   0.0585 -0.0266 -0.0238
+  0.0586  0.0107  0.0100  ...   0.0568 -0.0283 -0.0210
+  0.0546  0.0169  0.0156  ...   0.0465 -0.0254 -0.0145
+  0.0000  0.0000  0.0000  ...   0.0000  0.0000  0.0000
+  0.0000  0.0000  0.0000  ...   0.0000  0.0000  0.0000
+
+( 4 ,.,.) = 
+  0.0216  0.0130 -0.0082  ...   0.0798 -0.0284 -0.0177
+  0.0237  0.0296  0.0056  ...   0.0602 -0.0350 -0.0208
+  0.0437  0.0187  0.0055  ...   0.0683 -0.0305 -0.0175
+  0.0495  0.0106  0.0228  ...   0.0700 -0.0320 -0.0245
+  0.0000  0.0000  0.0000  ...   0.0000  0.0000  0.0000
+  0.0000  0.0000  0.0000  ...   0.0000  0.0000  0.0000
+[torch.cuda.FloatTensor of size 5x6x100 (GPU 0)]
+
+2018-04-24 13:29:03,829 [MainThread  ] [WARNI]  gt_where[b][1:] [25, 11, 0, 74, 4]
+2018-04-24 13:29:03,830 [MainThread  ] [WARNI]  gt_where[b][1:] [19, 20, 5, 76, 4]
+2018-04-24 13:29:03,832 [MainThread  ] [WARNI]  gt_where[b][1:] [43, 7, 0, 76, 77, 4]
+2018-04-24 13:29:03,834 [MainThread  ] [WARNI]  gt_where[b][1:] [20, 6, 78, 4]
+2018-04-24 13:29:03,835 [MainThread  ] [WARNI]  gt_where[b][1:] [20, 5, 75, 4]
+2018-04-24 13:29:03,977 [MainThread  ] [WARNI]   Loss = 8.67447280884
+2018-04-24 13:29:04,607 [MainThread  ] [WARNI]  cond_toks: ['EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL']
+2018-04-24 13:29:04,607 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:04,607 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:04,607 [MainThread  ] [WARNI]  cur_cond: [0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']
+2018-04-24 13:29:04,608 [MainThread  ] [WARNI]  cond_toks: ['EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL']
+2018-04-24 13:29:04,609 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:04,609 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:04,609 [MainThread  ] [WARNI]  cur_cond: [0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']
+2018-04-24 13:29:04,610 [MainThread  ] [WARNI]  cond_toks: ['EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL']
+2018-04-24 13:29:04,610 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:04,610 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:04,611 [MainThread  ] [WARNI]  cur_cond: [0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']
+2018-04-24 13:29:04,612 [MainThread  ] [WARNI]  cond_toks: ['EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL']
+2018-04-24 13:29:04,612 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:04,612 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:04,612 [MainThread  ] [WARNI]  cur_cond: [0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']
+2018-04-24 13:29:04,613 [MainThread  ] [WARNI]  cond_toks: ['EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL']
+2018-04-24 13:29:04,613 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:04,614 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:04,614 [MainThread  ] [WARNI]  cur_cond: [0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']
+2018-04-24 13:29:04,614 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']]
+2018-04-24 13:29:04,614 [MainThread  ] [WARNI]  cond_gt_qry: [[6, 2, u'80']]
+2018-04-24 13:29:04,614 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:04,614 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:04,614 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']]
+2018-04-24 13:29:04,614 [MainThread  ] [WARNI]  cond_gt_qry: [[4, 3, u'1850']]
+2018-04-24 13:29:04,614 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:04,614 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:04,615 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']]
+2018-04-24 13:29:04,615 [MainThread  ] [WARNI]  cond_gt_qry: [[13, 8, u'gallery 226']]
+2018-04-24 13:29:04,615 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:04,615 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:04,615 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']]
+2018-04-24 13:29:04,615 [MainThread  ] [WARNI]  cond_gt_qry: [[17, 4, u'1900']]
+2018-04-24 13:29:04,615 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:04,615 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:04,615 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']]
+2018-04-24 13:29:04,615 [MainThread  ] [WARNI]  cond_gt_qry: [[17, 3, u'1920']]
+2018-04-24 13:29:04,615 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:04,615 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:04,615 [MainThread  ] [WARNI]  tot_err: 5
+2018-04-24 13:29:04,615 [MainThread  ] [WARNI]  cond_err: 5.0
+2018-04-24 13:29:04,616 [MainThread  ] [WARNI]  one_acc_num: [ 2.  0.  0.]
+2018-04-24 13:29:04,616 [MainThread  ] [WARNI]  tot_acc_num: 0.0
+2018-04-24 13:29:04,622 [MainThread  ] [WARNI]   Train acc_qm: 0.0
+   breakdown result: [ 0.4  0.   0. ]
+2018-04-24 13:29:05,428 [MainThread  ] [WARNI]  cond_toks: ['EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL']
+2018-04-24 13:29:05,428 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:05,428 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:05,428 [MainThread  ] [WARNI]  cur_cond: [0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']
+2018-04-24 13:29:05,430 [MainThread  ] [WARNI]  cond_toks: ['EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL']
+2018-04-24 13:29:05,430 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:05,430 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:05,430 [MainThread  ] [WARNI]  cur_cond: [0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']
+2018-04-24 13:29:05,431 [MainThread  ] [WARNI]  cond_toks: ['EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL']
+2018-04-24 13:29:05,431 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:05,432 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:05,432 [MainThread  ] [WARNI]  cur_cond: [0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']
+2018-04-24 13:29:05,433 [MainThread  ] [WARNI]  cond_toks: ['EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL']
+2018-04-24 13:29:05,433 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:05,433 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:05,434 [MainThread  ] [WARNI]  cur_cond: [0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']
+2018-04-24 13:29:05,435 [MainThread  ] [WARNI]  cond_toks: ['EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL', 'EQL']
+2018-04-24 13:29:05,435 [MainThread  ] [WARNI]  sel_col: []
+2018-04-24 13:29:05,435 [MainThread  ] [WARNI]  pred_col: 
+2018-04-24 13:29:05,435 [MainThread  ] [WARNI]  cur_cond: [0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']
+2018-04-24 13:29:05,435 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']]
+2018-04-24 13:29:05,436 [MainThread  ] [WARNI]  cond_gt_qry: [[6, 2, u'80']]
+2018-04-24 13:29:05,436 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:05,436 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:05,436 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']]
+2018-04-24 13:29:05,436 [MainThread  ] [WARNI]  cond_gt_qry: [[4, 3, u'1850']]
+2018-04-24 13:29:05,436 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:05,436 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:05,436 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']]
+2018-04-24 13:29:05,436 [MainThread  ] [WARNI]  cond_gt_qry: [[13, 8, u'gallery 226']]
+2018-04-24 13:29:05,436 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:05,436 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:05,436 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']]
+2018-04-24 13:29:05,436 [MainThread  ] [WARNI]  cond_gt_qry: [[17, 4, u'1900']]
+2018-04-24 13:29:05,437 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:05,437 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:05,437 [MainThread  ] [WARNI]  cond_pred_qry: [[0, 2, 'EQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQLEQL']]
+2018-04-24 13:29:05,437 [MainThread  ] [WARNI]  cond_gt_qry: [[17, 3, u'1920']]
+2018-04-24 13:29:05,437 [MainThread  ] [WARNI]  wrong column selected
+2018-04-24 13:29:05,437 [MainThread  ] [WARNI]  Error increased by one
+2018-04-24 13:29:05,437 [MainThread  ] [WARNI]  tot_err: 5
+2018-04-24 13:29:05,437 [MainThread  ] [WARNI]  cond_err: 5.0
+2018-04-24 13:29:05,437 [MainThread  ] [WARNI]  one_acc_num: [ 2.  0.  0.]
+2018-04-24 13:29:05,437 [MainThread  ] [WARNI]  tot_acc_num: 0.0
+2018-04-24 13:29:05,444 [MainThread  ] [WARNI]  Epoch 3 @ 2018-04-24 13:29:05.444823
+2018-04-24 13:29:05,456 [MainThread  ] [WARNI]  cur_where_query: [u'painting', u'id', 'eql', u'80']
+2018-04-24 13:29:05,456 [MainThread  ] [WARNI]  item: painting index:25
+2018-04-24 13:29:05,456 [MainThread  ] [WARNI]  item: id index:11
+2018-04-24 13:29:05,456 [MainThread  ] [WARNI]  item: eql index:0
+2018-04-24 13:29:05,456 [MainThread  ] [WARNI]  item: 80 index:74
+2018-04-24 13:29:05,456 [MainThread  ] [WARNI]  cur_where_query: [u'birth', u'year', 'gt', u'1850']
+2018-04-24 13:29:05,457 [MainThread  ] [WARNI]  item: birth index:19
+2018-04-24 13:29:05,457 [MainThread  ] [WARNI]  item: year index:20
+2018-04-24 13:29:05,457 [MainThread  ] [WARNI]  item: gt index:5
+2018-04-24 13:29:05,457 [MainThread  ] [WARNI]  item: 1850 index:76
+2018-04-24 13:29:05,457 [MainThread  ] [WARNI]  cur_where_query: [u'location', 'nt', 'eql', u'gallery', u'226']
+2018-04-24 13:29:05,457 [MainThread  ] [WARNI]  item: location index:43
+2018-04-24 13:29:05,457 [MainThread  ] [WARNI]  item: nt index:7
+2018-04-24 13:29:05,457 [MainThread  ] [WARNI]  item: eql index:0
+2018-04-24 13:29:05,457 [MainThread  ] [WARNI]  item: gallery index:76
+2018-04-24 13:29:05,457 [MainThread  ] [WARNI]  item: 226 index:77
+2018-04-24 13:29:05,457 [MainThread  ] [WARNI]  cur_where_query: [u'year', 'lt', u'1900']
+2018-04-24 13:29:05,458 [MainThread  ] [WARNI]  item: year index:20
+2018-04-24 13:29:05,458 [MainThread  ] [WARNI]  item: lt index:6
+2018-04-24 13:29:05,458 [MainThread  ] [WARNI]  item: 1900 index:78
+2018-04-24 13:29:05,458 [MainThread  ] [WARNI]  cur_where_query: [u'year', 'gt', u'1920']
+2018-04-24 13:29:05,458 [MainThread  ] [WARNI]  item: year index:20
+2018-04-24 13:29:05,458 [MainThread  ] [WARNI]  item: gt index:5
+2018-04-24 13:29:05,458 [MainThread  ] [WARNI]  item: 1920 index:75
+2018-04-24 13:29:05,458 [MainThread  ] [WARNI]  generate_gt_where_seq: [[1, 25, 11, 0, 74, 4], [1, 19, 20, 5, 76, 4], [1, 43, 7, 0, 76, 77, 4], [1, 20, 6, 78, 4], [1, 20, 5, 75, 4]]
+2018-04-24 13:29:05,470 [MainThread  ] [WARNI]  generated_decoder_seq [1, 25, 11, 0, 74]
+2018-04-24 13:29:05,470 [MainThread  ] [WARNI]  generated_decoder_seq [1, 19, 20, 5, 76]
+2018-04-24 13:29:05,470 [MainThread  ] [WARNI]  generated_decoder_seq [1, 43, 7, 0, 76, 77]
+2018-04-24 13:29:05,470 [MainThread  ] [WARNI]  generated_decoder_seq [1, 20, 6, 78]
+2018-04-24 13:29:05,470 [MainThread  ] [WARNI]  generated_decoder_seq [1, 20, 5, 75]
+2018-04-24 13:29:05,508 [MainThread  ] [WARNI]  pred_decoder_seq Variable containing:
+( 0 ,.,.) = 
+  0.0386  0.0262  0.0076  ...   0.0611 -0.0141 -0.0116
+  0.0417  0.0253  0.0136  ...   0.0637 -0.0302 -0.0196
+  0.0525  0.0124  0.0228  ...   0.0593 -0.0280 -0.0340
+  0.0514  0.0164  0.0154  ...   0.0513 -0.0246 -0.0331
+  0.0624  0.0112  0.0159  ...   0.0581 -0.0228 -0.0407
+  0.0000  0.0000  0.0000  ...   0.0000  0.0000  0.0000
+
+( 1 ,.,.) = 
+  0.0266  0.0231 -0.0024  ...   0.0627 -0.0169 -0.0229
+  0.0341  0.0405  0.0071  ...   0.0630 -0.0385 -0.0290
+  0.0406  0.0285  0.0165  ...   0.0540 -0.0383 -0.0420
+  0.0494  0.0153  0.0225  ...   0.0611 -0.0309 -0.0477
+  0.0455  0.0067  0.0246  ...   0.0579 -0.0294 -0.0361
+  0.0000  0.0000  0.0000  ...   0.0000  0.0000  0.0000
+
+( 2 ,.,.) = 
+  0.0222  0.0231  0.0111  ...   0.0657 -0.0274 -0.0331
+  0.0391  0.0417  0.0195  ...   0.0646 -0.0361 -0.0352
+  0.0402  0.0316  0.0243  ...   0.0552 -0.0321 -0.0291
+  0.0497  0.0286  0.0200  ...   0.0586 -0.0192 -0.0330
+  0.0606  0.0180  0.0218  ...   0.0558 -0.0183 -0.0344
+  0.0614  0.0060  0.0342  ...   0.0616 -0.0102 -0.0268
+
+( 3 ,.,.) = 
+  0.0279  0.0228 -0.0004  ...   0.0726 -0.0089 -0.0190
+  0.0329  0.0313  0.0088  ...   0.0692 -0.0296 -0.0277
+  0.0371  0.0317  0.0120  ...   0.0610 -0.0283 -0.0261
+  0.0417  0.0260  0.0134  ...   0.0461 -0.0391 -0.0224
+  0.0000  0.0000  0.0000  ...   0.0000  0.0000  0.0000
+  0.0000  0.0000  0.0000  ...   0.0000  0.0000  0.0000
+
+( 4 ,.,.) = 
+  0.0247  0.0026  0.0084  ...   0.0699 -0.0141 -0.0098
+  0.0467  0.0119  0.0078  ...   0.0763 -0.0211 -0.0142
+  0.0500  0.0174  0.0261  ...   0.0728 -0.0226 -0.0202
+  0.0546  0.0189  0.0157  ...   0.0700 -0.0231 -0.0343
+  0.0000  0.0000  0.0000  ...   0.0000  0.0000  0.0000
+  0.0000  0.0000  0.0000  ...   0.0000  0.0000  0.0000
+[torch.cuda.FloatTensor of size 5x6x100 (GPU 0)]
+
+2018-04-24 13:29:05,551 [MainThread  ] [WARNI]  gt_where[b][1:] [25, 11, 0, 74, 4]
+2018-04-24 13:29:05,552 [MainThread  ] [WARNI]  gt_where[b][1:] [19, 20, 5, 76, 4]
+2018-04-24 13:29:05,553 [MainThread  ] [WARNI]  gt_where[b][1:] [43, 7, 0, 76, 77, 4]
+2018-04-24 13:29:05,554 [MainThread  ] [WARNI]  gt_where[b][1:] [20, 6, 78, 4]
+2018-04-24 13:29:05,556 [MainThread  ] [WARNI]  gt_where[b][1:] [20, 5, 75, 4]
+2018-04-24 13:29:05,679 [MainThread  ] [WARNI]   Loss = 8.61292552948

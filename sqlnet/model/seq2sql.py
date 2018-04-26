@@ -81,6 +81,26 @@ class Seq2SQL(nn.Module):
         if gpu:
             self.cuda()
 
+    def search(self, source, target, start=0, end=None, forward=True):
+        """Naive search for target in source."""
+        m = len(source)
+        n = len(target)
+        if end is None:
+            end = m
+        else:
+            end = min(end, m)
+        if n == 0 or (end-start) < n:
+            # target is empty, or longer than source, so obviously can't be found.
+            return None
+        if forward:
+            x = range(start, end-n+1)
+        else:
+            x = range(end-n, start-1, -1)
+        for i in x:
+            if source[i:i+n] == target:
+                return i
+        return None
+
     def generate_gt_sel_seq(self, q, col, query, ans_seq):
     # NOTE: these numbers are in terms of the overall all_toks!!!!
         gt_sel_seq = []
@@ -88,24 +108,39 @@ class Seq2SQL(nn.Module):
         for cur_q, cur_col, cur_query, mini_seq in zip(q, col, query, ans_seq):
             connect_col = [tok for col_tok in cur_col for tok in col_tok+[',']]
             all_toks = self.SEL_SQL_TOK + connect_col + [None] + cur_q + [None]
-            # print('all_toks_gt', all_toks)
+            all_toks_condense = self.SEL_SQL_TOK + cur_col + [None] + cur_q + [None]
+            logging.warning('all_toks_gt: {0}'.format(all_toks))
+            logging.warning('all_toks_condense: {0}'.format(all_toks_condense))
             # get aggregators
             cur_seq = [all_toks.index('SELECT')]
             # print('cur_seq', cur_seq)
             # print('cur_q', cur_q)
-            # print('cur_query', cur_query)
-            # print('mini_seq', mini_seq)
+            logging.warning('cur_sel_gt_query{0}'.format(cur_query))
+            logging.warning('mini_sel_gt_seq{0}'.format(mini_seq))
             for i, x in enumerate(mini_seq[0]):
                 if mini_seq[0][i] != 0:
-                    # print('orig_agg_index', mini_seq[0][i])
+                    logging.warning('orig_agg_index', mini_seq[0][i])
                     cur_seq.append(all_toks.index(',')+ mini_seq[0][i]) 
                     # get the overall agg index - not plus 1 because all indices are already one off because deleted ''
                     # print('changed to ', all_toks.index(',')+ mini_seq[0][i])
-                cur_seq.append(len(self.SEL_SQL_TOK) + mini_seq[1][i]) # get the overall column index
+                # cur_seq.append(len(self.SEL_SQL_TOK) + mini_seq[1][i]) # get the overall column index
+                index = len(self.SEL_SQL_TOK) + mini_seq[1][i] # get the index for the normal word in all_toks without the expanded columns
+                column_words = all_toks_condense[index] # list of words that are the column tokenized
+                logging.warning('got word{0} for index{1}'.format(column_words, index))
+                first_index = self.search(all_toks, column_words)
+                for i in range(first_index, first_index + len(column_words)):
+                    cur_seq.append(i)
+                    logging.warning('appended {0}'.format(i))
+                cur_seq.append(all_toks.index(','))
+                logging.warning('appended , with index {0}'.format(all_toks.index(',')))
+                    
+                # cur_seq.append(all.toks.index(','))
+            cur_seq = cur_seq[:-1] # delete the last ,
             cur_seq.append(all_toks.index('<END>'))
             # print('mini_seq[0] - agg', mini_seq[0])
             # print('mini_seq[1] - agg', mini_seq[1])
             # print('cur_seq_final', cur_seq)
+            logging.warning('cur_sel_query_indices: %s', cur_seq)
             ret_seq.append(cur_seq)
         # print('gt_sel_seq',ret_seq)
         return ret_seq
@@ -161,22 +196,22 @@ class Seq2SQL(nn.Module):
                 cur_where_query = cur_query[cur_query.index('where') + 1:]
                 # logging.debug('cur_where_query: %s', cur_where_query)
                 cur_where_query = self.clean_where_query(cur_where_query)
-                logging.warning('cur_where_query: %s', cur_where_query)
+                # logging.warning('cur_where_query: %s', cur_where_query)
                 # logging.warning('all_toks: {0}'.format(all_toks))
                 for item in cur_where_query:
                     if item in all_toks:
                         
                         cur_seq += [all_toks.index(item.lower())]
-                        logging.warning('item: {0} index:{1}'.format(item, all_toks.index(item.lower())))
+                        # logging.warning('item: {0} index:{1}'.format(item, all_toks.index(item.lower())))
                     else:
-                        logging.warning('Not found in all_toks {0}'.format(item))
+                        logging.info('Not found in all_toks {0}'.format(item))
                         # assert False, "%s" % item
                 # cur_seq = cur_seq + map(lambda tok:all_toks.index(tok)
                 #                         if tok in all_toks else 0, cur_where_query)
-                logging.debug('cur_seq: %s', cur_seq)
+                # logging.debug('cur_seq: %s', cur_seq)
             cur_seq.append(all_toks.index('<end>'))
             ret_seq.append(cur_seq)
-        logging.warning('generate_gt_where_seq: %s', ret_seq) 
+        # logging.warning('generate_gt_where_seq: %s', ret_seq) 
         return ret_seq
 
 
@@ -252,7 +287,7 @@ class Seq2SQL(nn.Module):
                 if self.gpu:
                     cond_truth_var = Variable(
                         torch.from_numpy(np.array(gt_where[b][1:])).cuda())
-                    logging.warning('gt_where[b][1:] {0}'.format(gt_where[b][1:]))
+                    
                 else:
                     cond_truth_var = Variable(
                         torch.from_numpy(np.array(gt_where[b][1:])))
@@ -366,49 +401,63 @@ class Seq2SQL(nn.Module):
             # print('sel_score_idx', sel_score_idx)
             sel_tok = np.argmax(sel_score_idx)
             # print('max: ', np.max(sel_score_idx)) # should I maybe get the next highest???
-            # print('sel_tok', sel_tok)
+            logging.warning('sel_tok {0}'.format(sel_tok))
             sel_val = all_toks[sel_tok] # get all the words
-            # get less likely words UNTIL you reach a column or the agg
-            # while sel_val not in to_idx and sel_val not in agg_sql_tok_lower:
-            #     # print(i)
-            #     sel_score_idx[np.argmax(sel_score_idx)] = -100
-            #     sel_tok = np.argmax(sel_score_idx)
-            #     sel_val = all_toks[sel_tok] # get all the words
-            #     print('new_sel_val', sel_val)
-            # print ('sel_val', sel_val)
+            logging.warning('sel_val {0}'.format(sel_val))
             if sel_val == '<END>':
-                logging.info('found EXIT!!!')
+                logging.warning('found EXIT!!!')
                 # exit(1)
                 break
             sel_toks.append(sel_val) # get the column names
         if verbose:
             print sel_toks
-        if len(sel_toks) > 0:
-            sel_toks = sel_toks[1:] # gets rid of <SEL>
+        # if len(sel_toks) > 0:
+        #     sel_toks = sel_toks[1:] # gets rid of <SEL>
         sel_toks = [x.lower() for x in sel_toks]
-        logging.debug('sel_toks: %s', str(sel_toks))
-        logging.debug('to_idx: %s', str(to_idx))
-        logging.debug('self.agg_sql_tok: %s', str(self.AGG_SQL_TOK))
-        for pred_col in sel_toks:
+        logging.warning('sel_toks: %s', str(sel_toks))
+        logging.warning('to_idx: %s', str(to_idx))
+        logging.warning('self.agg_sql_tok: %s', str(self.AGG_SQL_TOK))
+        sel_merged_toks = []
+        if ',' in sel_toks:
+            while sel_toks:
+                try:
+                    index_comma = sel_toks.index(',') # get index of ','
+                except:
+                    index_comma = len(sel_toks)
+                pred_col = self.merge_tokens(sel_toks[:index_comma], raw_q[b] + ' || ' + \
+                                        ' || '.join(raw_col[b])) # get all the words until first comma
+                logging.warning('merged pred_col {0}'.format(pred_col)) # merged column names
+                sel_merged_toks.append(pred_col)
+                sel_toks = sel_toks[index_comma + 1:] # move to the next one
+        else:
+            pred_col = self.merge_tokens(sel_toks, raw_q[b] + ' || ' + \
+                                        ' || '.join(raw_col[b]))
+            sel_merged_toks = [pred_col]
+        
+        for pred_col in sel_merged_toks:
+            logging.warning('looking for {0}'.format(pred_col))
             if pred_col in to_idx:
                 sel_query.append(to_idx.index(pred_col)) # column name
+                logging.warning('appended {0}'.format(to_idx.index(pred_col)))
                 if len(agg_query) != len(sel_query):
                     agg_query.append(0)
             elif pred_col in agg_sql_tok_lower:
                 agg_query.append(agg_sql_tok_lower.index(pred_col)) # agg token
             else:
-                logging.info('unknown pred col: %s', str(pred_col))
+                logging.warning('unknown pred col: %s', str(pred_col))
                 pass
                 # if 0 not in sel_query:
                 #     sel_query.append(0)
         if not sel_query:
+            logging.warning('No items predicted in sel_query: predict them all')
             sel_query.append(0)
         if not agg_query:
             agg_query.append(0)
 
         if len(sel_query) != len(agg_query):
-            logging.info('len sel_query: %d len_agg_query: %d', len(sel_query), len(agg_query))
+            logging.warning('len sel_query: %d len_agg_query: %d', len(sel_query), len(agg_query))
         # assert len(sel_query) == len(agg_query), " len_sel_query: %d len_agg_query: %d" % (len(sel_query), len(agg_query))
+        logging.warning('pred sel_query indices: {0}'.format(sel_query))
         return  agg_query, sel_query
 
 
@@ -435,7 +484,7 @@ class Seq2SQL(nn.Module):
         # if len(cond_toks) > 0:
         #     cond_toks = cond_toks[1:] # get rid of the WHERE
         st = 0
-        logging.warning('cond_toks: %s', str(cond_toks))
+        # logging.warning('cond_toks: %s', str(cond_toks))
         while st < len(cond_toks):
             print ('st', st)
             cur_cond = [None, None, None]
@@ -462,17 +511,17 @@ class Seq2SQL(nn.Module):
                 op_prev = op = st
                 cur_cond[1] = 0
             sel_col = cond_toks[st:op_prev]
-            logging.warning('sel_col: %s', str(sel_col))
+            # logging.warning('sel_col: %s', str(sel_col))
             to_idx = [x.lower() for x in raw_col[b]]
             pred_col = self.merge_tokens(sel_col, raw_q[b] + ' || ' + \
                                     ' || '.join(raw_col[b]))
-            logging.warning('pred_col: %s', str(pred_col))
+            # logging.warning('pred_col: %s', str(pred_col))
             if pred_col in to_idx:
                 cur_cond[0] = to_idx.index(pred_col)
             else:
                 cur_cond[0] = 0
             cur_cond[2] = self.merge_tokens(cond_toks[op+1:ed], raw_q[b])
-            logging.warning('cur_cond: {0}'.format(cur_cond))
+            # logging.warning('cur_cond: {0}'.format(cur_cond))
             conds.append(cur_cond)
             st = ed + 1
         logging.debug('conds', conds)
@@ -529,31 +578,16 @@ class Seq2SQL(nn.Module):
                 if not flag:
                     agg_err += 1
                     good = False
-                # for idx in range(len(cond_pred)):
-                #     if not flag:
-                #         break
-                #     gt_idx = tuple(x[0] for x in cond_gt).index(cond_pred[idx][0])
-                #     if flag and unicode(cond_gt[gt_idx][2]).lower() != \
-                #        unicode(cond_pred[idx][2]).lower():
-                #         flag = False
-                #         cond_val_err += 1
-
-                # if not flag:
-                #     cond_err += 1
-                #     good = False
-
-                # if agg_pred != agg_gt:
-                #     agg_err += 1
-                #     good = False
 
             if pred_sel:
                 sel_pred = pred_qry['sel']
                 sel_gt = gt_qry['sel']
-                logging.info('sel_pred: %s', str(sel_pred))
-                logging.info('sel_gt: %s', str(sel_gt))
+                logging.warning('sel_pred: %s', str(sel_pred))
+                logging.warning('sel_gt: %s', str(sel_gt))
                 flag = True
                 if len(sel_pred) != len(sel_gt): # if length is off
                     flag = False
+                    logging.warning('wrong number of columns selected')
                     #sel_err += 1
                 sel_pred_sorted = sorted(sel_pred)
                 sel_gt_sorted = sorted(sel_gt)
@@ -562,10 +596,12 @@ class Seq2SQL(nn.Module):
                         break
                     if flag and sel_pred_sorted[idx] != sel_gt_sorted[idx]:
                         flag = False
+                        logging.warning('wrong columns!')
                         #sel_err += 1
 
                 if not flag:
                     sel_err += 1
+                    logging.warning('incremented sel_err')
                     good = False
 
             if pred_cond:
@@ -577,8 +613,8 @@ class Seq2SQL(nn.Module):
                         gt_qry['cond'][i] = item[1:]
                         logging.info('item after: %s', str(gt_qry['cond'][i]))
                 cond_gt = gt_qry['cond']
-                logging.warning('cond_pred_qry: {0}'.format(cond_pred))
-                logging.warning('cond_gt_qry: {0}'.format(cond_gt))
+                # logging.warning('cond_pred_qry: {0}'.format(cond_pred))
+                # logging.warning('cond_gt_qry: {0}'.format(cond_gt))
                 flag = True
                 # print('cond_err', cond_err)
                 if len(cond_pred) != len(cond_gt): # penalize if they predict the wrong number of conditions
@@ -591,7 +627,7 @@ class Seq2SQL(nn.Module):
                         x[0] for x in cond_pred) != set(x[0] for x in cond_gt): # penalize if they predict the different columns
                     flag = False
                     cond_col_err += 1
-                    logging.warning('wrong column selected')
+                    logging.info('wrong column selected')
                 # print('cond_col_err', cond_col_err)
 
                 for idx in range(len(cond_pred)):
@@ -602,7 +638,7 @@ class Seq2SQL(nn.Module):
                     if flag and cond_gt[gt_idx][1] != cond_pred[idx][1]:
                         flag = False
                         cond_op_err += 1
-                        logging.warning('Wrong condition op')
+                        logging.info('Wrong condition op')
                 # print('cond_op_err', cond_op_err)
 
                 for idx in range(len(cond_pred)):
@@ -613,7 +649,7 @@ class Seq2SQL(nn.Module):
                        unicode(cond_pred[idx][2]).lower():
                         flag = False
                         cond_val_err += 1
-                        logging.warning('Wrong values!!')
+                        logging.info('Wrong values!!')
                 # print('cond_val_err', cond_val_err)
                 
 

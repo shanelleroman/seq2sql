@@ -53,13 +53,6 @@ if __name__ == '__main__':
     test_sql_data, test_table_data = load_dataset_new(args.dataset, use_small=USE_SMALL)
 
     logging.warning('data loaded')
-    sql_data = sql_data[BATCH_SIZE:BATCH_SIZE + 5]
-    val_sql_data = val_sql_data[BATCH_SIZE:BATCH_SIZE + 5]
-    print(json.dumps(sql_data, indent=4))
-    print( json.dumps(val_sql_data, indent=4))
-    # (json.dumps(sql_data, indent=4))
-    # ( json.dumps(val_sql_data, indent=4))
-    # exit(1)
     word_emb = load_word_emb('glove/glove.%dB.%dd.txt'%(B_word,N_word), \
             load_used=args.train_emb, use_small=USE_SMALL)
 

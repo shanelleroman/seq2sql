@@ -43,7 +43,7 @@ class Seq2SQLCondPredictor(nn.Module):
             # print('one_tok_seq', one_tok_seq)
             # print('gen_inp', gen_inp)
             out_one_tok_seq = one_tok_seq[:-1] if gen_inp else one_tok_seq[1:]
-            logging.warning('generated_decoder_seq {0}'.format(out_one_tok_seq))
+            # logging.warning('generated_decoder_seq {0}'.format(out_one_tok_seq))
             for t, tok_id in enumerate(out_one_tok_seq):
                 ret_array[b, t, tok_id] = 1
 
@@ -67,7 +67,7 @@ class Seq2SQLCondPredictor(nn.Module):
             
             g_s, _ = run_lstm(self.cond_decoder,
                     gt_tok_seq, gt_tok_len, decoder_hidden)
-            logging.warning('pred_decoder_seq {0}'.format(g_s))
+            # logging.warning('pred_decoder_seq {0}'.format(g_s))
 
             h_enc_expand = h_enc.unsqueeze(1)
             g_s_expand = g_s.unsqueeze(2)

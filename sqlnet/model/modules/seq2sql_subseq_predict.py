@@ -42,6 +42,7 @@ class Seq2SQLSubSeqPredictor(nn.Module):
         for b, one_tok_seq in enumerate(tok_seq):
             # print('one_tok_seq', one_tok_seq)
             out_one_tok_seq = one_tok_seq[:-1] if gen_inp else one_tok_seq[1:]
+            logging.warning('generated_gt_sel_decoder_seq {0}'.format(out_one_tok_seq))
             # print ('out_one_tok_seq', out_one_tok_seq)
             for t, tok_id in enumerate(out_one_tok_seq):
                 ret_array[b, t, tok_id] = 1
@@ -68,8 +69,8 @@ class Seq2SQLSubSeqPredictor(nn.Module):
         # print('decoder_hidden[1].size()', decoder_hidden[1].size())
         if gt_index_seq is not None:
             logging.info('gold sequence provided')
-            # print('gt_index_seq', gt_index_seq)
-            gt_tok_seq, gt_tok_len = self.gen_gt_batch(gt_index_seq, gen_inp=False) # get rid of <SELECT>
+            logging.warning('gt_sel_gt_index_seq', gt_index_seq)
+            gt_tok_seq, gt_tok_len = self.gen_gt_batch(gt_index_seq, gen_inp=True) # get rid of <SELECT>
             # print('gt_index_seq', gt_tok_seq)
             # gt_tok_seq: SELECT_index agg_index , col_index ... last_col_index
             # print('gt_tok_seq.size()', gt_tok_seq.size())
@@ -77,6 +78,7 @@ class Seq2SQLSubSeqPredictor(nn.Module):
             # print('gt_tok_len', gt_tok_len)
             # print('decoder_hidden', decoder_hidden)
             g_s, _ = run_lstm(self.dec_lstm, gt_tok_seq, gt_tok_len, decoder_hidden)
+            # logging.warning('pred_sel_decoder_seq {0}'.format(g_s))
             # print('g_s.size()', g_s.size())
 
             h_enc_expand = h_enc.unsqueeze(1)
