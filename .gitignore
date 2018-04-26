@@ -4,6 +4,7 @@
 *.json
 *.jsonl
 *.db
+log/*
 glove/*
 saved_model/*
 !saved_model/.keep

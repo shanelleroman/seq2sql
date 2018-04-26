@@ -34,6 +34,7 @@ if __name__ == '__main__':
             help='Train word embedding for SQLNet(requires pretrained model).')
     args = parser.parse_args()
 
+
     N_word=300
     B_word=42
     if args.toy:
@@ -49,8 +50,7 @@ if __name__ == '__main__':
     learning_rate = 1e-4 if args.rl else 1e-3
 
     logging.warning('about to load dataset')
-    sql_data, table_data, val_sql_data, val_table_data, \
-    test_sql_data, test_table_data = load_dataset_new(args.dataset, use_small=USE_SMALL)
+    sql_data, table_data, val_sql_data, val_table_data, test_sql_data, test_table_data = load_dataset(args.dataset, use_small=USE_SMALL)
 
     logging.warning('data loaded')
     word_emb = load_word_emb('glove/glove.%dB.%dd.txt'%(B_word,N_word), \
@@ -68,7 +68,10 @@ if __name__ == '__main__':
         assert not args.rl, "SQLNet can\'t do reinforcement learning."
     optimizer = torch.optim.Adam(model.parameters(),
             lr=learning_rate, weight_decay = 0)
-
+    if args.toy:
+        sql_data = sql_data[:BATCH_SIZE]
+        val_sql_data = val_sql_data[:BATCH_SIZE]
+        test_sql_data = test_sql_data[:BATCH_SIZE]
     logging.warning('SQLNet loaded')
 
     if args.train_emb:
@@ -89,7 +92,7 @@ if __name__ == '__main__':
         best_acc = 0.0
         best_idx = -1
         logging.warning("Init dev acc_qm: %s\n  breakdown on (agg, sel, where): %s"% \
-                epoch_acc(model, BATCH_SIZE, val_sql_data,\
+                epoch_acc_new(model, BATCH_SIZE, val_sql_data,\
                 val_table_data, TRAIN_ENTRY))
         logging.warning("Init dev acc_ex: %s"%epoch_exec_acc(
                 model, BATCH_SIZE, val_sql_data, val_table_data, DEV_DB))
@@ -213,6 +216,7 @@ if __name__ == '__main__':
                     if args.train_emb:
                         torch.save(model.cond_embed_layer.state_dict(),
                         'saved_model/epoch%d.cond_embed%s'%(i+1, args.suffix))
+            exit(1)
   
         logging.warning('Best_agg_acc = %s on epoch %s ', str(best_agg_acc), str(best_agg_idx))
         logging.warning('best_sel_acc = %s on epoch %s ', str(best_sel_acc), str(best_sel_idx))

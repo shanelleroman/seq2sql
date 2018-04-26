@@ -1,0 +1,1200 @@
+WARNING:root:about to load dataset
+WARNING:root:data loaded
+WARNING:root:glove loaded
+WARNING:root:SQLNet loaded
+WARNING:root:method seq2sqlforward
+WARNING:root:toks word_embedding _gen_x_batch: [u'*', u'template type code', u'template type description', u'template id', u'version number', u'template type code', u'date effective from', u'date effective to', u'template details', u'document id', u'template id', u'document name', u'document description', u'other details', u'paragraph id', u'document id', u'paragraph text', u'other details']
+WARNING:root:first_item toks: *
+WARNING:root:one_col_all _gen_x_batch: [u'*', ',', u'template', u'type', u'code', ',', u'template', u'type', u'description', ',', u'template', u'id', ',', u'version', u'number', ',', u'template', u'type', u'code', ',', u'date', u'effective', u'from', ',', u'date', u'effective', u'to', ',', u'template', u'details', ',', u'document', u'id', ',', u'template', u'id', ',', u'document', u'name', ',', u'document', u'description', ',', u'other', u'details', ',', u'paragraph', u'id', ',', u'document', u'id', ',', u'paragraph', u'text', ',', u'other', u'details', ',']
+WARNING:root:toks word_embedding _gen_x_batch: [u'*', u'template type code', u'template type description', u'template id', u'version number', u'template type code', u'date effective from', u'date effective to', u'template details', u'document id', u'template id', u'document name', u'document description', u'other details', u'paragraph id', u'document id', u'paragraph text', u'other details']
+WARNING:root:first_item toks: *
+WARNING:root:one_col_all _gen_x_batch: [u'*', ',', u'template', u'type', u'code', ',', u'template', u'type', u'description', ',', u'template', u'id', ',', u'version', u'number', ',', u'template', u'type', u'code', ',', u'date', u'effective', u'from', ',', u'date', u'effective', u'to', ',', u'template', u'details', ',', u'document', u'id', ',', u'template', u'id', ',', u'document', u'name', ',', u'document', u'description', ',', u'other', u'details', ',', u'paragraph', u'id', ',', u'document', u'id', ',', u'paragraph', u'text', ',', u'other', u'details', ',']
+WARNING:root:toks word_embedding _gen_x_batch: [u'*', u'template type code', u'template type description', u'template id', u'version number', u'template type code', u'date effective from', u'date effective to', u'template details', u'document id', u'template id', u'document name', u'document description', u'other details', u'paragraph id', u'document id', u'paragraph text', u'other details']
+WARNING:root:first_item toks: *
+WARNING:root:one_col_all _gen_x_batch: [u'*', ',', u'template', u'type', u'code', ',', u'template', u'type', u'description', ',', u'template', u'id', ',', u'version', u'number', ',', u'template', u'type', u'code', ',', u'date', u'effective', u'from', ',', u'date', u'effective', u'to', ',', u'template', u'details', ',', u'document', u'id', ',', u'template', u'id', ',', u'document', u'name', ',', u'document', u'description', ',', u'other', u'details', ',', u'paragraph', u'id', ',', u'document', u'id', ',', u'paragraph', u'text', ',', u'other', u'details', ',']
+WARNING:root:toks word_embedding _gen_x_batch: [u'*', u'template type code', u'template type description', u'template id', u'version number', u'template type code', u'date effective from', u'date effective to', u'template details', u'document id', u'template id', u'document name', u'document description', u'other details', u'paragraph id', u'document id', u'paragraph text', u'other details']
+WARNING:root:first_item toks: *
+WARNING:root:one_col_all _gen_x_batch: [u'*', ',', u'template', u'type', u'code', ',', u'template', u'type', u'description', ',', u'template', u'id', ',', u'version', u'number', ',', u'template', u'type', u'code', ',', u'date', u'effective', u'from', ',', u'date', u'effective', u'to', ',', u'template', u'details', ',', u'document', u'id', ',', u'template', u'id', ',', u'document', u'name', ',', u'document', u'description', ',', u'other', u'details', ',', u'paragraph', u'id', ',', u'document', u'id', ',', u'paragraph', u'text', ',', u'other', u'details', ',']
+WARNING:root:toks word_embedding _gen_x_batch: [u'*', u'template type code', u'template type description', u'template id', u'version number', u'template type code', u'date effective from', u'date effective to', u'template details', u'document id', u'template id', u'document name', u'document description', u'other details', u'paragraph id', u'document id', u'paragraph text', u'other details']
+WARNING:root:first_item toks: *
+WARNING:root:one_col_all _gen_x_batch: [u'*', ',', u'template', u'type', u'code', ',', u'template', u'type', u'description', ',', u'template', u'id', ',', u'version', u'number', ',', u'template', u'type', u'code', ',', u'date', u'effective', u'from', ',', u'date', u'effective', u'to', ',', u'template', u'details', ',', u'document', u'id', ',', u'template', u'id', ',', u'document', u'name', ',', u'document', u'description', ',', u'other', u'details', ',', u'paragraph', u'id', ',', u'document', u'id', ',', u'paragraph', u'text', ',', u'other', u'details', ',']
+Loading from new dataset
+Loading data from New_Data/train.json
+Loading data from New_Data/tables.json
+Loading data from New_Data/dev.json
+Loading data from New_Data/tables.json
+Loading data from New_Data/train.json
+Loading data from New_Data/tables.json
+Loading word embedding from glove/glove.42B.300d.txt
+WARNING:root:seq2sqlforward non-trainable embeddings
+WARNING:root:gt_sel: None
+WARNING:root:method subsequence_pred forward
+WARNING:root:q_seq [[u'Home', u'many', u'documents', u'do', u'we', u'have', u'?'], [u'Count', u'the', u'number', u'of', u'documents', u'.'], [u'List', u'document', u'IDs', u',', u'document', u'names', u',', u'and', u'document', u'descriptions', u'for', u'all', u'documents', u'.'], [u'What', u'are', u'the', u'ids', u',', u'names', u',', u'and', u'descriptions', u'for', u'all', u'documents', u'?'], [u'What', u'is', u'the', u'document', u'name', u'and', u'template', u'id', u'for', u'document', u'with', u'description', u'with', u'the', u'letter', u"'w", u"'", u'in', u'it', u'?']]
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_toks: [u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id']
+WARNING:root:to_idx: [u'*', u'template type code', u'template type description', u'template id', u'version number', u'template type code', u'date effective from', u'date effective to', u'template details', u'document id', u'template id', u'document name', u'document description', u'other details', u'paragraph id', u'document id', u'paragraph text', u'other details', ',']
+WARNING:root:self.agg_sql_tok: ['MAX', 'MIN', 'AVG', 'COUNT', 'SUM']
+WARNING:root:looking for id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id
+WARNING:root:unknown pred col: id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id
+WARNING:root:No items predicted in sel_query: predict them all
+WARNING:root:pred sel_query indices: [0]
+('st', 0)
+('ed', 100)
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_toks: [u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id']
+WARNING:root:to_idx: [u'*', u'template type code', u'template type description', u'template id', u'version number', u'template type code', u'date effective from', u'date effective to', u'template details', u'document id', u'template id', u'document name', u'document description', u'other details', u'paragraph id', u'document id', u'paragraph text', u'other details', ',']
+WARNING:root:self.agg_sql_tok: ['MAX', 'MIN', 'AVG', 'COUNT', 'SUM']
+WARNING:root:looking for id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id
+WARNING:root:unknown pred col: id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id
+WARNING:root:No items predicted in sel_query: predict them all
+WARNING:root:pred sel_query indices: [0]
+('st', 0)
+('ed', 100)
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_toks: [u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id']
+WARNING:root:to_idx: [u'*', u'template type code', u'template type description', u'template id', u'version number', u'template type code', u'date effective from', u'date effective to', u'template details', u'document id', u'template id', u'document name', u'document description', u'other details', u'paragraph id', u'document id', u'paragraph text', u'other details', ',']
+WARNING:root:self.agg_sql_tok: ['MAX', 'MIN', 'AVG', 'COUNT', 'SUM']
+WARNING:root:looking for id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id
+WARNING:root:unknown pred col: id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id
+WARNING:root:No items predicted in sel_query: predict them all
+WARNING:root:pred sel_query indices: [0]
+('st', 0)
+('ed', 100)
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_toks: [u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id']
+WARNING:root:to_idx: [u'*', u'template type code', u'template type description', u'template id', u'version number', u'template type code', u'date effective from', u'date effective to', u'template details', u'document id', u'template id', u'document name', u'document description', u'other details', u'paragraph id', u'document id', u'paragraph text', u'other details', ',']
+WARNING:root:self.agg_sql_tok: ['MAX', 'MIN', 'AVG', 'COUNT', 'SUM']
+WARNING:root:looking for id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id
+WARNING:root:unknown pred col: id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id
+WARNING:root:No items predicted in sel_query: predict them all
+WARNING:root:pred sel_query indices: [0]
+('st', 0)
+('ed', 100)
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_tok 55
+WARNING:root:sel_val id
+WARNING:root:sel_toks: [u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id', u'id']
+WARNING:root:to_idx: [u'*', u'template type code', u'template type description', u'template id', u'version number', u'template type code', u'date effective from', u'date effective to', u'template details', u'document id', u'template id', u'document name', u'document description', u'other details', u'paragraph id', u'document id', u'paragraph text', u'other details', ',']
+WARNING:root:self.agg_sql_tok: ['MAX', 'MIN', 'AVG', 'COUNT', 'SUM']
+WARNING:root:looking for id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id
+WARNING:root:unknown pred col: id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id id
+WARNING:root:No items predicted in sel_query: predict them all
+WARNING:root:pred sel_query indices: [0]
+WARNING:root:pred_queries: [{'agg': [0], 'sel': [0], 'conds': [[0, 0, u'have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have have']]}, {'agg': [0], 'sel': [0], 'conds': [[0, 0, u'to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to']]}, {'agg': [0], 'sel': [0], 'conds': [[0, 0, u'to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to']]}, {'agg': [0], 'sel': [0], 'conds': [[0, 0, u'to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to']]}, {'agg': [0], 'sel': [0], 'conds': [[0, 0, u'to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to']]}]
+WARNING:root:sel_pred: [0]
+WARNING:root:sel_gt: [0]
+WARNING:root:wrong number of columns
+WARNING:root:Error increased by one
+WARNING:root:sel_pred: [0]
+WARNING:root:sel_gt: [0]
+WARNING:root:wrong number of columns
+WARNING:root:Error increased by one
+WARNING:root:sel_pred: [0]
+WARNING:root:sel_gt: [9, 11, 12]
+WARNING:root:wrong number of columns selected
+WARNING:root:incremented sel_err
+WARNING:root:wrong number of columns
+WARNING:root:Error increased by one
+WARNING:root:sel_pred: [0]
+WARNING:root:sel_gt: [9, 11, 12]
+WARNING:root:wrong number of columns selected
+WARNING:root:incremented sel_err
+WARNING:root:wrong number of columns
+WARNING:root:Error increased by one
+WARNING:root:sel_pred: [0]
+WARNING:root:sel_gt: [11, 10]
+WARNING:root:wrong number of columns selected
+WARNING:root:incremented sel_err
+WARNING:root:Error increased by one
+WARNING:root:tot_err: 5
+WARNING:root:cond_err: 5.0
+WARNING:root:one_acc_num: [ 0.  2.  0.]
+WARNING:root:tot_acc_num: 0.0
+WARNING:root:init_acc: (0.0, array([ 0. ,  0.4,  0. ]))
+WARNING:root:Init dev acc_qm: 0.0
+  breakdown on (agg, sel, where): [ 0.   0.4  0. ]
+('st', 0)
+('ed', 100)
+WARNING:root:Epoch 1 @ 2018-04-26 15:38:03.484470
+WARNING:root:method generate_gt_where_seq
+WARNING:root:method generate_gt_sel_seq
+WARNING:root:connect_col: [u'*', ',', u'code', ',', u'name', ',', u'headquarter', ',', u'founder', ',', u'revenue', ',', u'code', ',', u'name', ',', u'price', ',', u'manufacturer', ',']
+WARNING:root:cur_col_list: [[u'*'], [u'code'], [u'name'], [u'headquarter'], [u'founder'], [u'revenue'], [u'code'], [u'name'], [u'price'], [u'manufacturer']]
+WARNING:root:all_toks_gt: ['SELECT', '<END>', ',', 'MAX', 'MIN', 'AVG', 'COUNT', 'SUM', u'*', ',', u'code', ',', u'name', ',', u'headquarter', ',', u'founder', ',', u'revenue', ',', u'code', ',', u'name', ',', u'price', ',', u'manufacturer', ',', None, u'Who', u'is', u'the', u'founder', u'of', u'Sony', u'?', None]
+WARNING:root:all_toks_condense: ['SELECT', '<END>', ',', 'MAX', 'MIN', 'AVG', 'COUNT', 'SUM', [u'*'], [u'code'], [u'name'], [u'headquarter'], [u'founder'], [u'revenue'], [u'code'], [u'name'], [u'price'], [u'manufacturer'], None, u'Who', u'is', u'the', u'founder', u'of', u'Sony', u'?', None]
+WARNING:root:cur_sel_gt_query[u'SELECT', u'founder', u'FROM', u'manufacturers', u'WHERE', u'name', u'=', u"'Sony", u"'"]
+WARNING:root:mini_sel_gt_seq([0], [4], 1, (2,), (2,), 1, [], 0, [], [], 0, -1)
+WARNING:root:got word [u'founder'] for index12
+WARNING:root:appended 16
+WARNING:root:appended , with index 2
+WARNING:root:cur_sel_query_indices: [0, 16, 1]
+WARNING:root:connect_col: [u'*', ',', u'code', ',', u'name', ',', u'headquarter', ',', u'founder', ',', u'revenue', ',', u'code', ',', u'name', ',', u'price', ',', u'manufacturer', ',']
+WARNING:root:cur_col_list: [[u'*'], [u'code'], [u'name'], [u'headquarter'], [u'founder'], [u'revenue'], [u'code'], [u'name'], [u'price'], [u'manufacturer']]
+WARNING:root:all_toks_gt: ['SELECT', '<END>', ',', 'MAX', 'MIN', 'AVG', 'COUNT', 'SUM', u'*', ',', u'code', ',', u'name', ',', u'headquarter', ',', u'founder', ',', u'revenue', ',', u'code', ',', u'name', ',', u'price', ',', u'manufacturer', ',', None, u'Return', u'the', u'founder', u'of', u'Sony', u'.', None]
+WARNING:root:all_toks_condense: ['SELECT', '<END>', ',', 'MAX', 'MIN', 'AVG', 'COUNT', 'SUM', [u'*'], [u'code'], [u'name'], [u'headquarter'], [u'founder'], [u'revenue'], [u'code'], [u'name'], [u'price'], [u'manufacturer'], None, u'Return', u'the', u'founder', u'of', u'Sony', u'.', None]
+WARNING:root:cur_sel_gt_query[u'SELECT', u'founder', u'FROM', u'manufacturers', u'WHERE', u'name', u'=', u"'Sony", u"'"]
+WARNING:root:mini_sel_gt_seq([0], [4], 1, (2,), (2,), 1, [], 0, [], [], 0, -1)
+WARNING:root:got word [u'founder'] for index12
+WARNING:root:appended 16
+WARNING:root:appended , with index 2
+WARNING:root:cur_sel_query_indices: [0, 16, 1]
+WARNING:root:connect_col: [u'*', ',', u'code', ',', u'name', ',', u'headquarter', ',', u'founder', ',', u'revenue', ',', u'code', ',', u'name', ',', u'price', ',', u'manufacturer', ',']
+WARNING:root:cur_col_list: [[u'*'], [u'code'], [u'name'], [u'headquarter'], [u'founder'], [u'revenue'], [u'code'], [u'name'], [u'price'], [u'manufacturer']]
+WARNING:root:all_toks_gt: ['SELECT', '<END>', ',', 'MAX', 'MIN', 'AVG', 'COUNT', 'SUM', u'*', ',', u'code', ',', u'name', ',', u'headquarter', ',', u'founder', ',', u'revenue', ',', u'code', ',', u'name', ',', u'price', ',', u'manufacturer', ',', None, u'Where', u'is', u'the', u'headquarter', u'of', u'the', u'company', u'founded', u'by', u'James', u'?', None]
+WARNING:root:all_toks_condense: ['SELECT', '<END>', ',', 'MAX', 'MIN', 'AVG', 'COUNT', 'SUM', [u'*'], [u'code'], [u'name'], [u'headquarter'], [u'founder'], [u'revenue'], [u'code'], [u'name'], [u'price'], [u'manufacturer'], None, u'Where', u'is', u'the', u'headquarter', u'of', u'the', u'company', u'founded', u'by', u'James', u'?', None]
+WARNING:root:cur_sel_gt_query[u'SELECT', u'headquarter', u'FROM', u'manufacturers', u'WHERE', u'founder', u'=', u"'James", u"'"]
+WARNING:root:mini_sel_gt_seq([0], [3], 1, (4,), (2,), 1, [], 0, [], [], 0, -1)
+WARNING:root:got word [u'headquarter'] for index11
+WARNING:root:appended 14
+WARNING:root:appended , with index 2
+WARNING:root:cur_sel_query_indices: [0, 14, 1]
+WARNING:root:connect_col: [u'*', ',', u'code', ',', u'name', ',', u'headquarter', ',', u'founder', ',', u'revenue', ',', u'code', ',', u'name', ',', u'price', ',', u'manufacturer', ',']
+WARNING:root:cur_col_list: [[u'*'], [u'code'], [u'name'], [u'headquarter'], [u'founder'], [u'revenue'], [u'code'], [u'name'], [u'price'], [u'manufacturer']]
+WARNING:root:all_toks_gt: ['SELECT', '<END>', ',', 'MAX', 'MIN', 'AVG', 'COUNT', 'SUM', u'*', ',', u'code', ',', u'name', ',', u'headquarter', ',', u'founder', ',', u'revenue', ',', u'code', ',', u'name', ',', u'price', ',', u'manufacturer', ',', None, u'What', u'is', u'the', u'headquarter', u'of', u'the', u'company', u'whose', u'founder', u'is', u'James', u'?', None]
+WARNING:root:all_toks_condense: ['SELECT', '<END>', ',', 'MAX', 'MIN', 'AVG', 'COUNT', 'SUM', [u'*'], [u'code'], [u'name'], [u'headquarter'], [u'founder'], [u'revenue'], [u'code'], [u'name'], [u'price'], [u'manufacturer'], None, u'What', u'is', u'the', u'headquarter', u'of', u'the', u'company', u'whose', u'founder', u'is', u'James', u'?', None]
+WARNING:root:cur_sel_gt_query[u'SELECT', u'headquarter', u'FROM', u'manufacturers', u'WHERE', u'founder', u'=', u"'James", u"'"]
+WARNING:root:mini_sel_gt_seq([0], [3], 1, (4,), (2,), 1, [], 0, [], [], 0, -1)
+WARNING:root:got word [u'headquarter'] for index11
+WARNING:root:appended 14
+WARNING:root:appended , with index 2
+WARNING:root:cur_sel_query_indices: [0, 14, 1]
+WARNING:root:connect_col: [u'*', ',', u'code', ',', u'name', ',', u'headquarter', ',', u'founder', ',', u'revenue', ',', u'code', ',', u'name', ',', u'price', ',', u'manufacturer', ',']
+WARNING:root:cur_col_list: [[u'*'], [u'code'], [u'name'], [u'headquarter'], [u'founder'], [u'revenue'], [u'code'], [u'name'], [u'price'], [u'manufacturer']]
+WARNING:root:all_toks_gt: ['SELECT', '<END>', ',', 'MAX', 'MIN', 'AVG', 'COUNT', 'SUM', u'*', ',', u'code', ',', u'name', ',', u'headquarter', ',', u'founder', ',', u'revenue', ',', u'code', ',', u'name', ',', u'price', ',', u'manufacturer', ',', None, u'Find', u'all', u'manufacturers', u"'", u'names', u'and', u'their', u'headquarters', u',', u'sorted', u'by', u'the', u'ones', u'with', u'highest', u'revenue', u'first', u'.', None]
+WARNING:root:all_toks_condense: ['SELECT', '<END>', ',', 'MAX', 'MIN', 'AVG', 'COUNT', 'SUM', [u'*'], [u'code'], [u'name'], [u'headquarter'], [u'founder'], [u'revenue'], [u'code'], [u'name'], [u'price'], [u'manufacturer'], None, u'Find', u'all', u'manufacturers', u"'", u'names', u'and', u'their', u'headquarters', u',', u'sorted', u'by', u'the', u'ones', u'with', u'highest', u'revenue', u'first', u'.', None]
+WARNING:root:cur_sel_gt_query[u'SELECT', u'name', u',', u'headquarter', u'FROM', u'manufacturers', u'ORDER', u'BY', u'revenue', u'DESC']
+WARNING:root:mini_sel_gt_seq([0, 0], [2, 3], 0, (), (), 2, [], 0, [0], [5], 1, 0)
+WARNING:root:got word [u'name'] for index10
+WARNING:root:appended 12
+WARNING:root:appended , with index 2
+WARNING:root:got word [u'headquarter'] for index11
+WARNING:root:appended 14
+WARNING:root:appended , with index 2
+WARNING:root:cur_sel_query_indices: [0, 12, 2, 14, 1]
+WARNING:root:method seq2sqlforward
+WARNING:root:toks word_embedding _gen_x_batch: [u'*', u'code', u'name', u'headquarter', u'founder', u'revenue', u'code', u'name', u'price', u'manufacturer']
+WARNING:root:first_item toks: *
+WARNING:root:one_col_all _gen_x_batch: [u'*', ',', u'code', ',', u'name', ',', u'headquarter', ',', u'founder', ',', u'revenue', ',', u'code', ',', u'name', ',', u'price', ',', u'manufacturer', ',']
+WARNING:root:toks word_embedding _gen_x_batch: [u'*', u'code', u'name', u'headquarter', u'founder', u'revenue', u'code', u'name', u'price', u'manufacturer']
+WARNING:root:first_item toks: *
+WARNING:root:one_col_all _gen_x_batch: [u'*', ',', u'code', ',', u'name', ',', u'headquarter', ',', u'founder', ',', u'revenue', ',', u'code', ',', u'name', ',', u'price', ',', u'manufacturer', ',']
+WARNING:root:toks word_embedding _gen_x_batch: [u'*', u'code', u'name', u'headquarter', u'founder', u'revenue', u'code', u'name', u'price', u'manufacturer']
+WARNING:root:first_item toks: *
+WARNING:root:one_col_all _gen_x_batch: [u'*', ',', u'code', ',', u'name', ',', u'headquarter', ',', u'founder', ',', u'revenue', ',', u'code', ',', u'name', ',', u'price', ',', u'manufacturer', ',']
+WARNING:root:toks word_embedding _gen_x_batch: [u'*', u'code', u'name', u'headquarter', u'founder', u'revenue', u'code', u'name', u'price', u'manufacturer']
+WARNING:root:first_item toks: *
+WARNING:root:one_col_all _gen_x_batch: [u'*', ',', u'code', ',', u'name', ',', u'headquarter', ',', u'founder', ',', u'revenue', ',', u'code', ',', u'name', ',', u'price', ',', u'manufacturer', ',']
+WARNING:root:toks word_embedding _gen_x_batch: [u'*', u'code', u'name', u'headquarter', u'founder', u'revenue', u'code', u'name', u'price', u'manufacturer']
+WARNING:root:first_item toks: *
+WARNING:root:one_col_all _gen_x_batch: [u'*', ',', u'code', ',', u'name', ',', u'headquarter', ',', u'founder', ',', u'revenue', ',', u'code', ',', u'name', ',', u'price', ',', u'manufacturer', ',']
+method epoch_train
+WARNING:root:cond_score.size() torch.Size([5, 48])
+Traceback (most recent call last):
+  File "train_nl2sql.py", line 164, in <module>
+    sql_data, table_data, TRAIN_ENTRY))
+  File "/data/lily/slr63/SQLNet/sqlnet/utils_new.py", line 265, in epoch_train
+    gt_where=gt_where_seq, gt_cond=gt_cond_seq, gt_sel=gt_sel_seq)
+  File "/data/lily/slr63/SQLNet/sqlnet/model/seq2sql.py", line 266, in forward
+    reinforce=reinforce)
+  File "/home/lily/slr63/anaconda2/lib/python2.7/site-packages/torch/nn/modules/module.py", line 357, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/data/lily/slr63/SQLNet/sqlnet/model/modules/seq2sql_condition_predict.py", line 80, in forward
+    cond_score[idx, :, num:] = -100
+  File "/home/lily/slr63/anaconda2/lib/python2.7/site-packages/torch/autograd/variable.py", line 87, in __setitem__
+    return SetItem.apply(self, key, value)
+  File "/home/lily/slr63/anaconda2/lib/python2.7/site-packages/torch/autograd/_functions/tensor.py", line 117, in forward
+    i._set_index(ctx.index, value)
+IndexError: trying to index 3 dimensions of a 2 dimensional tensor

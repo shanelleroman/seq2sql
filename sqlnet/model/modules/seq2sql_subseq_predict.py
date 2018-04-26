@@ -35,6 +35,7 @@ class Seq2SQLSubSeqPredictor(nn.Module):
         # If gen_inp: generate the input token sequence (removing <END>)
         # Otherwise: generate the output token sequence (removing <BEG>)
         # print ('tok_seq', tok_seq)
+        logging.warning('method subsequence_pred gen_gt_batch')
         B = len(tok_seq)
         ret_len = np.array([len(one_tok_seq)-1 for one_tok_seq in tok_seq])
         max_len = max(ret_len)
@@ -56,6 +57,7 @@ class Seq2SQLSubSeqPredictor(nn.Module):
 
     def forward(self, x_emb_var, x_len, col_inp_var, col_name_len, col_len,
             col_num, gt_index_seq=None, gt_query=None, reinforce=None): # check what is gt_query
+        logging.warning('method subsequence_pred forward')
         max_x_len = max(x_len)
         # print ('max_x_len', max_x_len)
         B = len(x_len)
@@ -69,7 +71,7 @@ class Seq2SQLSubSeqPredictor(nn.Module):
         # print('decoder_hidden[1].size()', decoder_hidden[1].size())
         if gt_index_seq is not None:
             logging.info('gold sequence provided')
-            logging.warning('gt_sel_gt_index_seq', gt_index_seq)
+            logging.warning('gt_sel_gt_index_seq {0}'.format(gt_index_seq))
             gt_tok_seq, gt_tok_len = self.gen_gt_batch(gt_index_seq, gen_inp=True) # get rid of <SELECT>
             # print('gt_index_seq', gt_tok_seq)
             # gt_tok_seq: SELECT_index agg_index , col_index ... last_col_index

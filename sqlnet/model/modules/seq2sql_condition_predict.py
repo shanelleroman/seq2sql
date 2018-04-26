@@ -74,6 +74,7 @@ class Seq2SQLCondPredictor(nn.Module):
             #
             cond_score = self.cond_out( self.cond_out_h(h_enc_expand) +
                     self.cond_out_g(g_s_expand) ).squeeze()
+            logging.warning('cond_score.size() {0}'.format(cond_score.size()))
             for idx, num in enumerate(x_len):
                 if num < max_x_len:
                     cond_score[idx, :, num:] = -100

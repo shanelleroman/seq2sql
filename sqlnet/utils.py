@@ -658,7 +658,7 @@ def epoch_reinforce_train(model, optimizer, batch_size, sql_data, table_data, db
     return cum_reward / len(sql_data)
 
 
-def load_word_emb(file_name, load_used=False, use_small=False):
+def load_word_emb(file_name, load_used=True, use_small=False):
     if not load_used:
         print ('Loading word embedding from %s'%file_name)
         ret = {}
