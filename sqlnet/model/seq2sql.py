@@ -107,14 +107,14 @@ class Seq2SQL(nn.Module):
         gt_sel_seq = []
         ret_seq = []
         for cur_q, cur_col, cur_query, mini_seq in zip(q, col, query, ans_seq):
-            connect_col = [tok for col_tok in cur_col for tok in col_tok.split(' ')+[',']] # get the column names
+            connect_col = [tok for col_tok in cur_col for tok in col_tok +[',']] # get the column names
             # [u'*', ',', u'col_tok_1', 'col_tok_2', ',' + ...]
             logging.warning('connect_col: {0}'.format(connect_col))
             all_toks = self.SEL_SQL_TOK + connect_col + [None] + cur_q + [None]
             # logging.warning('cur_col: {0}'.format(cur_col))
-            cur_col_list = [col.split(' ') for col in cur_col]
-            logging.warning('cur_col_list: {0}'.format(cur_col_list))
-            all_toks_condense = self.SEL_SQL_TOK + cur_col_list + [None] + cur_q + [None]
+            # cur_col_list = [col.split(' ') for col in cur_col]
+            # logging.warning('cur_col_list: {0}'.format(cur_col_list))
+            all_toks_condense = self.SEL_SQL_TOK + cur_col + [None] + cur_q + [None]
             logging.warning('all_toks_gt: {0}'.format(all_toks))
             logging.warning('all_toks_condense: {0}'.format(all_toks_condense))
             # get aggregators
@@ -193,7 +193,7 @@ class Seq2SQL(nn.Module):
         logging.warning('method generate_gt_where_seq')
         ret_seq = []
         for cur_q, cur_col, cur_query in zip(q, col, query):
-            connect_col = [tok for col_tok in cur_col for tok in col_tok.split(' ')+[',']]
+            connect_col = [tok for col_tok in cur_col for tok in col_tok +[',']]
             all_toks = self.SQL_TOK + connect_col + [None] + cur_q + [None]
             for i in range(len(all_toks)):
                 if all_toks[i]:
@@ -396,7 +396,7 @@ class Seq2SQL(nn.Module):
         selects = []
         all_toks = self.SEL_SQL_TOK + \
                    [x for toks in col[b] for x in
-                    toks.split(' ') +[',']] + [''] + q[b] + [''] # should I delete q --> issue is that I get the wrong dimensions, should I change the embeddings??
+                    toks +[',']] + [''] + q[b] + [''] # should I delete q --> issue is that I get the wrong dimensions, should I change the embeddings??
         # print('all_toks', all_toks)
         # print('all_toks_len', len(all_toks))
         sel_toks = []
@@ -476,7 +476,7 @@ class Seq2SQL(nn.Module):
         conds = []
         all_toks = self.SQL_TOK + \
                    [x for toks in col[b] for x in
-                    toks.split(' ') +[',']] + [''] + q[b] + ['']
+                    toks +[',']] + [''] + q[b] + ['']
         cond_toks = []
 
         # print 'making where'

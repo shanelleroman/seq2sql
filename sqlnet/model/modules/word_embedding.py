@@ -49,7 +49,7 @@ class WordEmbedding(nn.Module):
             else:
                 logging.warning('toks word_embedding _gen_x_batch: {0}'.format(one_col))
                 logging.warning('first_item toks: {0}'.format(one_col[0]))
-                one_col_all = [x for toks in one_col for x in toks.split(' ') +[',']]
+                one_col_all = [x for toks in one_col for x in toks +[',']]
                 logging.warning('one_col_all _gen_x_batch: {0}'.format(one_col_all))
                 if self.trainable:
                     col_val = map(lambda x:self.w2i.get(x, 0), one_col_all)

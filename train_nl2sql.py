@@ -1,7 +1,7 @@
 # *- coding: utf-8 -*-
 import json
 import torch
-from sqlnet.utils_new import *
+from sqlnet.utils import *
 from sqlnet.model.seq2sql import Seq2SQL
 from sqlnet.model.sqlnet import SQLNet
 import numpy as np
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     learning_rate = 1e-4 if args.rl else 1e-3
 
     logging.warning('about to load dataset')
-    sql_data, table_data, val_sql_data, val_table_data, test_sql_data, test_table_data = load_dataset(args.dataset, use_small=USE_SMALL)
+    sql_data, table_data, val_sql_data, val_table_data, test_sql_data, test_table_data = load_dataset_new(args.dataset, use_small=USE_SMALL)
 
     logging.warning('data loaded')
     word_emb = load_word_emb('glove/glove.%dB.%dd.txt'%(B_word,N_word), \
@@ -71,7 +71,7 @@ if __name__ == '__main__':
     if args.toy:
         sql_data = sql_data[:BATCH_SIZE]
         val_sql_data = val_sql_data[:BATCH_SIZE]
-        test_sql_data = test_sql_data[:BATCH_SIZE]
+        # test_sql_data = test_sql_data[:BATCH_SIZE]
     logging.warning('SQLNet loaded')
 
     if args.train_emb:
@@ -216,7 +216,6 @@ if __name__ == '__main__':
                     if args.train_emb:
                         torch.save(model.cond_embed_layer.state_dict(),
                         'saved_model/epoch%d.cond_embed%s'%(i+1, args.suffix))
-            exit(1)
   
         logging.warning('Best_agg_acc = %s on epoch %s ', str(best_agg_acc), str(best_agg_idx))
         logging.warning('best_sel_acc = %s on epoch %s ', str(best_sel_acc), str(best_sel_idx))
