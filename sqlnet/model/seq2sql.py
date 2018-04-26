@@ -18,6 +18,11 @@ import logging
 # Seq2SQL: Generating Structured Queries from Natural Language using
 # Reinforcement Learning. arXiv:1709.00103
 
+def debug_print(var_name, var_val):
+    print var_name + ": " 
+    print var_val
+
+
 class Seq2SQL(nn.Module):
     def __init__(self, word_emb, N_word, N_h=100, N_depth=2,
                  gpu=False, trainable_emb=False):

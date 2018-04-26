@@ -229,6 +229,12 @@ def epoch_train_old(model, optimizer, batch_size, sql_data, table_data, pred_ent
         gt_agg_seq = [x[0] for x in ans_seq]
         score = model.forward(q_seq, col_seq, col_num, pred_entry,
                 gt_where=gt_where_seq, gt_cond=gt_cond_seq, gt_sel=gt_sel_seq)
+        
+        # print 'score', score
+        # print 'ans_seq', ans_seq
+        # print 'pred_entry', pred_entry
+        # print 'gt_where_seq', gt_where_seq
+        # print 'loss about to called'
         loss = model.loss(score, ans_seq, pred_entry, gt_where_seq)
         cum_loss += loss.data.cpu().numpy()[0]*(ed - st)
         optimizer.zero_grad()
