@@ -410,7 +410,9 @@ class Seq2SQL(nn.Module):
         # print('sel_score.size()', sel_score.size())
         # print ('sel_score[b].size()', sel_score[b].size())
         # print ('sel_score', sel_score[b].data.cpu().numpy())
-        to_idx = [x.lower() for x in raw_col[b]] + [',']# possible columns to predict
+        to_idx = [x.lower() for x in raw_col + [',']]# possible columns to 
+        # to_idx = [x.lower() for toks in col[b] for x in toks +[',']]
+        logging.warning('raw_col {0}'.format(raw_col))
         agg_query = []
         agg_sql_tok_lower = [x.lower() for x in self.AGG_SQL_TOK]
         for sel_score_idx in sel_score[b].data.cpu().numpy():
@@ -433,6 +435,8 @@ class Seq2SQL(nn.Module):
         logging.warning('sel_toks: %s', str(sel_toks))
         logging.warning('to_idx: %s', str(to_idx))
         logging.warning('self.agg_sql_tok: %s', str(self.AGG_SQL_TOK))
+        # raw_col_edited = [' '.join(lst) for lst in raw_col[b]]
+        logging.warning('raw_col_edited: {0}'.format(raw_col))
         sel_merged_toks = []
         if ',' in sel_toks:
             while sel_toks:
@@ -440,14 +444,15 @@ class Seq2SQL(nn.Module):
                     index_comma = sel_toks.index(',') # get index of ','
                 except:
                     index_comma = len(sel_toks)
-                pred_col = self.merge_tokens(sel_toks[:index_comma], raw_q[b] + ' || ' + \
-                                        ' || '.join(raw_col[b])) # get all the words until first comma
+                # pred_col = self.merge_tokens(sel_toks[:index_comma], raw_q[b] + ' || ' + ' || '.join(raw_col[b])) # get all the words until first comma
+                pred_col = self.merge_tokens(sel_toks[:index_comma], raw_q[b] + ' || ' + ' || '.join(raw_col))
                 logging.warning('merged pred_col {0}'.format(pred_col)) # merged column names
                 sel_merged_toks.append(pred_col)
                 sel_toks = sel_toks[index_comma + 1:] # move to the next one
         else:
-            pred_col = self.merge_tokens(sel_toks, raw_q[b] + ' || ' + \
-                                        ' || '.join(raw_col[b]))
+            logging.warning('raw_col: {0}'.format(raw_col))
+            # pred_col = self.merge_tokens(sel_toks, raw_q[b] + ' || ' + ' || '.join(raw_col[b]))
+            pred_col = self.merge_tokens(sel_toks, raw_q[b] + ' || ' + ' || '.join(raw_col))
             sel_merged_toks = [pred_col]
         
         for pred_col in sel_merged_toks:
@@ -528,9 +533,9 @@ class Seq2SQL(nn.Module):
                 cur_cond[1] = 0
             sel_col = cond_toks[st:op_prev]
             # logging.warning('sel_col: %s', str(sel_col))
-            to_idx = [x.lower() for x in raw_col[b]]
+            to_idx = [x.lower() for x in raw_col]
             pred_col = self.merge_tokens(sel_col, raw_q[b] + ' || ' + \
-                                    ' || '.join(raw_col[b]))
+                                    ' || '.join(raw_col))
             # logging.warning('pred_col: %s', str(pred_col))
             if pred_col in to_idx:
                 cur_cond[0] = to_idx.index(pred_col)
@@ -700,16 +705,18 @@ class Seq2SQL(nn.Module):
             B = len(cond_score[0]) if reinforce else len(cond_score)
         for b in range(B):
             cur_query = {}
+            raw_col_edited = [' '.join(lst) for lst in raw_col[b]]
+            logging.warning('raw_col_edited {0}'.format(raw_col_edited))
             # if pred_agg:
             #     cur_query['agg'] = np.argmax(agg_score[b].data.cpu().numpy())
                 # print ('cur_query_agg', cur_query['agg'])
             if pred_sel:
                 cur_query['sel'] = np.argmax(sel_score[b].data.cpu().numpy())
-                cur_query['agg'], cur_query['sel'] =  self.gen_sel_query(col, sel_score, b, q, raw_col, raw_q)
+                cur_query['agg'], cur_query['sel'] =  self.gen_sel_query(col, sel_score, b, q, raw_col_edited, raw_q)
                 logging.debug('cur_query[sel]: %s', str(cur_query['sel']))
                 logging.debug('cur_query[agg]: %s', str(cur_query['agg']))
             if pred_cond:
-                cur_query['conds'] = self.gen_where_query(col, cond_score, b, q, raw_col, raw_q)
+                cur_query['conds'] = self.gen_where_query(col, cond_score, b, q, raw_col_edited, raw_q)
                 logging.debug('cur_query_conds: %s', str(cur_query['conds']))
             # print('cur_query', cur_query)
             ret_queries.append(cur_query)

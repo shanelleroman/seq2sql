@@ -124,6 +124,7 @@ class Seq2SQLCondPredictor(nn.Module):
                 t += 1
 
             cond_score = torch.stack(scores, 1)
+            logging.warning('cond_score.size() {0}'.format(cond_score.size()))
 
         if reinforce:
             return cond_score, choices

@@ -179,7 +179,8 @@ def to_batch_seq(sql_data, table_data, idxes, st, ed, ret_vis_data=False):
         q_seq.append(sql['question_tok']) 
         table = table_data[sql['table_id']]
         col_num.append(len(table['col_map'])) 
-        tab_cols = [col[1] for col in table['col_map']]
+        # tab_cols = [col[1] for col in table['col_map']]
+        tab_cols = [col[1].split(' ') for col in table['col_map']]
         col_seq.append(tab_cols)
         ans_seq.append((sql['agg'], 
             sql['sel'], 
@@ -295,6 +296,7 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry):
         q_seq, col_seq, col_num, ans_seq, query_seq, gt_cond_seq, raw_data = to_batch_seq(sql_data, table_data, perm, st, ed, ret_vis_data=True)
         if len(q_seq) == 0:
             break
+        logging.warning('col_seq: {0}'.format(col_seq))
         raw_q_seq = [x[0] for x in raw_data]
         raw_col_seq = [x[1] for x in raw_data]
         query_gt, table_ids = to_batch_query(sql_data, perm, st, ed)
