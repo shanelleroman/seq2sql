@@ -40,7 +40,7 @@ if __name__ == '__main__':
     if args.toy:
         USE_SMALL=True
         GPU=True
-        BATCH_SIZE=5
+        BATCH_SIZE=10
     else:
         USE_SMALL=True
         GPU=True
@@ -52,8 +52,8 @@ if __name__ == '__main__':
     logging.warning('about to load dataset')
     sql_data, table_data, val_sql_data, val_table_data, test_sql_data, test_table_data = load_dataset(args.dataset, use_small=USE_SMALL)
     if args.toy:
-        sql_data = sql_data[:BATCH_SIZE]
-        val_sql_data = val_sql_data[:BATCH_SIZE]
+        sql_data = sql_data[20:BATCH_SIZE + 20]
+        val_sql_data = val_sql_data[20 :BATCH_SIZE + 20]
     logging.warning('data loaded')
     word_emb = load_word_emb('glove/glove.%dB.%dd.txt'%(B_word,N_word), \
             load_used=args.train_emb, use_small=USE_SMALL)
@@ -119,7 +119,6 @@ if __name__ == '__main__':
         init_acc = epoch_acc_new(model, BATCH_SIZE,
                 val_sql_data, val_table_data, TRAIN_ENTRY)
         logging.warning('init_acc: %s', str(init_acc))
-        exit(1)
         best_agg_acc = init_acc[1][0]
         best_agg_idx = 0
         best_sel_acc = init_acc[1][1]
@@ -171,8 +170,7 @@ if __name__ == '__main__':
             #val_acc = epoch_token_acc(model, BATCH_SIZE, val_sql_data, val_table_data, TRAIN_ENTRY)
             val_acc = epoch_acc_new(model,
                     BATCH_SIZE, val_sql_data, val_table_data, TRAIN_ENTRY)
-            # logging.warning(' Dev acc_qm: %s\n   breakdown result: %s'%val_acc)
-            # logging.debug('val_acc', val_acc)
+            logging.warning(' Dev acc_qm: %s\n   breakdown result: %s'%val_acc)
             if TRAIN_AGG:
                 # logging.warning('val_acc[1][0]: %s', str(val_acc[1][0]))
                 # logging.warning('best_agg_acc: %s', str(best_agg_acc))

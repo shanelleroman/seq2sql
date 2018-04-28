@@ -246,7 +246,7 @@ def epoch_train_old(model, optimizer, batch_size, sql_data, table_data, pred_ent
 
     return cum_loss / len(sql_data)
 def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
-    print 'method epoch_train'
+    logging.info('method epoch_train')
     model.train()
     # perm=np.random.permutation(len(sql_data))
     perm = list(range(len(sql_data)))
@@ -260,14 +260,7 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
         if len(q_seq) == 0:
             break
         gt_where_seq = model.generate_gt_where_seq(q_seq, col_seq, query_seq)
-        # print('gt_where_seq', gt_where_seq)
-        # print('ans_seq', ans_seq)
-        # print('q_seq', q_seq)
-        # print('col_seq', col_seq)
-        # print('query_seq', query_seq)
-        # exit(1)
         gt_sel_seq = model.generate_gt_sel_seq(q_seq, col_seq, query_seq, ans_seq)
-        # print('gt_sel_seq', gt_sel_seq)
         score = model.forward(q_seq, col_seq, col_num, pred_entry,
                 gt_where=gt_where_seq, gt_cond=gt_cond_seq, gt_sel=gt_sel_seq)
         loss = model.loss(score, ans_seq, pred_entry, gt_where_seq, gt_sel_seq)
@@ -275,7 +268,6 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-        # print('\a')
         st = ed
 
     return cum_loss / len(sql_data)
@@ -296,7 +288,6 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry):
         q_seq, col_seq, col_num, ans_seq, query_seq, gt_cond_seq, raw_data = to_batch_seq(sql_data, table_data, perm, st, ed, ret_vis_data=True)
         if len(q_seq) == 0:
             break
-        logging.warning('col_seq: {0}'.format(col_seq))
         raw_q_seq = [x[0] for x in raw_data]
         raw_col_seq = [x[1] for x in raw_data]
         query_gt, table_ids = to_batch_query(sql_data, perm, st, ed)
@@ -304,11 +295,11 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry):
                 pred_entry)
 
         # print('query_gt', query_gt)
-        logging.warning('q_seq {0}'.format(q_seq))
+        logging.debug('q_seq {0}'.format(q_seq))
         pred_queries = model.gen_query(score, q_seq, col_seq,
                 raw_q_seq, raw_col_seq, pred_entry) # is this the decoder portion??
         # exit(1)
-        logging.warning('pred_queries: {0}'.format(pred_queries))
+        logging.debug('pred_queries: {0}'.format(pred_queries))
         # pred_queries = model.gen_query(score, q_seq, col_seq,
         #         raw_q_seq, raw_col_seq, pred_entry, gt_cond = gt_cond_seq)
         one_err, tot_err = model.check_acc(raw_data,
@@ -316,8 +307,8 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry):
 
         one_acc_num += (ed-st-one_err) # 5 - 0 - 2
         tot_acc_num += (ed-st-tot_err)
-        logging.warning('one_acc_num: {0}'.format(one_acc_num)) # should be 3
-        logging.warning('tot_acc_num: {0}'.format(tot_acc_num))
+        logging.debug('one_acc_num: {0}'.format(one_acc_num)) # should be 3
+        logging.debug('tot_acc_num: {0}'.format(tot_acc_num))
         # exit(1)
 
         st = ed

@@ -47,10 +47,7 @@ class WordEmbedding(nn.Module):
                     val_embs.append([np.zeros(self.N_word, dtype=np.float32)] + q_val + [np.zeros(self.N_word, dtype=np.float32)])  #<BEG> and <END>
                 val_len[i] = 1 + len(q_val) + 1
             else:
-                logging.warning('toks word_embedding _gen_x_batch: {0}'.format(one_col))
-                logging.warning('first_item toks: {0}'.format(one_col[0]))
                 one_col_all = [x for toks in one_col for x in toks +[',']]
-                logging.warning('one_col_all _gen_x_batch: {0}'.format(one_col_all))
                 if self.trainable:
                     col_val = map(lambda x:self.w2i.get(x, 0), one_col_all)
                     val_embs.append( [0 for _ in self.SQL_TOK] + col_val + [0] + q_val+ [0])
