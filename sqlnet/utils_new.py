@@ -34,15 +34,6 @@ def load_data_new(sql_paths, table_paths, use_small=False):
         with open(SQL_PATH) as inf:
             data = lower_keys(json.load(inf))
             sql_data += data
-                
-    # for i, TABLE_PATH in enumerate(table_paths):
-    #     if use_small and i >= 2:
-    #         break
-    #     print "Loading data from %s"%TABLE_PATH
-    #     with open(TABLE_PATH) as inf:
-    #         file_name = get_main_table_name(TABLE_PATH)
-    #         if file_name:
-    #             table_data[file_name] = lower_keys(json.load(inf))
 
     for i, TABLE_PATH in enumerate(table_paths):
         if use_small and i >= 2:
@@ -282,6 +273,7 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry):
     st = 0
     one_acc_num = 0.0
     tot_acc_num = 0.0
+    acc_num_breakdown = 0.0
     while st < len(sql_data):
         ed = st+batch_size if st+batch_size < len(perm) else len(perm)
 
@@ -291,6 +283,9 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry):
         raw_q_seq = [x[0] for x in raw_data]
         raw_col_seq = [x[1] for x in raw_data]
         query_gt, table_ids = to_batch_query(sql_data, perm, st, ed)
+        # logging.warning('query_gt: {0}'.format(json.dumps(query_gt, indent=4)))
+        # exit(1)
+        # continue
         score = model.forward(q_seq, col_seq, col_num,
                 pred_entry)
 
@@ -299,20 +294,22 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry):
         pred_queries = model.gen_query(score, q_seq, col_seq,
                 raw_q_seq, raw_col_seq, pred_entry) # is this the decoder portion??
         # exit(1)
-        logging.debug('pred_queries: {0}'.format(pred_queries))
+        logging.warning('pred_queries: {0}'.format(pred_queries))
         # pred_queries = model.gen_query(score, q_seq, col_seq,
         #         raw_q_seq, raw_col_seq, pred_entry, gt_cond = gt_cond_seq)
-        one_err, tot_err = model.check_acc(raw_data,
+        one_err, tot_err, err_breakdown = model.check_acc(raw_data,
                 pred_queries, query_gt, pred_entry)
 
         one_acc_num += (ed-st-one_err) # 5 - 0 - 2
         tot_acc_num += (ed-st-tot_err)
+        acc_num_breakdown += (ed-st-err_breakdown)
         logging.debug('one_acc_num: {0}'.format(one_acc_num)) # should be 3
         logging.debug('tot_acc_num: {0}'.format(tot_acc_num))
+        logging.warning('acc_num_breakdown: {0}'.format(acc_num_breakdown))
         # exit(1)
 
         st = ed
-    return tot_acc_num / len(sql_data), one_acc_num / len(sql_data)
+    return tot_acc_num / len(sql_data), one_acc_num / len(sql_data), acc_num_breakdown / len(sql_data)
 
 
 def epoch_acc(model, batch_size, sql_data, table_data, pred_entry, error_print=False, train_flag = False):
@@ -439,6 +436,7 @@ def process(sql_data, table_data):
                 curr_cond = []
                 curr_cond.append(cond[2][1][1])
                 curr_cond.append(cond[1])
+
                 if cond[4] is not None:
                     curr_cond.append([cond[3], cond[4]])
                 else:
@@ -446,6 +444,9 @@ def process(sql_data, table_data):
                 sql_temp['cond'].append(curr_cond)
 
         sql_temp['conj'] = [gt_cond[x] for x in range(len(gt_cond)) if x % 2 == 1]
+        # logging.warning('process')
+        # logging.warning('sql: {0}'.format(json.dumps(gt_cond, indent=4)))
+        # logging.warning('sql_temp: {0}'.format(json.dumps(sql_temp, indent=4)))
 
         # process group by / having
         sql_temp['group'] = [x[1] for x in sql['sql']['groupby']]

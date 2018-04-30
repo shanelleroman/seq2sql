@@ -9,7 +9,7 @@ from net_utils import run_lstm
 import logging
 
 class Seq2SQLSubSeqPredictor(nn.Module):
-    def __init__(self, N_word, N_h, N_depth, max_col_num, max_tok_num, gpu):
+    def __init__(self, N_word, N_h, N_depth, max_col_num, max_tok_num, gpu, start_end_indices=(0,1)):
         super(Seq2SQLSubSeqPredictor, self).__init__()
         logging.info("Seq2SQL subsequence prediction")
         self.N_h = N_h
@@ -29,6 +29,7 @@ class Seq2SQLSubSeqPredictor(nn.Module):
         self.seq_out = nn.Sequential(nn.Tanh(), nn.Linear(N_h, 1)) # just one SEQUENCE that we are predicting - each word is one CHOICE
 
         self.softmax = nn.Softmax() # get the probability distribution
+        self.start_end_indices = start_end_indices
 
 
     def gen_gt_batch(self, tok_seq, gen_inp=True):
@@ -43,7 +44,7 @@ class Seq2SQLSubSeqPredictor(nn.Module):
         for b, one_tok_seq in enumerate(tok_seq):
             # print('one_tok_seq', one_tok_seq)
             out_one_tok_seq = one_tok_seq[:-1] if gen_inp else one_tok_seq[1:]
-            logging.info('generated_gt_sel_decoder_seq {0}'.format(out_one_tok_seq))
+            logging.warning('generated_gt_sel_decoder_seq {0}'.format(out_one_tok_seq))
             # print ('out_one_tok_seq', out_one_tok_seq)
             for t, tok_id in enumerate(out_one_tok_seq):
                 ret_array[b, t, tok_id] = 1
@@ -102,7 +103,7 @@ class Seq2SQLSubSeqPredictor(nn.Module):
             t = 0
             init_inp = np.zeros((B, 1, self.max_tok_num), dtype=np.float32) # initialize input because no golden to pass in
             # print ('self.max_tok_num', self.max_tok_num)
-            init_inp[:,0,0] = 1   #Set the SELECT token - this needs to change - will need to pass in as a parameter when I extend for other things
+            init_inp[:,0,self.start_end_indices[0]] = 1   #Set the SELECT token - this needs to change - will need to pass in as a parameter when I extend for other things
             # 2 = index of SELECT
             # first input
             #RNN <=> update cur_inp each time, pass hidden and update it! 
@@ -140,7 +141,7 @@ class Seq2SQLSubSeqPredictor(nn.Module):
                 cur_inp = cur_inp.unsqueeze(1)
                 # print('ans_tok.squeeze()', ans_tok.squeeze())
                 for idx, tok in enumerate(ans_tok.squeeze()):
-                    if tok == 1:  #Find the <END> token
+                    if tok == self.start_end_indices[1]:  #Find the <END> token
                         done_set.add(idx) # index of the the <END> token for this sequence => this much closer to finishing!
                 t += 1
 

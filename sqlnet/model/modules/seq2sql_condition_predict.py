@@ -40,7 +40,7 @@ class Seq2SQLCondPredictor(nn.Module):
         max_len = max(ret_len)
         ret_array = np.zeros((B, max_len, self.max_tok_num), dtype=np.float32)
         for b, one_tok_seq in enumerate(tok_seq):
-            print('one_tok_seq', one_tok_seq)
+            logging.info('one_tok_seq', one_tok_seq)
             # print('gen_inp', gen_inp)
             out_one_tok_seq = one_tok_seq[:-1] if gen_inp else one_tok_seq[1:]
             logging.info('generated_decoder_seq {0}'.format(out_one_tok_seq))
