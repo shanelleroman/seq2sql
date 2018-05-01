@@ -89,10 +89,15 @@ class Seq2SQLSubSeqPredictor(nn.Module):
 
             seq_score = self.seq_out( self.seq_out_h(h_enc_expand) +
                     self.seq_out_g(g_s_expand) ).squeeze()
+            if len(seq_score.size()) == 2:
+                seq_score = seq_score.unsqueeze(1)
+                logging.info('new seq_score.size() {0}'.format(seq_score.size()))
             # print('seq_score.size()', seq_score.size())
             for idx, num in enumerate(x_len):
-                if num < max_x_len:
+                if num < max_x_len and len(seq_score.size()) > 2:
                     seq_score[idx, :, num:] = -100 # make sure the padded numbers have ~0 probab
+                elif num < max_x_len:
+                     seq_score[idx, num:] = -100
         else:
             logging.info('gold sequence not provided')
             h_enc_expand = h_enc.unsqueeze(1)
@@ -146,6 +151,7 @@ class Seq2SQLSubSeqPredictor(nn.Module):
                 t += 1
 
             seq_score = torch.stack(scores, 1)
+            logging.warning('seq_score.size()" {0}'.format(seq_score.size()))
 
         if reinforce:
             return seq_score, choices

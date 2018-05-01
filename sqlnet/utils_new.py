@@ -44,6 +44,57 @@ def load_data_new(sql_paths, table_paths, use_small=False):
     sql_data_new, table_data_new = process(sql_data, table_data)  # comment out if not on full dataset
     return sql_data_new, table_data_new
 
+def epoch_reinforce_train(model, optimizer, batch_size, sql_data, table_data, db_path):
+    engine = DBEngine(db_path)
+
+    model.train()
+    perm = np.random.permutation(len(sql_data))
+    # perm = list(range(len(sql_data)))
+    cum_reward = 0.0
+    st = 0
+    while st < len(sql_data):
+        ed = st+batch_size if st+batch_size < len(perm) else len(perm)
+
+        q_seq, col_seq, col_num, ans_seq, query_seq, gt_cond_seq, raw_data =\
+            to_batch_seq(sql_data, table_data, perm, st, ed, ret_vis_data=True)
+        gt_where_seq = model.generate_gt_where_seq(q_seq, col_seq, query_seq)
+        raw_q_seq = [x[0] for x in raw_data]
+        raw_col_seq = [x[1] for x in raw_data]
+        query_gt, table_ids = to_batch_query(sql_data, perm, st, ed)
+        gt_sel_seq = model.generate_gt_sel_seq(q_seq, col_seq, query_seq)
+        score = model.forward(q_seq, col_seq, col_num, (True, True, True, True),
+                reinforce=True, gt_sel=gt_sel_seq)
+        pred_queries = model.gen_query(score, q_seq, col_seq, raw_q_seq,
+                raw_col_seq, (True, True, True, True), reinforce=True)
+
+        query_gt, table_ids = to_batch_query(sql_data, perm, st, ed)
+        rewards = []
+        for idx, (sql_gt, sql_pred, tid) in enumerate(
+                zip(query_gt, pred_queries, table_ids)):
+            ret_gt = engine.execute(tid,
+                    sql_gt['sel'], sql_gt['agg'], sql_gt['conds'])
+            try:
+                ret_pred = engine.execute(tid,
+                        sql_pred['sel'], sql_pred['agg'], sql_pred['conds'])
+            except:
+                ret_pred = None
+
+            if ret_pred is None:
+                rewards.append(-2)
+            elif ret_pred != ret_gt:
+                rewards.append(-1)
+            else:
+                rewards.append(1)
+
+        cum_reward += (sum(rewards))
+        optimizer.zero_grad()
+        model.reinforce_backward(score, rewards)
+        optimizer.step()
+
+        st = ed
+
+    return cum_reward / len(sql_data)
+
 def load_data(sql_paths, table_paths, use_small=False):
     if not isinstance(sql_paths, list):
         sql_paths = (sql_paths, )
@@ -141,6 +192,8 @@ def best_model_name(args, for_load=False):
             mode, use_emb, use_ca)
     cond_model_name = 'saved_model/%s_%s%s%s.cond_%smodel'%(new_data,
             mode, use_emb, use_ca, use_rl)
+    groupby_model_name = 'saved_model/%s_%s%s%s.groupby_%smodel'%(new_data,
+            mode, use_emb, use_ca, use_rl)
 
     if not for_load and args.train_emb:
         agg_embed_name = 'saved_model/%s_%s%s%s.agg_embed'%(new_data,
@@ -152,7 +205,7 @@ def best_model_name(args, for_load=False):
         return agg_model_name, sel_model_name, cond_model_name,\
                 agg_embed_name, sel_embed_name, cond_embed_name
     else:
-        return agg_model_name, sel_model_name, cond_model_name
+        return agg_model_name, sel_model_name, cond_model_name, groupby_model_name
 
 
 def to_batch_seq(sql_data, table_data, idxes, st, ed, ret_vis_data=False):
@@ -166,26 +219,29 @@ def to_batch_seq(sql_data, table_data, idxes, st, ed, ret_vis_data=False):
 
     for i in range(st, ed):
         sql = sql_data[idxes[i]]
-        # print sql
+        logging.warning('sql: {0}'.format(sql))
         q_seq.append(sql['question_tok']) 
         table = table_data[sql['table_id']]
         col_num.append(len(table['col_map'])) 
         # tab_cols = [col[1] for col in table['col_map']]
         tab_cols = [col[1].split(' ') for col in table['col_map']]
         col_seq.append(tab_cols)
-        ans_seq.append((sql['agg'], 
-            sql['sel'], 
-            len(sql['cond']), 
-            tuple(x[0] for x in sql['cond']),  
-            tuple(x[1] for x in sql['cond']),
-            len(set(sql['sel'])),       
-            sql['group'][:-1],          
+
+        ans_seq.append((sql['agg'], #index 0
+            sql['sel'], # index 1
+            len(sql['cond']), # index 2
+            tuple(x[0] for x in sql['cond']),  # index 3
+            tuple(x[1] for x in sql['cond']), # index 4
+            len(set(sql['sel'])), # index 5       
+            sql['group'][:-1], # index 6 = group         
             len(sql['group']) - 1,      
             sql['order'][0],            
             sql['order'][1],            
             len(sql['order'][1]),       
             sql['order'][2]             
-            ))  
+            ))
+
+
         query_seq.append(sql['query_tok'])
         gt_cond_seq.append([x for x in sql['cond']])
         vis_seq.append((sql['question'], tab_cols, sql['query']))
@@ -236,6 +292,7 @@ def epoch_train_old(model, optimizer, batch_size, sql_data, table_data, pred_ent
         st = ed
 
     return cum_loss / len(sql_data)
+
 def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
     logging.info('method epoch_train')
     model.train()
@@ -252,9 +309,10 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
             break
         gt_where_seq = model.generate_gt_where_seq(q_seq, col_seq, query_seq)
         gt_sel_seq = model.generate_gt_sel_seq(q_seq, col_seq, query_seq, ans_seq)
+        gt_groupby_seq = model.generate_gt_group_seq(q_seq, col_seq, query_seq, ans_seq)
         score = model.forward(q_seq, col_seq, col_num, pred_entry,
-                gt_where=gt_where_seq, gt_cond=gt_cond_seq, gt_sel=gt_sel_seq)
-        loss = model.loss(score, ans_seq, pred_entry, gt_where_seq, gt_sel_seq)
+                gt_where=gt_where_seq, gt_cond=gt_cond_seq, gt_sel=gt_sel_seq, gt_groupby=gt_groupby_seq)
+        loss = model.loss(score, ans_seq, pred_entry, gt_where_seq, gt_sel_seq, gt_groupby_seq)
         cum_loss += loss.data.cpu().numpy()[0]*(ed - st)
         optimizer.zero_grad()
         loss.backward()
@@ -263,12 +321,13 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
 
     return cum_loss / len(sql_data)
 
+
 def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry):
     logging.info('epoch_acc_new')
     model.eval()
     # print ('perm', perm)\
-    # perm=np.random.permutation(len(sql_data))
-    perm = list(range(len(sql_data)))
+    perm=np.random.permutation(len(sql_data))
+    # perm = list(range(len(sql_data)))
     # logging.warning('len sql: %d', len(sql_data))
     st = 0
     one_acc_num = 0.0
@@ -283,17 +342,13 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry):
         raw_q_seq = [x[0] for x in raw_data]
         raw_col_seq = [x[1] for x in raw_data]
         query_gt, table_ids = to_batch_query(sql_data, perm, st, ed)
-        # logging.warning('query_gt: {0}'.format(json.dumps(query_gt, indent=4)))
-        # exit(1)
-        # continue
         score = model.forward(q_seq, col_seq, col_num,
                 pred_entry)
-
         # print('query_gt', query_gt)
         logging.debug('q_seq {0}'.format(q_seq))
         pred_queries = model.gen_query(score, q_seq, col_seq,
                 raw_q_seq, raw_col_seq, pred_entry) # is this the decoder portion??
-        # exit(1)
+        
         logging.warning('pred_queries: {0}'.format(pred_queries))
         # pred_queries = model.gen_query(score, q_seq, col_seq,
         #         raw_q_seq, raw_col_seq, pred_entry, gt_cond = gt_cond_seq)
@@ -342,6 +397,45 @@ def epoch_acc(model, batch_size, sql_data, table_data, pred_entry, error_print=F
         st = ed
     return tot_acc_num / len(sql_data), one_acc_num / len(sql_data)
 
+def epoch_exec_acc(model, batch_size, sql_data, table_data, db_path):
+    engine = DBEngine(db_path)
+    print 'exec acc'
+
+    model.eval()
+    perm = list(range(len(sql_data)))
+    tot_acc_num = 0.0
+    acc_of_log = 0.0
+    st = 0
+    while st < len(sql_data):
+        ed = st+batch_size if st+batch_size < len(perm) else len(perm)
+        q_seq, col_seq, col_num, ans_seq, query_seq, gt_cond_seq, raw_data = \
+            to_batch_seq(sql_data, table_data, perm, st, ed, ret_vis_data=True)
+        raw_q_seq = [x[0] for x in raw_data]
+        raw_col_seq = [x[1] for x in raw_data]
+        model.generate_gt_sel_seq(q_seq, col_seq, query_seq)
+        gt_where_seq = model.generate_gt_where_seq(q_seq, col_seq, query_seq)
+        query_gt, table_ids = to_batch_query(sql_data, perm, st, ed)
+        gt_sel_seq = [x[1] for x in ans_seq]
+        # print 'gt_sel_seq', gt_sel_seq
+        score = model.forward(q_seq, col_seq, col_num,
+                (True, True, True), gt_sel=gt_sel_seq)
+        pred_queries = model.gen_query(score, q_seq, col_seq,
+                raw_q_seq, raw_col_seq, (True, True, True))
+
+        for idx, (sql_gt, sql_pred, tid) in enumerate(
+                zip(query_gt, pred_queries, table_ids)):
+            ret_gt = engine.execute(tid,
+                    sql_gt['sel'], sql_gt['agg'], sql_gt['conds'])
+            try:
+                ret_pred = engine.execute(tid,
+                        sql_pred['sel'], sql_pred['agg'], sql_pred['conds'])
+            except:
+                ret_pred = None
+            tot_acc_num += (ret_gt == ret_pred)
+        
+        st = ed
+
+    return tot_acc_num / len(sql_data)
 
 def load_para_wemb(file_name):
     f = io.open(file_name, 'r', encoding='utf-8')

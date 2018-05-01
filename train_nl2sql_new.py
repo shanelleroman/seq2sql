@@ -6,6 +6,7 @@ from sqlnet.model.seq2sql import Seq2SQL
 from sqlnet.model.sqlnet import SQLNet
 import numpy as np
 import datetime
+import csv
 
 import argparse
 import logging
@@ -16,7 +17,7 @@ if __name__ == '__main__':
     logging.basicConfig(handlers=[
         logging.FileHandler("{0}/{1}.log".format(logPath, fileName)),
         logging.StreamHandler()
-    ], level=logging.WARNING)
+    ], level=logging.ERROR)
     parser = argparse.ArgumentParser()
     parser.add_argument('--toy', action='store_true', 
             help='If set, use small data; used for fast debugging.')
@@ -40,13 +41,13 @@ if __name__ == '__main__':
     if args.toy:
         USE_SMALL=True
         GPU=True
-        BATCH_SIZE=10
+        BATCH_SIZE=5
     else:
         USE_SMALL=True
         GPU=True
         BATCH_SIZE=40
-    TRAIN_ENTRY=(True, True, True)  # (AGG, SEL, COND) # TODDO - change last one to False
-    TRAIN_AGG, TRAIN_SEL, TRAIN_COND = TRAIN_ENTRY
+    TRAIN_ENTRY=(True, True, True, True)  # (AGG, SEL, COND, GROUPBY) 
+    TRAIN_AGG, TRAIN_SEL, TRAIN_COND, TRAIN_GROUPBY = TRAIN_ENTRY
     learning_rate = 1e-4 if args.rl else 1e-3
 
     logging.warning('about to load dataset')
@@ -54,7 +55,6 @@ if __name__ == '__main__':
     if args.toy:
         sql_data = sql_data[20:BATCH_SIZE + 20]
         val_sql_data = val_sql_data[20 :BATCH_SIZE + 20]
-        # logging.warning('sql_data: {0}'.format(json.dumps(sql_data, indent=4)))
 
     logging.warning('data loaded')
     word_emb = load_word_emb('glove/glove.%dB.%dd.txt'%(B_word,N_word), \
@@ -72,25 +72,22 @@ if __name__ == '__main__':
         assert not args.rl, "SQLNet can\'t do reinforcement learning."
     optimizer = torch.optim.Adam(model.parameters(),
             lr=learning_rate, weight_decay = 0)
-    if args.toy:
-        sql_data = sql_data[:BATCH_SIZE]
-        val_sql_data = val_sql_data[:BATCH_SIZE]
-        # test_sql_data = test_sql_data[:BATCH_SIZE]
-    logging.warning('SQLNet loaded')
 
     if args.train_emb:
         agg_m, sel_m, cond_m, agg_e, sel_e, cond_e = best_model_name(args)
     else:
-        agg_m, sel_m, cond_m = best_model_name(args)
+        agg_m, sel_m, cond_m, groupby_m = best_model_name(args)
 
     if args.rl or args.train_emb: # Load pretrained model.
-        agg_lm, sel_lm, cond_lm = best_model_name(args, for_load=True)
+        agg_lm, sel_lm, cond_lm, groupby_m = best_model_name(args, for_load=True)
         print "Loading from %s"%agg_lm
         model.agg_pred.load_state_dict(torch.load(agg_lm))
         print "Loading from %s"%sel_lm
         model.sel_pred.load_state_dict(torch.load(sel_lm))
         print "Loading from %s"%cond_lm
         model.cond_pred.load_state_dict(torch.load(cond_lm))
+        print "Loading from %s"%groupby_m
+        model.cond_pred.load_state_dict(torch.load(groupby_m))
     
     if args.rl:
         best_acc = 0.0
@@ -121,12 +118,16 @@ if __name__ == '__main__':
         init_acc = epoch_acc_new(model, BATCH_SIZE,
                 val_sql_data, val_table_data, TRAIN_ENTRY)
         logging.warning('init_acc: %s', str(init_acc))
+        # total accuracies
         best_agg_acc = init_acc[1][0]
         best_agg_idx = 0
         best_sel_acc = init_acc[1][1]
         best_sel_idx = 0
         best_cond_acc = init_acc[1][2]
         best_cond_idx = 0
+        best_group_acc = init_acc[1][3]
+        best_group_idx = 0
+        # accuracy breakdowns
         best_agg_num_acc = init_acc[2][0][0]
         best_agg_num_idx = 0
         best_agg_op_acc = init_acc[2][0][1]
@@ -155,23 +156,38 @@ if __name__ == '__main__':
             torch.save(model.cond_pred.state_dict(), cond_m)
             if args.train_emb:
                 torch.save(model.cond_embed_layer.state_dict(), cond_e)
+        if TRAIN_GROUPBY:
+            torch.save(model.groupby_pred.state_dict(), cond_m)
+            if args.train_emb:
+                torch.save(model.groupby_embed_layer.state_dict(), cond_e)
         loss = 100
-        # for i in range(100):
-        # i = 0
-        # while loss > 1:
-        
-        for i in range(500):
+
+        EPOCH_NUM = 100
+        train_acc = np.zeros((EPOCH_NUM + 1, 5)) #(100, 5) = (Epoch_num, accuracy) accuracy = (Total, Agg, Sel, Cond, Group)
+        dev_acc = np.zeros((EPOCH_NUM + 2, 5)) 
+        # last row = best accuracy!!
+        dev_acc[0,0] = init_acc[0]
+        dev_acc[0, 1:] = init_acc[1]
+
+        for i in range(100):
             logging.warning('Epoch %d @ %s'%(i+1, datetime.datetime.now()))
             logging.warning(' Loss = %s'%epoch_train(
                     model, optimizer, BATCH_SIZE, 
                     sql_data, table_data, TRAIN_ENTRY))
             train_acc_tot, train_acc_indiv, train_acc_break = epoch_acc_new(model, BATCH_SIZE, sql_data, table_data, TRAIN_ENTRY)
-            logging.warning(' Train acc_qm: %s\n   breakdown result: %s further breakdown: %s'% (train_acc_tot, train_acc_indiv, train_acc_break))
+            logging.error(' Train acc_qm: %s\n   breakdown result: %s further breakdown: %s'% (train_acc_tot, train_acc_indiv, train_acc_break))
             logging.warning('-------------')
             logging.warning('validation acc!')
+            # update the accuracies
+            train_acc[i,0] = train_acc_tot
+            train_acc[i,1:] = train_acc_indiv
+
             val_acc = epoch_acc_new(model,
                     BATCH_SIZE, val_sql_data, val_table_data, TRAIN_ENTRY)
-            logging.warning(' Dev acc_qm: %s\n   breakdown result: %s\n Further breakdown: %s'%val_acc)
+            dev_acc[i + 1,0] = val_acc[0]
+            dev_acc[i + 1, 1:] = val_acc[1]
+            logging.error(' Dev acc_qm: %s\n   breakdown result: %s\n Further breakdown: %s'%val_acc)
+
             if TRAIN_AGG:
                 # logging.warning('val_acc[1][0]: %s', str(val_acc[1][0]))
                 # logging.warning('best_agg_acc: %s', str(best_agg_acc))
@@ -188,11 +204,6 @@ if __name__ == '__main__':
                 if agg_acc[1] > best_agg_op_acc:
                     best_agg_op_acc = agg_acc[1]
                     best_agg_op_idx = i+1
-                
-                # if args.train_emb:
-                #     torch.save(model.agg_embed_layer.state_dict(),
-                #         'saved_model/epoch%d.agg_embed%s'%(i+1, args.suffix))
-                #     torch.save(model.agg_embed_layer.state_dict(), agg_e)
             if TRAIN_SEL:
                 if val_acc[1][1] > best_sel_acc:
                     best_sel_acc = val_acc[1][1]
@@ -211,14 +222,7 @@ if __name__ == '__main__':
                 if sel_acc[1] > best_sel_col_acc:
                     best_sel_col_acc = sel_acc[1]
                     best_sel_col_idx = i+1
-                
-                # if args.train_emb:
-                #     torch.save(model.agg_embed_layer.state_dict(),
-                #         'saved_model/epoch%d.agg_embed%s'%(i+1, args.suffix))
-                #     torch.save(model.agg_embed_layer.state_dict(), agg_e)
             if TRAIN_COND:
-                # logging.warning('val_acc[1][2]: %s', str(val_acc[1][2]))
-                # logging.warning('best_cond_acc: %s', str(best_cond_acc))
                 if val_acc[1][2] > best_cond_acc:
                     best_cond_acc = val_acc[1][2]
                     best_cond_idx = i + 1 
@@ -236,14 +240,39 @@ if __name__ == '__main__':
                 if cond_acc[1] > best_cond_op_acc:
                     best_cond_op_acc = cond_acc[1]
                     best_cond_op_idx = i+1
-                if cond_acc[2] > best_cond_op_acc:
-                    best_cond_val_acc = cond_acc[2]
-                    best_cond_val_idx = i+1
+                if cond_acc[2] > best_cond_col_acc:
+                    best_cond_col_acc = cond_acc[2]
+                    best_cond_col_idx = i+1
+            if TRAIN_GROUPBY:
+                if val_acc[1][3] > best_group_acc:
+                    best_group_acc = val_acc[1][3]
+                    best_group_idx = i + 1 
+ 
+                    torch.save(model.cond_pred.state_dict(),
+                        'saved_model/epoch%d.cond_model%s'%(i+1, args.suffix))
+                    torch.save(model.cond_pred.state_dict(), cond_m)
+
   
-        logging.warning('Best_agg_acc = %s on epoch %s ', str(best_agg_acc), str(best_agg_idx))
-        logging.warning('best_sel_acc = %s on epoch %s ', str(best_sel_acc), str(best_sel_idx))
-        logging.warning('best_cond_acc = %s on epoch %s ', str(best_cond_acc), str(best_cond_idx))
+        logging.error('Best_agg_acc = %s on epoch %s ', str(best_agg_acc), str(best_agg_idx))
+        logging.error('best_sel_acc = %s on epoch %s ', str(best_sel_acc), str(best_sel_idx))
+        logging.error('best_cond_acc = %s on epoch %s ', str(best_cond_acc), str(best_cond_idx))
+        logging.error('best_group_acc = %s on epoch %s ', str(best_group_acc), str(best_group_idx))
+        with open('results_train.csv', 'wb') as csvfile:
+            spamwriter = csv.writer(csvfile, delimiter=' ',
+                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            spamwriter.writerow(['total', 'agg', 'sel', 'cond', 'group'])
+            for row in train_acc:
+                spamwriter.writerow(row)
+        with open('results_dev.csv', 'wb') as csvfile_new:
+            new_writer = csv.writer(csvfile_new, delimiter=' ',
+                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            new_writer.writerow(['total', 'agg', 'sel', 'cond', 'group'])
+            for row in dev_acc:
+                new_writer.writerow(row)
+
+
         print('\a')
+        logging.warning('dev_data[1:,:] == my_data[1:,:]: {0}'.format(dev_acc[1:,:] == train_acc[1:,:]))
             # print ' Best val acc = %d, on epoch %d individually'% (best_agg_acc, best_sel_acc, best_cond_acc), (best_agg_idx, best_sel_idx, best_cond_idx)
                     # (best_agg_num_acc, best_agg_op_acc, best_sel_num_acc, best_sel_col_acc, best_cond_num_acc, best_cond_col_acc, best_cond_op_acc),
                     # (best_agg_num_idx, best_agg_op_idx, best_sel_num_idx, best_sel_col_idx, best_cond_num_idx, best_cond_col_idx, best_cond_op_idx))
