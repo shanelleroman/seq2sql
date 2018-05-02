@@ -709,11 +709,6 @@ class Seq2SQL(nn.Module):
                 agg_gt = [x for x in gt_qry['agg']]
 
                 flag = True
-                # if len(agg_pred) != len(agg_gt): # if length is off
-                #     flag = False
-                #     logging.warning('len_agg_pred: {0}, len_agg_gt: {1}'.format(len(agg_pred), len(agg_gt)))
-                #     agg_num_err += 1
-                #     # agg_err += 1
                 if flag and len(set(agg_pred)) != len(set(agg_gt)):
                     flag = False
                     agg_num_err += 1
