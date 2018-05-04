@@ -7,6 +7,7 @@ from sqlnet.model.sqlnet import SQLNet
 import numpy as np
 import datetime
 import csv
+import os
 
 import argparse
 import logging
@@ -33,6 +34,8 @@ if __name__ == '__main__':
             help='If set, then train Seq2SQL model; default is SQLNet model.')
     parser.add_argument('--train_emb', action='store_true',
             help='Train word embedding for SQLNet(requires pretrained model).')
+    parser.add_argument('--train_num', type=int, default=100,
+            help='If set, number of training epochs. Default is 100. ')
     args = parser.parse_args()
 
 
@@ -41,20 +44,25 @@ if __name__ == '__main__':
     if args.toy:
         USE_SMALL=True
         GPU=True
-        BATCH_SIZE=5
+        BATCH_SIZE=40
     else:
         USE_SMALL=True
         GPU=True
         BATCH_SIZE=40
-    TRAIN_ENTRY=(True, True, True, True)  # (AGG, SEL, COND, GROUPBY) 
+    TRAIN_ENTRY=(False, False, True, False)  # (AGG, SEL, COND, GROUPBY) 
     TRAIN_AGG, TRAIN_SEL, TRAIN_COND, TRAIN_GROUPBY = TRAIN_ENTRY
     learning_rate = 1e-4 if args.rl else 1e-3
 
     logging.warning('about to load dataset')
     sql_data, table_data, val_sql_data, val_table_data, test_sql_data, test_table_data = load_dataset(args.dataset, use_small=USE_SMALL)
     if args.toy:
-        sql_data = sql_data[20:BATCH_SIZE + 20]
-        val_sql_data = val_sql_data[20 :BATCH_SIZE + 20]
+        # sql_data = sql_data[20:30]
+        # val_sql_data = val_sql_data[20:30]        
+        sql_data = sql_data[0:300]
+        val_sql_data = val_sql_data[0:100]
+    # logging.warning(json.dumps(sql_data, indent=4))
+    # logging.warning(json.dumps(val_sql_data, indent=4))
+    logging.warning(json.dumps(table_data, indent=4))
 
     logging.warning('data loaded')
     word_emb = load_word_emb('glove/glove.%dB.%dd.txt'%(B_word,N_word), \
@@ -63,8 +71,7 @@ if __name__ == '__main__':
     logging.warning('glove loaded')
 
     if args.baseline:
-        model = Seq2SQL(word_emb, N_word=N_word, gpu=GPU,
-                trainable_emb = args.train_emb)
+        model = Seq2SQL(word_emb, N_word=N_word, gpu=GPU,trainable_emb =False)
         assert not args.train_emb, "Seq2SQL can\'t train embedding."
     else:
         model = SQLNet(word_emb, N_word=N_word, use_ca=args.ca,
@@ -73,10 +80,10 @@ if __name__ == '__main__':
     optimizer = torch.optim.Adam(model.parameters(),
             lr=learning_rate, weight_decay = 0)
 
-    if args.train_emb:
-        agg_m, sel_m, cond_m, agg_e, sel_e, cond_e = best_model_name(args)
-    else:
-        agg_m, sel_m, cond_m, groupby_m = best_model_name(args)
+    # if args.train_emb:
+    #     agg_m, sel_m, cond_m, agg_e, sel_e, cond_e = best_model_name(args)
+    # else:
+    agg_m, sel_m, cond_m, groupby_m = best_model_name(args)
 
     if args.rl or args.train_emb: # Load pretrained model.
         agg_lm, sel_lm, cond_lm, groupby_m = best_model_name(args, for_load=True)
@@ -118,6 +125,7 @@ if __name__ == '__main__':
         init_acc = epoch_acc_new(model, BATCH_SIZE,
                 val_sql_data, val_table_data, TRAIN_ENTRY)
         logging.warning('init_acc: %s', str(init_acc))
+
         # total accuracies
         best_agg_acc = init_acc[1][0]
         best_agg_idx = 0
@@ -128,20 +136,20 @@ if __name__ == '__main__':
         best_group_acc = init_acc[1][3]
         best_group_idx = 0
         # accuracy breakdowns
-        best_agg_num_acc = init_acc[2][0][0]
-        best_agg_num_idx = 0
-        best_agg_op_acc = init_acc[2][0][1]
-        best_agg_op_idx = 0
-        best_sel_num_acc = init_acc[2][1][0]
-        best_sel_num_idx = 0
-        best_sel_col_acc = init_acc[2][1][1]
-        best_sel_col_idx = 0
-        best_cond_num_acc = init_acc[2][2][0]
-        best_cond_num_idx = 0
-        best_cond_col_acc = init_acc[2][2][1]
-        best_cond_col_idx = 0
-        best_cond_op_acc = init_acc[2][2][2]
-        best_cond_op_idx = 0
+        # best_agg_num_acc = init_acc[2][0][0]
+        # best_agg_num_idx = 0
+        # best_agg_op_acc = init_acc[2][0][1]
+        # best_agg_op_idx = 0
+        # best_sel_num_acc = init_acc[2][1][0]
+        # best_sel_num_idx = 0
+        # best_sel_col_acc = init_acc[2][1][1]
+        # best_sel_col_idx = 0
+        # best_cond_num_acc = init_acc[2][2][0]
+        # best_cond_num_idx = 0
+        # best_cond_col_acc = init_acc[2][2][1]
+        # best_cond_col_idx = 0
+        # best_cond_op_acc = init_acc[2][2][2]
+        # best_cond_op_idx = 0
         logging.warning('Init dev acc_qm: %s\n  breakdown on (agg, sel, where): %s futher breakdown %s' % init_acc)
 
         if TRAIN_AGG:
@@ -162,51 +170,51 @@ if __name__ == '__main__':
                 torch.save(model.groupby_embed_layer.state_dict(), cond_e)
         loss = 100
 
-        EPOCH_NUM = 100
+        EPOCH_NUM = args.train_num
         train_acc = np.zeros((EPOCH_NUM + 1, 5)) #(100, 5) = (Epoch_num, accuracy) accuracy = (Total, Agg, Sel, Cond, Group)
         dev_acc = np.zeros((EPOCH_NUM + 2, 5)) 
         # last row = best accuracy!!
         dev_acc[0,0] = init_acc[0]
         dev_acc[0, 1:] = init_acc[1]
 
-        for i in range(100):
-            logging.warning('Epoch %d @ %s'%(i+1, datetime.datetime.now()))
-            logging.warning(' Loss = %s'%epoch_train(
+        for i in range(EPOCH_NUM):
+            logging.error('Epoch %d @ %s'%(i+1, datetime.datetime.now()))
+            logging.error(' Loss = %s'%epoch_train(
                     model, optimizer, BATCH_SIZE, 
                     sql_data, table_data, TRAIN_ENTRY))
-            train_acc_tot, train_acc_indiv, train_acc_break = epoch_acc_new(model, BATCH_SIZE, sql_data, table_data, TRAIN_ENTRY)
-            logging.error(' Train acc_qm: %s\n   breakdown result: %s further breakdown: %s'% (train_acc_tot, train_acc_indiv, train_acc_break))
-            logging.warning('-------------')
-            logging.warning('validation acc!')
+            train_acc_tot, train_acc_indiv, _ = epoch_acc_new(model, BATCH_SIZE, sql_data, table_data, TRAIN_ENTRY)
+            logging.error(' Train acc_qm: %s\n   breakdown result: %s'% (train_acc_tot, train_acc_indiv))
+            logging.error('-------------')
+            logging.error('validation acc!')
             # update the accuracies
             train_acc[i,0] = train_acc_tot
             train_acc[i,1:] = train_acc_indiv
 
-            val_acc = epoch_acc_new(model,
+            val_acc_tot, val_acc_indiv, _ = epoch_acc_new(model,
                     BATCH_SIZE, val_sql_data, val_table_data, TRAIN_ENTRY)
-            dev_acc[i + 1,0] = val_acc[0]
-            dev_acc[i + 1, 1:] = val_acc[1]
-            logging.error(' Dev acc_qm: %s\n   breakdown result: %s\n Further breakdown: %s'%val_acc)
+            dev_acc[i + 1,0] = val_acc_tot
+            dev_acc[i + 1, 1:] = val_acc_indiv
+            logging.error(' Dev acc_qm: %s\n   breakdown result: %s\n'%(val_acc_tot, val_acc_indiv))
 
             if TRAIN_AGG:
                 # logging.warning('val_acc[1][0]: %s', str(val_acc[1][0]))
                 # logging.warning('best_agg_acc: %s', str(best_agg_acc))
-                if val_acc[1][0] > best_agg_acc:
-                    best_agg_acc = val_acc[1][0]
+                if val_acc_indiv[0] > best_agg_acc:
+                    best_agg_acc = val_acc_indiv[0]
                     best_agg_idx = i + 1
                     torch.save(model.agg_pred.state_dict(),
                         'saved_model/epoch%d.agg_model%s'%(i+1, args.suffix))
                     torch.save(model.agg_pred.state_dict(), agg_m)
-                agg_acc = val_acc[2][0]
-                if agg_acc[0] > best_agg_num_acc:
-                    best_agg_num_acc = agg_acc[0]
-                    best_agg_num_idx = i+1
-                if agg_acc[1] > best_agg_op_acc:
-                    best_agg_op_acc = agg_acc[1]
-                    best_agg_op_idx = i+1
+                # agg_acc = val_acc[2][0]
+                # if agg_acc[0] > best_agg_num_acc:
+                #     best_agg_num_acc = agg_acc[0]
+                #     best_agg_num_idx = i+1
+                # if agg_acc[1] > best_agg_op_acc:
+                #     best_agg_op_acc = agg_acc[1]
+                #     best_agg_op_idx = i+1
             if TRAIN_SEL:
-                if val_acc[1][1] > best_sel_acc:
-                    best_sel_acc = val_acc[1][1]
+                if val_acc_indiv[1] > best_sel_acc:
+                    best_sel_acc = val_acc_indiv[1]
                     best_sel_idx = i + 1
                     torch.save(model.sel_pred.state_dict(),
                         'saved_model/epoch%d.sel_model%s'%(i+1, args.suffix))
@@ -215,16 +223,16 @@ if __name__ == '__main__':
                         torch.save(model.sel_embed_layer.state_dict(),
                         'saved_model/epoch%d.sel_embed%s'%(i+1, args.suffix))
                         torch.save(model.sel_embed_layer.state_dict(), sel_e)
-                sel_acc = val_acc[2][1]
-                if sel_acc[0] > best_sel_num_acc:
-                    best_sel_num_acc = sel_acc[0]
-                    best_sel_num_idx = i+1
-                if sel_acc[1] > best_sel_col_acc:
-                    best_sel_col_acc = sel_acc[1]
-                    best_sel_col_idx = i+1
+                # sel_acc = val_acc[2][1]
+                # if sel_acc[0] > best_sel_num_acc:
+                #     best_sel_num_acc = sel_acc[0]
+                #     best_sel_num_idx = i+1
+                # if sel_acc[1] > best_sel_col_acc:
+                #     best_sel_col_acc = sel_acc[1]
+                #     best_sel_col_idx = i+1
             if TRAIN_COND:
-                if val_acc[1][2] > best_cond_acc:
-                    best_cond_acc = val_acc[1][2]
+                if val_acc_indiv[2] > best_cond_acc:
+                    best_cond_acc =  val_acc_indiv[2]
                     best_cond_idx = i + 1 
  
                     torch.save(model.cond_pred.state_dict(),
@@ -233,24 +241,26 @@ if __name__ == '__main__':
                     if args.train_emb:
                         torch.save(model.cond_embed_layer.state_dict(),
                         'saved_model/epoch%d.cond_embed%s'%(i+1, args.suffix))
-                cond_acc = val_acc[2][2]
-                if cond_acc[0] > best_cond_num_acc:
-                    best_cond_num_acc = cond_acc[0]
-                    best_cond_num_idx = i+1
-                if cond_acc[1] > best_cond_op_acc:
-                    best_cond_op_acc = cond_acc[1]
-                    best_cond_op_idx = i+1
-                if cond_acc[2] > best_cond_col_acc:
-                    best_cond_col_acc = cond_acc[2]
-                    best_cond_col_idx = i+1
+                # cond_acc = val_acc[2][2]
+                # if cond_acc[0] > best_cond_num_acc:
+                #     best_cond_num_acc = cond_acc[0]
+                #     best_cond_num_idx = i+1
+                # if cond_acc[1] > best_cond_op_acc:
+                #     best_cond_op_acc = cond_acc[1]
+                #     best_cond_op_idx = i+1
+                # if cond_acc[2] > best_cond_col_acc:
+                #     best_cond_col_acc = cond_acc[2]
+                #     best_cond_col_idx = i+1
             if TRAIN_GROUPBY:
-                if val_acc[1][3] > best_group_acc:
-                    best_group_acc = val_acc[1][3]
+                if val_acc_indiv[3] > best_group_acc:
+                    best_group_acc = val_acc_indiv[3]
                     best_group_idx = i + 1 
  
                     torch.save(model.cond_pred.state_dict(),
                         'saved_model/epoch%d.cond_model%s'%(i+1, args.suffix))
                     torch.save(model.cond_pred.state_dict(), cond_m)
+            os.environ["EPOCH"] = "{0}".format(i)
+            print('\a')
 
   
         logging.error('Best_agg_acc = %s on epoch %s ', str(best_agg_acc), str(best_agg_idx))
