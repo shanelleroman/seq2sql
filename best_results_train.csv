@@ -1,0 +1,4 @@
+total agg sel cond group epoch_num toy changes_made
+0.0 0.091836734693877556 0.0 0.81927710843373491 0.0 300.0 True |changed word embeddings to include the column embeddings|
+0.11666666666666667 0.17666666666666667 0.65454545454545454 0.81927710843373491 0.0 300.0 True |changed word embeddings to include the column embeddings|
+0.95999999999999996 0.0 0.0 0.0 0.84615384615384615 300.0 True |changed group accuracy|

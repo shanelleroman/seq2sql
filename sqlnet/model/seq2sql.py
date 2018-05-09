@@ -5,12 +5,13 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
 import numpy as np
-from modules.word_embedding import WordEmbedding
+from modules.word_embedding import WordEmbedding, Type_Pred
 from modules.aggregator_predict import AggPredictor
 from modules.selection_predict import SelPredictor
 from modules.seq2sql_subseq_predict import Seq2SQLSubSeqPredictor
 from modules.seq2sql_condition_predict import Seq2SQLCondPredictor
 import logging
+
 
 # This is a re-implementation based on the following paper:
 
@@ -44,6 +45,8 @@ def convert_tok_to_combined_indices(orig_col_lst, expanded_lst, indices):
 
 
 
+
+
 class Seq2SQL(nn.Module):
     def __init__(self, word_emb, N_word, N_h=100, N_depth=2,
                  gpu=False, trainable_emb=False):
@@ -57,12 +60,14 @@ class Seq2SQL(nn.Module):
         self.max_col_num = 45
         self.max_tok_num = 200
         self.AGG_SQL_TOK= ['MAX', 'MIN', 'AVG', 'COUNT', 'SUM']
-        self.SEL_SQL_TOK = ['SELECT', '<END>', ','] + self.AGG_SQL_TOK # w
+        # ['', MAX, MIN] index =2 => 2 +2 = 4 = new_index
+        # SELECT, END, '', MAX, MIN = new_index correct!!
+        self.SEL_SQL_TOK = ['SELECT', '<END>'] + self.AGG_SQL_TOK # w
         #gt_sel_seq = [0, ..., 1]
         self.SQL_TOK = ['NT', 'BTWN', 'EQL', 'GT', 'LT', 'GTEQL', 'LTEQL', 'NTEQL', 'IN', 'LKE', 'IS', 'XST']\
          + ['WHERE', 'AND', 'OR', '<END>']
          #WHERE = 12, END = 14
-        self.GROUPBY_SQL_TOK = ['GROUPBY', '<END>', ',']
+        self.GROUPBY_SQL_TOK = ['GROUPBY', '<END>']
         self.COND_OPS = ['NT', 'BTWN', 'EQL', 'GT', 'LT', 'GTEQL', 'LTEQL', 'NTEQL', 'IN', 'LKE', 'IS', 'XST']
 
         #Word embedding
@@ -128,50 +133,30 @@ class Seq2SQL(nn.Module):
 
     def generate_gt_sel_seq(self, q, col, query, ans_seq):
     # NOTE: these numbers are in terms of the overall all_toks!!!!
-        logging.info('method generate_gt_sel_seq')
+        logging.error('method generate_gt_sel_seq')
         gt_sel_seq = []
         ret_seq = []
         for cur_q, cur_col, cur_query, mini_seq in zip(q, col, query, ans_seq):
-            connect_col = [tok for col_tok in cur_col for tok in col_tok +[',']] # get the column names
-            # [u'*', ',', u'col_tok_1', 'col_tok_2', ',' + ...]
-            logging.info('connect_col: {0}'.format(connect_col))
-            all_toks = self.SEL_SQL_TOK + connect_col + [None] + cur_q + [None]
-            # logging.info('cur_col: {0}'.format(cur_col))
-            # cur_col_list = [col.split(' ') for col in cur_col]
-            # logging.info('cur_col_list: {0}'.format(cur_col_list))
-            all_toks_condense = self.SEL_SQL_TOK + cur_col + [None] + cur_q + [None]
-            logging.info('all_toks_gt: {0}'.format(all_toks))
-            logging.info('all_toks_condense: {0}'.format(all_toks_condense))
+            all_toks = self.SEL_SQL_TOK + cur_col + [None] + cur_q + [None]
+
             # get aggregators
             cur_seq = [all_toks.index('SELECT')]
-            print('cur_seq', cur_seq)
-            # print('cur_q', cur_q)
-            # logging.info('cur_sel_gt_query{0}'.format(cur_query))
-            # logging.info('mini_sel_gt_seq{0}'.format(mini_seq))
+            # logging.error('mini_seq: {0}'.format(mini_seq))
+            # logging.error('mini_query: {0}'.format(cur_query))
             for i, x in enumerate(mini_seq[0]):
+                logging.info('orig_agg_index {0}'.format(mini_seq[0][i]))
                 if mini_seq[0][i] != 0:
-                    logging.info('orig_agg_index {0}'.format(mini_seq[0][i]))
-                    cur_seq.append(all_toks.index(',')+ mini_seq[0][i]) 
-                    # get the overall agg index - not plus 1 because all indices are already one off because deleted ''
-                    # print('changed to ', all_toks.index(',')+ mini_seq[0][i])
-                # cur_seq.append(len(self.SEL_SQL_TOK) + mini_seq[1][i]) # get the overall column index
+                    cur_seq.append(2 + mini_seq[0][i]) # index for the agg
+                    logging.info('new_agg_index {0}'.format(2 + mini_seq[0][i]))
+                    logging.info('new_agg_op: {0}'.format(all_toks[2 + mini_seq[0][i]]))
+                    # orig index = 2 => 4
+                
                 index = len(self.SEL_SQL_TOK) + mini_seq[1][i] # get the index for the normal word in all_toks without the expanded columns
-                column_words = all_toks_condense[index] # list of words that are the column tokenized
-                logging.warning('got word {0} for index{1}'.format(column_words, index))
-                first_index = self.search(all_toks, column_words)
-                if first_index != -1:
-                    for i in range(first_index, first_index + len(column_words)):
-                        cur_seq.append(i)
-                        # logging.info('appended {0}'.format(i))
-                    cur_seq.append(all_toks.index(','))
-                # logging.info('appended , with index {0}'.format(all_toks.index(',')))
-                    
-                # cur_seq.append(all.toks.index(','))
-            cur_seq = cur_seq[:-1] # delete the last ,
+                logging.warning('index: {0}'.format(index))
+                logging.warning('new_val: {0}'.format(all_toks[index]))
+                cur_seq.append(index)
             cur_seq.append(all_toks.index('<END>'))
-            # print('mini_seq[0] - agg', mini_seq[0])
-            # print('mini_seq[1] - agg', mini_seq[1])
-            # print('cur_seq_final', cur_seq)
+
             logging.warning('cur_sel_query_indices: {0}'.format(cur_seq))
             ret_seq.append(cur_seq)
         # print('gt_sel_seq',ret_seq)
@@ -269,80 +254,35 @@ class Seq2SQL(nn.Module):
 
 
 
-    # def generate_gt_where_seq(self,  col, query):
-    #     # data format
-    #     # <BEG> WHERE cond1_col cond1_op cond1
-    #     #         AND cond2_col cond2_op cond2
-    #     #         AND ... <END>
-    #     # WHERE cond1_col cond1_op cond1
-    #     #         AND cond2_col cond2_op cond2
-    #     #         AND ... <END>
-    #     # SELECT agg_tok col ,  col , ... <END>
-    #     # GROUPBY col ,  col , ... HAVING ... <END>
-    #     # ORDERBY agg col1 ASC/DESC limit num <END> 
-    #     logging.warning('method generate_gt_where_seq')
-    #     ret_seq = []
-    #     logging.info('q: {0}'.format(q))
-    #     logging.info('col: {0}'.format(col))
-    #     logging.info('quer: {0}'.format(query))
-    #     for cur_q, cur_col, cur_query in zip(q, col, query):
-    #         connect_col = [tok for col_tok in cur_col for tok in col_tok +[',']]
-    #         # logging.info('connect_col: {0}'.format(connect_col))
-    #         all_toks = self.SQL_TOK + connect_col + [None] + cur_q + [None]
-    #         for i in range(len(all_toks)):
-    #             if all_toks[i]:
-    #                 all_toks[i] = all_toks[i].lower()
-    #         logging.debug(all_toks)
-    #         cur_query = [x.lower() for x in cur_query]
-    #         cur_seq = [all_toks.index('where')]
-    #         # logging.info('cur_query: {0}'.format(cur_query))
-    #         if 'where' in cur_query:
-    #             cur_where_query = cur_query[cur_query.index('where') + 1:]
-    #             logging.warning('cur_where_query: %s', cur_where_query)
-    #             cur_where_query = self.clean_where_query(cur_where_query)
-    #             logging.warning('cur_where_query cleaned: %s', cur_where_query)
-    #             # logging.info('all_toks: {0}'.format(all_toks))
-    #             for item in cur_where_query:
-    #                 if item in all_toks:
-    #                     cur_seq += [all_toks.index(item.lower())]
-    #                     logging.warning('item: {0} index:{1}'.format(item, all_toks.index(item.lower())))
-    #                 else:
-    #                     logging.warning('Not found in all_toks {0}'.format(item))
-    #                     break
-    #                     # assert False, "%s" % item
-    #             # cur_seq = cur_seq + map(lambda tok:all_toks.index(tok)
-    #             #                         if tok in all_toks else 0, cur_where_query)
-    #             # logging.debug('cur_seq: %s', cur_seq)
-    #         cur_seq.append(all_toks.index('<end>'))
-    #         ret_seq.append(cur_seq)
-    #         logging.warning('generate_gt_where_seq: {0}'.format(ret_seq))
-    #         # exit(1) 
-
-    #     return ret_seq
-
     def generate_gt_group_seq(self, q, col, query, ans_seq):
         gt_group_seq = []
         ret_seq = []
         for cur_q, cur_col, cur_query, mini_seq in zip(q, col, query, ans_seq):
-            connect_col = [tok for col_tok in cur_col for tok in col_tok +[',']] # get the column names and tokenize
             # [u'*', ',', u'col_tok_1', 'col_tok_2', ',' + ...]
 
-            all_toks = self.GROUPBY_SQL_TOK + connect_col + [None] + cur_q + [None]
-            all_toks_condense = self.GROUPBY_SQL_TOK + cur_col + [None] + cur_q + [None]
+            all_toks = self.GROUPBY_SQL_TOK + cur_col + [None] + cur_q + [None]
+            logging.warning('all_toks: {0}'.format(all_toks))
+            logging.warning('mini_seq: {0}'.format(mini_seq))
+            logging.warning('cur_q: {0}'.format(cur_q))
+            logging.warning('cur_col: {0}'.format(cur_col))
+            logging.warning('cur_query: {0}'.format(cur_query))
             cur_seq = [all_toks.index('GROUPBY')]
             for i, x in enumerate(mini_seq[6]): # 6 = groupby component
-                index = len(self.SEL_SQL_TOK) + mini_seq[6][i] # get the index for the normal word in all_toks without the expanded columns
-                column_words = all_toks_condense[index] # list of words that are the column tokenized
-                logging.warning('got word {0} for index{1}'.format(column_words, index))
-                first_index = self.search(all_toks, column_words)
-                if first_index != -1:
-                    logging.warning('all_toks: {0}'.format(all_toks))
-                    logging.warning('first_index: {0}'.format(first_index))
-                    for i in range(first_index, first_index + len(column_words)):
-                        cur_seq.append(i) # append the individual indices for the column's words tokenized
+                index = len(self.GROUPBY_SQL_TOK) + mini_seq[6][i] # get the index for the normal word in all_toks without the expanded columns
+                logging.warning('mini_seq_6_i: {0}'.format(mini_seq[6][i]))
+                logging.warning('self_sql_tok: {0}'.format(self.GROUPBY_SQL_TOK))
+                logging.warning('got word {0} for index{1}'.format(all_toks[index], index))
+                # first_index = self.search(all_toks, column_words)
+                # if first_index != -1:
+                #     logging.warning('all_toks: {0}'.format(all_toks))
+                #     logging.warning('first_index: {0}'.format(first_index))
+                #     for i in range(first_index, first_index + len(column_words)):
+                cur_seq.append(index) # append the individual indices for the column's words tokenized
             cur_seq.append(all_toks.index('<END>'))
             logging.warning('cur_group_query_indices: {0}'.format(cur_seq))
+            logging.warning('--------')
             ret_seq.append(cur_seq)
+
         return ret_seq
         # print('gt_sel_seq',ret_seq)
 
@@ -376,12 +316,15 @@ class Seq2SQL(nn.Module):
                 cond_score = self.cond_pred(x_emb_var, x_len, col_inp_var,
                                             col_name_len, col_len, col_num,gt_where, gt_cond, reinforce=reinforce)
         else:
-            x_emb_var, x_len = self.embed_layer.gen_x_batch(q, col, is_q=True) # this creates the embeddings for the natural language question
-            # batch = self.embed_layer.gen_col_batch(col, ) # [[col_tok_1, col_tok_2]] => generate average for each column
-            col_inp_var, col_len = self.embed_layer.gen_x_batch(col, col, is_list=True)
+            # this creates the embeddings for the natural language question
+            
             col_name_len = -1 #TODO fix
-            max_x_len = max(x_len)
+            
             if pred_cond:
+                x_emb_var, x_len = self.embed_layer.gen_x_batch(q, col, is_q=True) 
+                # [[col_tok_1, col_tok_2]] => generate average for each column
+                col_inp_var, col_len = self.embed_layer.gen_x_batch(col, col, is_list=True)
+                max_x_len = max(x_len)
                 cond_score = self.cond_pred(x_emb_var, x_len, col_inp_var,
                                             col_name_len, col_len, col_num, gt_where, gt_cond,\
                                               reinforce=reinforce)
@@ -389,11 +332,19 @@ class Seq2SQL(nn.Module):
             if pred_sel:
                 logging.info('seq2sqlforward non-trainable embeddings')
                 logging.info('gt_sel: {0}'.format(gt_sel))
+                x_emb_var, x_len = self.embed_layer.gen_x_batch(q, col, is_q=True, type_pred=Type_Pred.sel) 
+                # [[col_tok_1, col_tok_2]] => generate average for each column
+                col_inp_var, col_len = self.embed_layer.gen_x_batch(col, col, is_list=True, type_pred=Type_Pred.sel)
+                max_x_len = max(x_len)
                 sel_score = self.sel_pred(x_emb_var, x_len, col_inp_var,
                                           col_name_len, col_len, col_num, gt_index_seq=gt_sel)
 
             if pred_groupby:
                 logging.info('gt_groupby: {0}'.format(gt_groupby))
+                x_emb_var, x_len = self.embed_layer.gen_x_batch(q, col, is_q=True, type_pred=Type_Pred.group) 
+                # [[col_tok_1, col_tok_2]] => generate average for each column
+                col_inp_var, col_len = self.embed_layer.gen_x_batch(col, col, is_list=True, type_pred=Type_Pred.group)
+                max_x_len = max(x_len)
                 groupby_score = self.groupby_pred(x_emb_var, x_len, col_inp_var,
                                           col_name_len, col_len, col_num, gt_index_seq=gt_groupby)
 
@@ -508,88 +459,71 @@ class Seq2SQL(nn.Module):
             ret = ret + tok
         return ret.strip()
 
-    def gen_group_query(self, col, group_score, b, q, raw_col, raw_q, verbose=False):
+    def gen_group_query(self, col, group_score, b, q, raw_col, raw_q, verbose=False, train=True):
         all_toks = self.GROUPBY_SQL_TOK + \
-                   [x for toks in col[b] for x in
-                    toks +[',']] + [''] + q[b] + [''] # should I delete q --> issue is that I get the wrong dimensions, should I change the embeddings??
+                   col[b] + ['']  + q[b] + [''] # should I delete q --> issue is that I get the wrong dimensions, should I change the embeddings??
 
+        logging.warning('all_toks: {0}'.format(all_toks))
         group_toks = []
         group_query = []
 
 
-        to_idx = [x.lower() for x in raw_col + [',']]# possible columns to 
+        to_idx = col[b] # possible columns to 
 
-        logging.info('raw_col {0}'.format(raw_col))
-
-        agg_sql_tok_lower = [x.lower() for x in self.AGG_SQL_TOK]
-        for group_score_idx in group_score[b].data.cpu().numpy():
+        logging.info('to_idx {0}'.format(to_idx))
+        for i, group_score_idx in enumerate(group_score[b].data.cpu().numpy()):
             group_tok = np.argmax(group_score_idx)
 
             try:
                 group_val = all_toks[group_tok] # get all the words
-                logging.warning('group_val {0}'.format(group_val))
+                logging.error('group_val {0}'.format(group_val))
             except:
                 break
             
             if group_val == '<END>':
-                logging.warning('found EXIT!!!')
+                logging.error('found EXIT!!!')
+                break
+            elif not train and i > 1:
+                logging.error('cut it off short!!')
                 break
             group_toks.append(group_val) # get the column names
         if verbose:
             print group_toks
 
-        group_toks = [x.lower() for x in group_toks]
-        logging.warning('orig group toks {0}'.format(group_toks))
-        group_toks = remove_duplicates(group_toks)
+        if not train:
+            # group_toks = remove_duplicates(group_toks)
+            if group_toks:
+                group_toks = [group_toks[0]] # get the first one 
+            if '*' in group_toks:
+                group_toks = []
 
+        for tok in group_toks:
+            if tok in col[b]:
+                group_query.append(to_idx.index(tok))
 
-        pred_col = self.merge_tokens(group_toks, raw_q[b] + ' || ' + ' || '.join(raw_col))
-        group_merged_toks = [pred_col]
-        
-        logging.warning('group_merged_toks: {0}'.format(group_merged_toks))
-        # check if the word is a substring in a column
-        poss_indices = [i for i, x in enumerate(col[b]) if pred_col in x and pred_col != '']
-        logging.warning('poss_indices: {0}'.format(poss_indices))
-        for index in poss_indices:
-            logging.warning ('col_b_ index: {0}'.format(col[b][index]))
-            word_seq = col[b][index]
-            for word in word_seq:
-                if word in to_idx:
-                    group_query.append(to_idx.index(word)) # column names
-        # if pred_col in to_idx:
-        #     group_query.append(to_idx.index(pred_col)) # column name
-        # else:
-        #     logging.warning('unknown pred col: %s', str(pred_col))
-        #     # check if the word is a substring in a column
-        #     poss_indices = [i for i, x in enumerate(group_merged_toks) if pred_col in x and pred_col != '']
-        #     if len(poss_indices) > 0 and 0 not in group_query:
-        #         group_query.append(np.random.choice(poss_indices, 1)[0])
-        #     pass
-
-        logging.warning('pred sel_query indices: {0}'.format(group_query))
         return  group_query
 
-    def gen_sel_query(self, col, sel_score, b, q, raw_col, raw_q, verbose=False):
+    def gen_sel_query(self, col, sel_score, b, q, raw_col, raw_q, verbose=False, train=True):
         selects = []
-        all_toks = self.SEL_SQL_TOK + \
-                   [x for toks in col[b] for x in
-                    toks +[',']] + [''] + q[b] + [''] # should I delete q --> issue is that I get the wrong dimensions, should I change the embeddings??
-        logging.warning('col[b]: {0}'.format(col[b]))
+        logging.error('gen_sel_query')
+        # the tokens with col[b] [[col_tok, col_tok], [col_tok, col_tok]]
+        all_toks = self.SEL_SQL_TOK + col[b] + [''] + q[b] + ['']
+
         sel_toks = []
         sel_query = []
+        agg_query = []
+
+        # indices refer to the original ones listed in the dataset
+        to_idx = col[b] 
 
 
-        to_idx = [x.lower() for x in raw_col + [',']]# possible columns to 
-
-        logging.info('raw_col {0}'.format(raw_col))
-        logging.info('all_toks: {0}'.format(all_toks))
-        logging.info('all_toks_len: {0}'.format(len(all_toks)))
 
         agg_sql_tok_lower = [x.lower() for x in self.AGG_SQL_TOK]
-        for sel_score_idx in sel_score[b].data.cpu().numpy():
+        for i, sel_score_idx in enumerate(sel_score[b].data.cpu().numpy()):
             sel_tok = np.argmax(sel_score_idx)
             logging.info('sel_tok: {0}'.format(sel_tok))
             try:
+                # get the words 
                 sel_val = all_toks[sel_tok] # get all the words
                 logging.info('sel_val {0}'.format(sel_val))
             except:
@@ -598,72 +532,45 @@ class Seq2SQL(nn.Module):
             if sel_val == '<END>':
                 logging.info('found EXIT!!!')
                 break
+            elif not train and i >= 10: # constraining the number of select columns to Tao
+                #TODO: ask Tao 
+                break
+
             sel_toks.append(sel_val) # get the column names
         if verbose:
             print sel_toks
+        logging.error('sel_toks: {0}'.format(sel_toks))
+        sel_query = []    
+        for tok in sel_toks:
 
-        sel_toks = [x.lower() for x in sel_toks]
-
-        sel_merged_toks = []
-        agg_query = []
-        if ',' in sel_toks:
-            while sel_toks:
-                try:
-                    index_comma = sel_toks.index(',') # get index of ','
-                except:
-                    index_comma = len(sel_toks)
-                # get all the words until first comma
-                pred_col = self.merge_tokens(sel_toks[:index_comma], raw_q[b] + ' || ' + ' || '.join(raw_col))
-                # merged column names
-                sel_merged_toks.append(pred_col)
-                sel_toks = sel_toks[index_comma + 1:] # move to the next one
-        else:
-            sel_toks_new = remove_duplicates(sel_toks)
-            logging.warning('sel_toks_new: {0}'.format(sel_toks_new))
-            for tok in sel_toks_new:
-                pred_col = self.merge_tokens(tok, raw_q[b] + ' || ' + ' || '.join(raw_col))
-                pred_col.replace(' ', '')
-                sel_merged_toks.append(pred_col)
-            # sel_merged_toks = [pred_col]
-        
-        logging.warning('sel_merged_toks: {0}'.format(sel_merged_toks))
-        for pred_col in sel_merged_toks:
-
-            if pred_col in to_idx:
-                sel_query.append(to_idx.index(pred_col)) # column name
-                if len(agg_query) != len(sel_query):
-                    agg_query.append(0)
-            elif pred_col in agg_sql_tok_lower:
-                agg_query.append(agg_sql_tok_lower.index(pred_col)) # agg token
+            if tok in to_idx:
+                sel_query.append(to_idx.index(tok))
+            elif tok in self.AGG_SQL_TOK:
+                agg_query.append(self.AGG_SQL_TOK.index(tok)) # agg token
             else:
-                logging.warning('unknown pred col: %s', str(pred_col))
-                # check if the word is a substring in a column
-                poss_indices = [i for i, x in enumerate(col[b]) if pred_col in x and pred_col != '']
-                logging.warning('poss_indices: {0}'.format(poss_indices))
-                for index in poss_indices:
-                    logging.warning ('col_b_ index: {0}'.format(col[b][index]))
-                    word_seq = col[b][index]
-                    for word in word_seq:
-                        if word in to_idx:
-                            sel_query.append(to_idx.index(word))
-                # if len(poss_indices) > 0 and 0 not in sel_query:
-                #     sel_query.append(np.random.choice(poss_indices, 1)[0])
-                
-        if not sel_query:
-            logging.warning('No items predicted in sel_query: predict them all')
-            sel_query.append(0)
-        if not agg_query:
-            agg_query.append(0)
+                logging.error('unknown pred col: {0}'.format(tok))
+                if not train and len(sel_query) == 0:
+                    sel_query.append(0)
+        logging.error('sel_indices: {0}'.format(sel_query))
 
-        if len(sel_query) != len(agg_query):
-            logging.info('len sel_query: %d len_agg_query: %d', len(sel_query), len(agg_query))
-        logging.warning('pred sel_query indices: {0}'.format(sel_query))
-        logging.warning('pred agg_query indices: {0}'.format(agg_query))
+        if not train:
+            len_agg_query = len(agg_query)
+            
+            if len(sel_query) == 0:
+                sel_query.append(0)
+            len_sel_query = len(sel_query)
+            if len_agg_query < len_sel_query:
+                for i in range(len_sel_query - len_agg_query):
+                    agg_query.append(0)
+                assert len_sel_query == len(agg_query)
+            elif len_agg_query > len_sel_query:
+                agg_query = agg_query[:len_sel_query]
         return  agg_query, sel_query
 
  
 
-    def gen_where_query(self, col, cond_score, b, q, raw_col, raw_q, verbose=False, train=False):
+    def gen_where_query(self, col, cond_score, b, q, raw_col, raw_q, verbose=False, train=True):
+        logging.warning('gen_where_query_train: {0}'.format(train))
         conds = []
         all_toks = self.SQL_TOK + \
                    col[b] + [''] + q[b] + ['']
@@ -671,7 +578,7 @@ class Seq2SQL(nn.Module):
 
 
         cond_toks = []
-        logging.error('method gen_where_query')
+        logging.warning('method gen_where_query')
         first_ind_q = all_toks.index(q[b][0])
         logging.warning('all_toks: {0}'.format(all_toks))
 
@@ -679,8 +586,10 @@ class Seq2SQL(nn.Module):
             cond_tok = np.argmax(where_score)
             # print('where_score', where_score)
             cond_val = all_toks[cond_tok]
+            if not train and i > 8:
+                break # restrain to 8 predicted tokens (3 clauses with 2 tokens each + 2 conj)
             if cond_val == '<END>':
-                
+
                 break
             cond_toks.append(cond_val)
 
@@ -690,7 +599,7 @@ class Seq2SQL(nn.Module):
         #     cond_toks = cond_toks[1:] # get rid of the WHERE
         st = 0
         try:
-            logging.error('cond_toks: {0}'.format(cond_toks))
+            logging.warning('cond_toks: {0}'.format(cond_toks))
         except:
             pass
         to_add = None
@@ -771,11 +680,15 @@ class Seq2SQL(nn.Module):
             '''
             if len(sel_col) != 1 or sel_col[0] not in col[b]:
                 cur_cond[0] = -1
-                logging.error('len_sel_col is not 1: {0}'.format(sel_col))
+                logging.warning('len_sel_col is not 1: {0}'.format(sel_col))
             else:
                 cur_cond[0] = col[b].index(sel_col[0])
-
-            conds.append(cur_cond)
+            if not train:
+                if cur_cond[1] != 15 and cur_cond[0] != -1:
+                    # impose additional heuristics for dev to improve the dev accuracy
+                    conds.append(cur_cond)
+            else:
+                conds.append(cur_cond)
             if to_add is not None:
                 conj.append(to_add)
             st = ed + 1
@@ -783,7 +696,7 @@ class Seq2SQL(nn.Module):
         # remove all until the right length
         len_conj = len(conds) - 1 if len(conds) >= 2 else 0
         conj = conj[:len_conj]
-        logging.error('conds {0}'.format(conds))
+        logging.warning('conds {0}'.format(conds))
         return  conds, conj
 
     def check_acc(self, vis_info, pred_queries, gt_queries, pred_entry):
@@ -827,7 +740,7 @@ class Seq2SQL(nn.Module):
                     logging.error('pred_agg: {0}, gt_agg: {1}'.format(agg_pred, agg_gt))
                     agg_count += 1
                     # going to count this batch
-                    if set(agg_pred) == set(agg_gt):
+                    if agg_pred == agg_gt:
                         agg_cor += 1
                     else:
                         
@@ -887,7 +800,7 @@ class Seq2SQL(nn.Module):
 
             if pred_group:
                 group_pred = pred_qry['group']
-                group_gt = gt_qry['group'][0] # ignore HAVING for now
+                group_gt = gt_qry['group'][0] if not gt_qry['group'][0] else [gt_qry['group'][0]]  # ignore HAVING for now 
                 if not (group_pred == group_gt == []):
                     logging.error('pred_group: {0}, gt_group: {1}'.format(group_pred, group_gt))
                     group_count += 1
@@ -1001,8 +914,8 @@ class Seq2SQL(nn.Module):
            
 
     def gen_query(self, score, q, col, raw_q, raw_col, pred_entry,
-                  reinforce=False, verbose=False):
-
+                  reinforce=False, verbose=False, train=True):
+        logging.error('gen_query_train: {0}'.format(train))
         pred_agg, pred_sel, pred_cond, pred_groupby = pred_entry
         sel_score, cond_score, groupby_score = score
 
@@ -1013,6 +926,8 @@ class Seq2SQL(nn.Module):
             B = len(sel_score)
         elif pred_cond:
             B = len(cond_score[0]) if reinforce else len(cond_score)
+        elif pred_groupby:
+            B = len(groupby_score)
         for b in range(B):
             cur_query = {}
             # raw_col[b] = [(0, [u'*']), (1, [u'template', u'type', u'code']), \
@@ -1023,16 +938,15 @@ class Seq2SQL(nn.Module):
                     logging.warning('raw_q[b]: {0}'.format(unicode(raw_q[b])))
                 except:
                     pass
-                cur_query['agg'], cur_query['sel'] =  self.gen_sel_query(col, sel_score, b, q, raw_col[b], raw_q)
+                cur_query['agg'], cur_query['sel'] =  self.gen_sel_query(col, sel_score, b, q, raw_col[b], raw_q, train=train)
                 # logging.debug('cur_query[sel]: %s', str(cur_query['sel']))
                 # logging.debug('cur_query[agg]: %s', str(cur_query['agg']))
             if pred_cond:
-                cur_query['conds'], cur_query['conj'] = self.gen_where_query(col, cond_score, b, q, raw_col[b], raw_q)
+                cur_query['conds'], cur_query['conj'] = self.gen_where_query(col, cond_score, b, q, raw_col[b], raw_q, train=train)
                 logging.warning('cur_query_conds: %s', str(cur_query['conds']))
                 logging.warning('cur_query_conj: %s', str(cur_query['conj'])) 
             if pred_groupby:
-                cur_query['group'] = self.gen_group_query(col, cond_score, b, q, raw_col[b], raw_q)
-                logging.error('cur_query[group]: {0}'.format(cur_query['group']))            
+                cur_query['group'] = self.gen_group_query(col, groupby_score, b, q, raw_col[b], raw_q, train=train)           
             # print('cur_query', cur_query)
             ret_queries.append(cur_query)
 

@@ -310,14 +310,14 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
         # [(col_index, [col_tok_1, col_tok_2]), (col_index, [col_tok_1, col_tok_2])]
         # raw_col_seq = [x[1] for x in raw_data] 
 
-        logging.warning('gt_cond_seq: {0}'.format(gt_cond_seq))
+        # logging.warning('gt_cond_seq: {0}'.format(gt_cond_seq))
         gt_where_seq = model.generate_gt_where_seq(q_seq, col_seq, gt_cond_seq)
+        # gt_where_seq = None
+        # gt_sel_seq = None
 
-        # gt_where_seq = model.generate_gt_where_seq(q_seq, col_seq, query_seq)
-        gt_sel_seq = None
-        # gt_sel_seq = model.generate_gt_sel_seq(q_seq, col_seq, query_seq, ans_seq)
-        gt_groupby_seq = None
-        # gt_groupby_seq = model.generate_gt_group_seq(q_seq, col_seq, query_seq, ans_seq)
+        gt_sel_seq = model.generate_gt_sel_seq(q_seq, col_seq, query_seq, ans_seq)
+        # gt_groupby_seq = None
+        gt_groupby_seq = model.generate_gt_group_seq(q_seq, col_seq, query_seq, ans_seq)
         score = model.forward(q_seq, col_seq, col_num, pred_entry,
                 gt_where=gt_where_seq, gt_cond=gt_cond_seq, gt_sel=gt_sel_seq, gt_groupby=gt_groupby_seq)
         loss = model.loss(score, ans_seq, pred_entry, gt_where_seq, gt_sel_seq, gt_groupby_seq)
@@ -330,8 +330,9 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
     return cum_loss / len(sql_data)
 
 
-def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry):
+def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry, train=True):
     logging.info('epoch_acc_new')
+
     model.eval()
     # print ('perm', perm)\
     # perm=np.random.permutation(len(sql_data))
@@ -352,18 +353,13 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry):
         raw_q_seq = [x[0] for x in raw_data]
         raw_col_seq = [x[1] for x in raw_data] # [(col_index, [col_tok_1, col_tok_2]), (col_index, [col_tok_1, col_tok_2])]
         query_gt, table_ids = to_batch_query(sql_data, perm, st, ed)
-        logging.warning('query_gt: {0}'.format(json.dumps(query_gt)))
+
         score = model.forward(q_seq, col_seq, col_num,
                 pred_entry)
 
         pred_queries = model.gen_query(score, q_seq, col_seq,
-                raw_q_seq, raw_col_seq, pred_entry) # is this the decoder portion??
-        
-        logging.warning('pred_queries: {0}'.format(pred_queries))
-        # pred_queries = model.gen_query(score, q_seq, col_seq,
-        #         raw_q_seq, raw_col_seq, pred_entry, gt_cond = gt_cond_seq)
-        # one_err, tot_err, err_breakdown = model.check_acc(raw_data,
-        #         pred_queries, query_gt, pred_entry)
+                raw_q_seq, raw_col_seq, pred_entry, train=train) # is this the decoder portion??
+
         ind_cor, tot_cor, _ = model.check_acc(raw_data, pred_queries, query_gt, pred_entry)
 
 
@@ -569,6 +565,7 @@ def process(sql_data, table_data):
         # logging.warning('sql_temp: {0}'.format(json.dumps(sql_temp, indent=4)))
 
         # process group by / having
+        # logging.warning('sql_groupby: {0}'.format(sql['sql']['groupby']))
         sql_temp['group'] = [x[1] for x in sql['sql']['groupby']]
         having_cond = []
         if len(sql['sql']['having']) > 0:

@@ -1,0 +1,4 @@
+usage: train_nl2sql_new.py [-h] [--toy] [--suffix SUFFIX] [--ca]
+                           [--dataset DATASET] [--rl] [--baseline]
+                           [--train_emb] [--train_num TRAIN_NUM]
+train_nl2sql_new.py: error: unrecognized arguments: text.txt

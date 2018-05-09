@@ -4,6 +4,13 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
 import numpy as np
+from enum import Enum
+import logging
+
+class Type_Pred(Enum):
+    cond = 16
+    sel = 8 # includes sel + agg
+    group = 3
 
 
 class WordEmbedding(nn.Module):
@@ -13,7 +20,12 @@ class WordEmbedding(nn.Module):
         self.trainable = trainable
         self.N_word = N_word
         self.gpu = gpu
-        self.SQL_TOK = SQL_TOK
+        self.SQL_TOK = (len(SQL_TOK), SQL_TOK)
+        self.AGG_SQL_TOK= ['MAX', 'MIN', 'AVG', 'COUNT', 'SUM']
+        self.AGG_SQL_TOK = (len(self.AGG_SQL_TOK), self.AGG_SQL_TOK)
+        self.SEL_SQL_TOK = ['SELECT', '<END>'] + self.AGG_SQL_TOK[1] 
+        self.SEL_SQL_TOK = (len(self.SEL_SQL_TOK), self.SEL_SQL_TOK)
+        self.GROUPBY_SQL_TOK = (3, ['GROUPBY', '<END>'])
 
 
         if trainable:
@@ -56,8 +68,23 @@ class WordEmbedding(nn.Module):
 
         return val_inp_var, val_len
 
+    def get_avg_word_emb(self, one_q):
+        q_val = []  
+        for ws in one_q:
+            emb_list = []
+            ws_len = len(ws)
+            for w in ws:
+                emb_list.append(self.word_emb.get(w, np.zeros(self.N_word, dtype=np.float32)))
+            if ws_len == 0:
+                raise Exception("word list should not be empty!")
+            elif ws_len == 1:
+                q_val.append(emb_list[0])
+            else:
+                q_val.append(sum(emb_list) / float(ws_len))
+        return q_val
 
-    def gen_x_batch(self, q, col, is_list=False, is_q=False, cond=True):
+
+    def gen_x_batch(self, q, col, is_list=False, is_q=False, type_pred=Type_Pred.cond):
         B = len(q)
         val_embs = []
         val_len = np.zeros(B, dtype=np.int64)
@@ -65,30 +92,47 @@ class WordEmbedding(nn.Module):
             if self.trainable:
                 # q_val is only the indexes of words
                 q_val = map(lambda x:self.w2i.get(x, 0), one_q)
-            elif not is_list:
+            elif is_q:
                 q_val = map(lambda x:self.word_emb.get(x, np.zeros(self.N_word, dtype=np.float32)), one_q)
+                col_val = self.get_avg_word_emb(one_col)
             else:
-                q_val = []
-                for ws in one_q:
-                    emb_list = []
-                    ws_len = len(ws)
-                    for w in ws:
-                        emb_list.append(self.word_emb.get(w, np.zeros(self.N_word, dtype=np.float32)))
-                    if ws_len == 0:
-                        raise Exception("word list should not be empty!")
-                    elif ws_len == 1:
-                        q_val.append(emb_list[0])
-                    else:
-                        q_val.append(sum(emb_list) / float(ws_len))
+                q_val = self.get_avg_word_emb(one_q)
+                col_val = self.get_avg_word_emb(one_col)
+                # q_val = []  
+                # for ws in one_q:
+                #     emb_list = []
+                #     ws_len = len(ws)
+                #     for w in ws:
+                #         emb_list.append(self.word_emb.get(w, np.zeros(self.N_word, dtype=np.float32)))
+                #     if ws_len == 0:
+                #         raise Exception("word list should not be empty!")
+                #     elif ws_len == 1:
+                #         q_val.append(emb_list[0])
+                #     else:
+                #         q_val.append(sum(emb_list) / float(ws_len))
 
             if self.trainable:
                 val_embs.append([1] + q_val + [2])  #<BEG> and <END>
                 val_len[i] = 1 + len(q_val) + 1
             elif not is_list or is_q:
-                val_embs.append([np.zeros(self.N_word, dtype=np.float32)] + q_val + [np.zeros(self.N_word, dtype=np.float32)])  #<BEG> and <END>
                 val_len[i] = 1 + len(q_val) + 1
-                if cond:
-                    val_len[i] = len(self.SQL_TOK) + len(one_col) + 1 + len(one_q) + 1
+                if type_pred == Type_Pred.group:
+                    # update the length
+                    val_len[i] = self.GROUPBY_SQL_TOK[0] + len(one_col) + 1 + len(one_q) + 1
+                    val_embs.append([np.zeros(self.N_word, dtype=np.float32) * self.GROUPBY_SQL_TOK[0]]+ \
+                         col_val + [np.zeros(self.N_word, dtype=np.float32)] + \
+                    q_val + [np.zeros(self.N_word, dtype=np.float32)])  #<BEG> and <END>
+                elif type_pred == Type_Pred.sel:
+                    val_len[i] = self.SEL_SQL_TOK[0] + len(one_col) + 1 + len(one_q) + 1
+                    val_embs.append([np.zeros(self.N_word, dtype=np.float32) * self.SEL_SQL_TOK[0]]+ \
+                         col_val + [np.zeros(self.N_word, dtype=np.float32)] + 
+                    q_val + [np.zeros(self.N_word, dtype=np.float32)])  #<BEG> and <END>
+                else:
+                    val_len[i] = self.SQL_TOK[0] + len(one_col) + 1 + len(one_q) + 1
+                    val_embs.append([np.zeros(self.N_word, dtype=np.float32) * self.SQL_TOK[0]]+ \
+                          col_val + [np.zeros(self.N_word, dtype=np.float32)] + \
+                    q_val + [np.zeros(self.N_word, dtype=np.float32)])  #<BEG> and <END>
+
             else:
                 val_embs.append(q_val)
                 val_len[i] = len(q_val)

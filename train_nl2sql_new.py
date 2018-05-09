@@ -18,7 +18,7 @@ if __name__ == '__main__':
     logging.basicConfig(handlers=[
         logging.FileHandler("{0}/{1}.log".format(logPath, fileName)),
         logging.StreamHandler()
-    ], level=logging.ERROR)
+    ], level=logging.INFO)
     parser = argparse.ArgumentParser()
     parser.add_argument('--toy', action='store_true', 
             help='If set, use small data; used for fast debugging.')
@@ -49,20 +49,22 @@ if __name__ == '__main__':
         USE_SMALL=True
         GPU=True
         BATCH_SIZE=40
-    TRAIN_ENTRY=(False, False, True, False)  # (AGG, SEL, COND, GROUPBY) 
+    TRAIN_ENTRY=(False, False, False, True)  # (AGG, SEL, COND, GROUPBY) 
     TRAIN_AGG, TRAIN_SEL, TRAIN_COND, TRAIN_GROUPBY = TRAIN_ENTRY
     learning_rate = 1e-4 if args.rl else 1e-3
 
     logging.warning('about to load dataset')
     sql_data, table_data, val_sql_data, val_table_data, test_sql_data, test_table_data = load_dataset(args.dataset, use_small=USE_SMALL)
     if args.toy:
-        # sql_data = sql_data[20:30]
-        # val_sql_data = val_sql_data[20:30]        
-        sql_data = sql_data[0:300]
-        val_sql_data = val_sql_data[0:100]
+        # sql_data = sql_data[40:50]
+        # val_sql_data = val_sql_data[40:50]        
+        sql_data = sql_data[0:500]
+        val_sql_data = val_sql_data
     # logging.warning(json.dumps(sql_data, indent=4))
     # logging.warning(json.dumps(val_sql_data, indent=4))
-    logging.warning(json.dumps(table_data, indent=4))
+    # logging.warning(json.dumps(sql_data, indent=4))
+    # logging.warning('------')
+    # logging.warning(json.dumps(val_sql_data, indent=4))
 
     logging.warning('data loaded')
     word_emb = load_word_emb('glove/glove.%dB.%dd.txt'%(B_word,N_word), \
@@ -123,7 +125,7 @@ if __name__ == '__main__':
             logging.info(' Best exec acc = %s, on epoch %s'%(best_acc, best_idx))
     else:
         init_acc = epoch_acc_new(model, BATCH_SIZE,
-                val_sql_data, val_table_data, TRAIN_ENTRY)
+                val_sql_data, val_table_data, TRAIN_ENTRY, train=False)
         logging.warning('init_acc: %s', str(init_acc))
 
         # total accuracies
@@ -182,7 +184,7 @@ if __name__ == '__main__':
             logging.error(' Loss = %s'%epoch_train(
                     model, optimizer, BATCH_SIZE, 
                     sql_data, table_data, TRAIN_ENTRY))
-            train_acc_tot, train_acc_indiv, _ = epoch_acc_new(model, BATCH_SIZE, sql_data, table_data, TRAIN_ENTRY)
+            train_acc_tot, train_acc_indiv, _ = epoch_acc_new(model, BATCH_SIZE, sql_data, table_data, TRAIN_ENTRY) # train=True
             logging.error(' Train acc_qm: %s\n   breakdown result: %s'% (train_acc_tot, train_acc_indiv))
             logging.error('-------------')
             logging.error('validation acc!')
@@ -191,7 +193,7 @@ if __name__ == '__main__':
             train_acc[i,1:] = train_acc_indiv
 
             val_acc_tot, val_acc_indiv, _ = epoch_acc_new(model,
-                    BATCH_SIZE, val_sql_data, val_table_data, TRAIN_ENTRY)
+                    BATCH_SIZE, val_sql_data, val_table_data, TRAIN_ENTRY, train=False)
             dev_acc[i + 1,0] = val_acc_tot
             dev_acc[i + 1, 1:] = val_acc_indiv
             logging.error(' Dev acc_qm: %s\n   breakdown result: %s\n'%(val_acc_tot, val_acc_indiv))
