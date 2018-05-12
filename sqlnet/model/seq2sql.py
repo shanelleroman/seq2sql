@@ -37,11 +37,11 @@ def remove_duplicates(sel_toks):
         sel_toks_new = [sel_toks[0]]
     return sel_toks_new
 
-def convert_tok_to_combined_indices(orig_col_lst, expanded_lst, indices):
-    # indices refer to the expanded list which follows the following form:
-    # [tok in each_col + ',']
-    # [['boat', 'id'], ['table', 'id']] => ['boat', 'id', ',', 'table', 'id', ',']
-    pass
+def safe_index_get(lst, word):
+    try:
+        return lst.index(word)
+    except:
+        return -2
 
 
 
@@ -59,15 +59,15 @@ class Seq2SQL(nn.Module):
 
         self.max_col_num = 45
         self.max_tok_num = 200
-        self.AGG_SQL_TOK= ['MAX', 'MIN', 'AVG', 'COUNT', 'SUM']
-        # ['', MAX, MIN] index =2 => 2 +2 = 4 = new_index
+        self.AGG_SQL_TOK= ['MAX', 'MIN', 'COUNT', 'SUM', 'AVG']
         # SELECT, END, '', MAX, MIN = new_index correct!!
         self.SEL_SQL_TOK = ['SELECT', '<END>'] + self.AGG_SQL_TOK # w
         #gt_sel_seq = [0, ..., 1]
         self.SQL_TOK = ['NT', 'BTWN', 'EQL', 'GT', 'LT', 'GTEQL', 'LTEQL', 'NTEQL', 'IN', 'LKE', 'IS', 'XST']\
          + ['WHERE', 'AND', 'OR', '<END>']
          #WHERE = 12, END = 14
-        self.GROUPBY_SQL_TOK = ['GROUPBY', '<END>']
+        self.GROUPBY_SQL_TOK = ['GROUPBY', '<END>'] + self.AGG_SQL_TOK + \
+        ['NT', 'BTWN', 'EQL', 'GT', 'LT', 'GTEQL', 'LTEQL', 'NTEQL', 'IN', 'LKE', 'IS', 'XST']
         self.COND_OPS = ['NT', 'BTWN', 'EQL', 'GT', 'LT', 'GTEQL', 'LTEQL', 'NTEQL', 'IN', 'LKE', 'IS', 'XST']
 
         #Word embedding
@@ -88,6 +88,7 @@ class Seq2SQL(nn.Module):
 
         #Predict aggregator
         self.agg_pred = Seq2SQLSubSeqPredictor(N_word, N_h, N_depth, self.max_col_num, self.max_tok_num, gpu)
+
         # self.agg_pred = AggPredictor(N_word, N_h, N_depth, use_ca=False)
 
         #Predict selected column
@@ -95,18 +96,19 @@ class Seq2SQL(nn.Module):
                                      # use_ca=False)
         self.sel_pred = Seq2SQLSubSeqPredictor(N_word, N_h, N_depth, self.max_col_num, self.max_tok_num, gpu)
 
+
         #Predict GROUPBY columns
         self.groupby_pred = Seq2SQLSubSeqPredictor(N_word, N_h, N_depth, self.max_col_num, self.max_tok_num, gpu)
 
         #Predict number of cond
-        self.cond_pred = Seq2SQLCondPredictor(
-            N_word, N_h, N_depth, self.max_col_num, self.max_tok_num, gpu)
+        self.cond_pred = Seq2SQLCondPredictor(N_word, N_h, N_depth, self.max_col_num, self.max_tok_num, gpu)
 
 
         self.CE = nn.CrossEntropyLoss()
         self.softmax = nn.Softmax()
         self.log_softmax = nn.LogSoftmax()
         self.bce_logit = nn.BCEWithLogitsLoss()
+
         if gpu:
             self.cuda()
 
@@ -138,18 +140,21 @@ class Seq2SQL(nn.Module):
         ret_seq = []
         for cur_q, cur_col, cur_query, mini_seq in zip(q, col, query, ans_seq):
             all_toks = self.SEL_SQL_TOK + cur_col + [None] + cur_q + [None]
+            logging.warning('all_toks: {0}'.format(all_toks))
 
             # get aggregators
             cur_seq = [all_toks.index('SELECT')]
             # logging.error('mini_seq: {0}'.format(mini_seq))
             # logging.error('mini_query: {0}'.format(cur_query))
+
             for i, x in enumerate(mini_seq[0]):
-                logging.info('orig_agg_index {0}'.format(mini_seq[0][i]))
+                logging.warning('orig_agg_index {0}'.format(mini_seq[0][i]))
+                
                 if mini_seq[0][i] != 0:
                     cur_seq.append(2 + mini_seq[0][i]) # index for the agg
-                    logging.info('new_agg_index {0}'.format(2 + mini_seq[0][i]))
-                    logging.info('new_agg_op: {0}'.format(all_toks[2 + mini_seq[0][i]]))
-                    # orig index = 2 => 4
+                    logging.warning('new_agg_index {0}'.format(1 + mini_seq[0][i]))
+                    logging.warning('new_agg_op: {0}'.format(all_toks[1 + mini_seq[0][i]]))
+                    logging.warning('actual_agg_op: {0}'.format(self.AGG_SQL_TOK[mini_seq[0][i] - 1]))                    # orig index = 2 => 4
                 
                 index = len(self.SEL_SQL_TOK) + mini_seq[1][i] # get the index for the normal word in all_toks without the expanded columns
                 logging.warning('index: {0}'.format(index))
@@ -162,76 +167,76 @@ class Seq2SQL(nn.Module):
         # print('gt_sel_seq',ret_seq)
         return ret_seq
 
-    def clean_where_query(self, cur_where_query):
-        logging.info('method clean_where_query')
-        import re
-        logging.info('cur_where_query: {0}'.format(cur_where_query))
-        op_index = 100
-        cond_ops = [x.lower() for x in self.COND_OPS]
-        if 'order' in cur_where_query and 'by' == cur_where_query[cur_where_query.index('order') + 1]:
-            cur_where_query = cur_where_query[:cur_where_query.index('order')] # gets rid of order by 
-        if 'group' in cur_where_query and 'by' == cur_where_query[cur_where_query.index('group') + 1]:
-            cur_where_query = cur_where_query[:cur_where_query.index('group')] # gets rid of group by 
-        if 'union' in cur_where_query:
-            cur_where_query = cur_where_query[:cur_where_query.index('union')] # gets rid of union
-        if 'intersect' in cur_where_query:
-            cur_where_query = cur_where_query[:cur_where_query.index('intersect')] # gets rid of intersect
-        if 'limit' in cur_where_query:
-            cur_where_query = cur_where_query[:cur_where_query.index('limit')] # gets rid of limit
-        cur_where_query = filter(lambda a: a != '``' and a != '\'\'' and a !=  '\'', cur_where_query) # get rid of all quotations
-        cur_where_query_copy = []
-        for i, x in enumerate(cur_where_query):
-            x_lowered = x.lower()
-            if x == '=':
-                if i > 0 and cur_where_query[i - 1] == '<':
-                    cur_where_query_copy[-1] = 'lteql' # ['<', '='] => ['lteql']
-                if i > 0 and cur_where_query[i - 1] == '>':
-                    cur_where_query_copy[-1] = 'gteql' # ['>', '='] => ['gteql']
-                else:
-                    cur_where_query_copy.append('eql')
-            elif x == '>':
-                cur_where_query_copy.append('gt')
-            elif x == '<':
-                cur_where_query_copy.append('lt')
-            elif x == '!' or x_lowered == 'not':
-                cur_where_query_copy.append('nt')
-            elif x_lowered == 'between':
-                cur_where_query_copy.append('btwn')
-            elif x_lowered == 'like':
-                cur_where_query_copy.append('lke')
-            elif x_lowered == 'exist':
-                cur_where_query_copy.append('xst')
-            else:
-                cur_where_query_copy.append(x)
-        cur_where_query = cur_where_query_copy
-        logging.info('cur_where_query: {0}'.format(cur_where_query))
-        quote_patt = re.compile('(\')(.*)')
-        cur_where_query = map(lambda tok: quote_patt.search(tok).group(2) if quote_patt.search(tok) is not None \
-                    else tok, cur_where_query)
-        logging.info('cur_where_query_cleaned: {0}'.format(cur_where_query))
-        t_pat = re.compile('(t\d+\.)(.*)')
-        cur_where_query =  map(lambda tok: t_pat.search(tok).group(2) if t_pat.search(tok) is not None \
-                    else tok, cur_where_query) # get rid of t1.colname -> colname
-        # splice or / and 
-        or_and_indices = [i for i, x in enumerate(cur_where_query) if x == 'or' or x == 'and']
-        or_and_indices.append(len(cur_where_query) - 1)
-        logging.info('or_and_indices: {0}'.format(or_and_indices))
-        st = 0
-        spliced = []
-        for index in or_and_indices:
-            mini_seq = cur_where_query[st:index] # doesn't include the or/and
-            op_index = -1
-            for i, x in enumerate(mini_seq):
-                if x in cond_ops:
-                    op_index = i
-                    break
-            spliced.extend(mini_seq[:i + 1]) # get rid of the value portion
-            spliced.append(cur_where_query[index]) # or/and
-            st = index + 1
-        spliced = spliced[:-1]
-        logging.info('spliced: {0}'.format(spliced))
+    # def clean_where_query(self, cur_where_query):
+    #     logging.info('method clean_where_query')
+    #     import re
+    #     logging.info('cur_where_query: {0}'.format(cur_where_query))
+    #     op_index = 100
+    #     cond_ops = [x.lower() for x in self.COND_OPS]
+    #     if 'order' in cur_where_query and 'by' == cur_where_query[cur_where_query.index('order') + 1]:
+    #         cur_where_query = cur_where_query[:cur_where_query.index('order')] # gets rid of order by 
+    #     if 'group' in cur_where_query and 'by' == cur_where_query[cur_where_query.index('group') + 1]:
+    #         cur_where_query = cur_where_query[:cur_where_query.index('group')] # gets rid of group by 
+    #     if 'union' in cur_where_query:
+    #         cur_where_query = cur_where_query[:cur_where_query.index('union')] # gets rid of union
+    #     if 'intersect' in cur_where_query:
+    #         cur_where_query = cur_where_query[:cur_where_query.index('intersect')] # gets rid of intersect
+    #     if 'limit' in cur_where_query:
+    #         cur_where_query = cur_where_query[:cur_where_query.index('limit')] # gets rid of limit
+    #     cur_where_query = filter(lambda a: a != '``' and a != '\'\'' and a !=  '\'', cur_where_query) # get rid of all quotations
+    #     cur_where_query_copy = []
+    #     for i, x in enumerate(cur_where_query):
+    #         x_lowered = x.lower()
+    #         if x == '=':
+    #             if i > 0 and cur_where_query[i - 1] == '<':
+    #                 cur_where_query_copy[-1] = 'lteql' # ['<', '='] => ['lteql']
+    #             if i > 0 and cur_where_query[i - 1] == '>':
+    #                 cur_where_query_copy[-1] = 'gteql' # ['>', '='] => ['gteql']
+    #             else:
+    #                 cur_where_query_copy.append('eql')
+    #         elif x == '>':
+    #             cur_where_query_copy.append('gt')
+    #         elif x == '<':
+    #             cur_where_query_copy.append('lt')
+    #         elif x == '!' or x_lowered == 'not':
+    #             cur_where_query_copy.append('nt')
+    #         elif x_lowered == 'between':
+    #             cur_where_query_copy.append('btwn')
+    #         elif x_lowered == 'like':
+    #             cur_where_query_copy.append('lke')
+    #         elif x_lowered == 'exist':
+    #             cur_where_query_copy.append('xst')
+    #         else:
+    #             cur_where_query_copy.append(x)
+    #     cur_where_query = cur_where_query_copy
+    #     logging.info('cur_where_query: {0}'.format(cur_where_query))
+    #     quote_patt = re.compile('(\')(.*)')
+    #     cur_where_query = map(lambda tok: quote_patt.search(tok).group(2) if quote_patt.search(tok) is not None \
+    #                 else tok, cur_where_query)
+    #     logging.info('cur_where_query_cleaned: {0}'.format(cur_where_query))
+    #     t_pat = re.compile('(t\d+\.)(.*)')
+    #     cur_where_query =  map(lambda tok: t_pat.search(tok).group(2) if t_pat.search(tok) is not None \
+    #                 else tok, cur_where_query) # get rid of t1.colname -> colname
+    #     # splice or / and 
+    #     or_and_indices = [i for i, x in enumerate(cur_where_query) if x == 'or' or x == 'and']
+    #     or_and_indices.append(len(cur_where_query) - 1)
+    #     logging.info('or_and_indices: {0}'.format(or_and_indices))
+    #     st = 0
+    #     spliced = []
+    #     for index in or_and_indices:
+    #         mini_seq = cur_where_query[st:index] # doesn't include the or/and
+    #         op_index = -1
+    #         for i, x in enumerate(mini_seq):
+    #             if x in cond_ops:
+    #                 op_index = i
+    #                 break
+    #         spliced.extend(mini_seq[:i + 1]) # get rid of the value portion
+    #         spliced.append(cur_where_query[index]) # or/and
+    #         st = index + 1
+    #     spliced = spliced[:-1]
+    #     logging.info('spliced: {0}'.format(spliced))
 
-        return spliced
+    #     return spliced
 
 
     def generate_gt_where_seq(self, q, col_seq, cond_tuples):
@@ -259,7 +264,6 @@ class Seq2SQL(nn.Module):
         ret_seq = []
         for cur_q, cur_col, cur_query, mini_seq in zip(q, col, query, ans_seq):
             # [u'*', ',', u'col_tok_1', 'col_tok_2', ',' + ...]
-
             all_toks = self.GROUPBY_SQL_TOK + cur_col + [None] + cur_q + [None]
             logging.warning('all_toks: {0}'.format(all_toks))
             logging.warning('mini_seq: {0}'.format(mini_seq))
@@ -272,17 +276,29 @@ class Seq2SQL(nn.Module):
                 logging.warning('mini_seq_6_i: {0}'.format(mini_seq[6][i]))
                 logging.warning('self_sql_tok: {0}'.format(self.GROUPBY_SQL_TOK))
                 logging.warning('got word {0} for index{1}'.format(all_toks[index], index))
+                logging.warning('having is: {0}'.format(mini_seq[8]))
+                cur_seq.append(index) # append the individual indices for the column's words tokenized
+                if mini_seq[8]:
+                    cur_seq.append(mini_seq[8][0] + 1) # AGG INDEX
+                    # make sure correct agg_tok
+                    my_lst = [''] + self.AGG_SQL_TOK
+                    assert all_toks[mini_seq[8][0] + 1] == my_lst[mini_seq[8][0]], 'predicted: {0} actual: {1}'.format(all_toks[mini_seq[8][0] + 2] , my_lst[mini_seq[8][0]])
+                    logging.warning('predicted AGG TOK is: {0}'.format(all_toks[mini_seq[8][0] + 2]))
+                    cur_seq.append(all_toks.index(cur_col[mini_seq[8][1]]))
+                    logging.warning('predicted col tok is: {0}'.format(cur_col[mini_seq[8][1]]))
+                    cur_seq.append(all_toks.index(self.COND_OPS[mini_seq[8][2]]))
+                    logging.warning('predicted cond op is: {0}'.format(self.COND_OPS[mini_seq[8][2]]))
+
                 # first_index = self.search(all_toks, column_words)
                 # if first_index != -1:
                 #     logging.warning('all_toks: {0}'.format(all_toks))
                 #     logging.warning('first_index: {0}'.format(first_index))
                 #     for i in range(first_index, first_index + len(column_words)):
-                cur_seq.append(index) # append the individual indices for the column's words tokenized
+                
             cur_seq.append(all_toks.index('<END>'))
             logging.warning('cur_group_query_indices: {0}'.format(cur_seq))
             logging.warning('--------')
             ret_seq.append(cur_seq)
-
         return ret_seq
         # print('gt_sel_seq',ret_seq)
 
@@ -471,37 +487,57 @@ class Seq2SQL(nn.Module):
         to_idx = col[b] # possible columns to 
 
         logging.info('to_idx {0}'.format(to_idx))
+        index_having_cond_tok = -1 
         for i, group_score_idx in enumerate(group_score[b].data.cpu().numpy()):
             group_tok = np.argmax(group_score_idx)
 
             try:
                 group_val = all_toks[group_tok] # get all the words
                 logging.error('group_val {0}'.format(group_val))
+                if group_val in self.COND_OPS:
+                    index_having_cond_tok = i
             except:
                 break
             
             if group_val == '<END>':
                 logging.error('found EXIT!!!')
                 break
-            elif not train and i > 1:
+            elif not train and i > 3:
                 logging.error('cut it off short!!')
                 break
             group_toks.append(group_val) # get the column names
         if verbose:
             print group_toks
 
+        # splice based on the first index of having
+        if index_having_cond_tok != -1:
+            # gets everything up to [having indices] if it makes sense, otherwise, just saves the first token as the group token
+            group_splice = group_toks[:index_having_cond_tok - 1] if index_having_cond_tok  > 0 else group_toks[:1] 
+            having_splice = group_toks[index_having_cond_tok - 1: ] if  index_having_cond_tok  > 0 else group_toks[1:]
+        else:
+            group_splice = group_toks
+            having_splice = []
+
+        having_query = []
         if not train:
             # group_toks = remove_duplicates(group_toks)
-            if group_toks:
-                group_toks = [group_toks[0]] # get the first one 
-            if '*' in group_toks:
-                group_toks = []
+            if group_splice:
+                group_splice = [group_splice[0]] # get the first one 
+            if '*' in group_splice:
+                group_splice = []
 
-        for tok in group_toks:
+
+
+        for tok in group_splice:
             if tok in col[b]:
                 group_query.append(to_idx.index(tok))
+        if len(having_splice) >= 3:
+            having_query.append(safe_index_get(self.AGG_SQL_TOK, having_splice[0]) + 1) # agg ops
+            having_query.append(safe_index_get(to_idx, having_splice[1])) # column name
+            having_query.append(safe_index_get(self.COND_OPS, having_splice[2]))
 
-        return  group_query
+
+        return  group_query, having_query
 
     def gen_sel_query(self, col, sel_score, b, q, raw_col, raw_q, verbose=False, train=True):
         selects = []
@@ -546,7 +582,13 @@ class Seq2SQL(nn.Module):
             if tok in to_idx:
                 sel_query.append(to_idx.index(tok))
             elif tok in self.AGG_SQL_TOK:
-                agg_query.append(self.AGG_SQL_TOK.index(tok)) # agg token
+                logging.warning('tok: {0}'.format(tok))
+                # logging.warning('potentially appened: {0}'.format(self.AGG_SQL_TOK.index(tok)))
+                # logging.warning('actually appending: {0}'.format(self.AGG_SQL_TOK.index(tok) + 1))
+                # logging.warning('alternate list: {0}'.format([''] + self.AGG_SQL_TOK))
+                my_lst = self.AGG_SQL_TOK
+                logging.warning('index_other option: {0}'.format(my_lst.index(tok)))
+                agg_query.append(my_lst.index(tok)) # agg token
             else:
                 logging.error('unknown pred col: {0}'.format(tok))
                 if not train and len(sel_query) == 0:
@@ -726,6 +768,7 @@ class Seq2SQL(nn.Module):
         = cond_col_cor = cond_op_cor = cond_val_cor = cond_conj_cor = 0.0
         tot_count = agg_count = sel_count = group_count = cond_count = 0.0
         group_cor = cond_val_cor
+        having_count = having_cor = 0.0
         agg_ops = ['None', 'MAX', 'MIN', 'COUNT', 'SUM', 'AVG']
         for b, (pred_qry, gt_qry) in enumerate(zip(pred_queries, gt_queries)):
             logging.error('------')
@@ -807,8 +850,21 @@ class Seq2SQL(nn.Module):
                     if group_pred == group_gt:
                         group_cor += 1
                     else:
-                        
                         good = False
+
+                # having accuracy
+                having_pred = pred_qry['having']
+                # logging.warning('gt_qry: {0}'.format(json.dumps(gt_qry, indent=4)))
+                having_gt = gt_qry['group'][1][:-1] if len(gt_qry['group']) == 2 else []
+                if not (having_pred == having_gt == []):
+                    logging.error('pred_having: {0}, gt_having: {1}'.format(having_pred, having_gt))
+                    having_count += 1
+                    if having_pred == having_gt:
+                        having_cor += 1
+                    else:
+                        good = False
+
+
 
                 # if group_pred != group_gt:
                 #     group_err += 1
@@ -907,7 +963,7 @@ class Seq2SQL(nn.Module):
         # err_breakdown[2,:] = (cond_num_err, cond_op_err, cond_val_err, cond_conj_err)
         # err_breakdown[3, 1] = group_err
         # logging.warning('err_breakdown: {0}'.format(err_breakdown))
-        return np.array([(agg_cor, sel_cor, cond_cor, group_cor), (agg_count, sel_count, cond_count, group_count)]), \
+        return np.array([(agg_cor, sel_cor, cond_cor, group_cor, having_cor), (agg_count, sel_count, cond_count, group_count, having_count)]), \
         np.array((tot_cor, tot_count)), err_breakdown
     
 
@@ -946,7 +1002,7 @@ class Seq2SQL(nn.Module):
                 logging.warning('cur_query_conds: %s', str(cur_query['conds']))
                 logging.warning('cur_query_conj: %s', str(cur_query['conj'])) 
             if pred_groupby:
-                cur_query['group'] = self.gen_group_query(col, groupby_score, b, q, raw_col[b], raw_q, train=train)           
+                cur_query['group'], cur_query['having'] = self.gen_group_query(col, groupby_score, b, q, raw_col[b], raw_q, train=train)           
             # print('cur_query', cur_query)
             ret_queries.append(cur_query)
 

@@ -226,7 +226,8 @@ def to_batch_seq(sql_data, table_data, idxes, st, ed, ret_vis_data=False):
         tab_cols = [col[1].split(' ') for col in table['col_map']]
         tab_col_indices = [(i, col[1].split(' ')) for i, col in enumerate(table['col_map'])]
         col_seq.append(tab_cols)
-
+        logging.warning('sql_group: {0}'.format(sql['group']))
+        logging.warning('sql_query_tok: {0}'.format(sql['query_tok']))
         ans_seq.append((sql['agg'], #index 0
             sql['sel'], # index 1
             len(sql['cond']), # index 2
@@ -234,7 +235,8 @@ def to_batch_seq(sql_data, table_data, idxes, st, ed, ret_vis_data=False):
             tuple(x[1] for x in sql['cond']), # index 4
             len(set(sql['sel'])), # index 5       
             sql['group'][:-1], # index 6 = group         
-            len(sql['group']) - 1,      
+            len(sql['group']) - 1,   # index 7 - not really sure   
+            sql['group'][-1], # index 8
             sql['order'][0],            
             sql['order'][1],            
             len(sql['order'][1]),       
@@ -311,11 +313,11 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
         # raw_col_seq = [x[1] for x in raw_data] 
 
         # logging.warning('gt_cond_seq: {0}'.format(gt_cond_seq))
-        gt_where_seq = model.generate_gt_where_seq(q_seq, col_seq, gt_cond_seq)
-        # gt_where_seq = None
-        # gt_sel_seq = None
+        # gt_where_seq = model.generate_gt_where_seq(q_seq, col_seq, gt_cond_seq)
+        gt_where_seq = None
+        gt_sel_seq = None
 
-        gt_sel_seq = model.generate_gt_sel_seq(q_seq, col_seq, query_seq, ans_seq)
+        # gt_sel_seq = model.generate_gt_sel_seq(q_seq, col_seq, query_seq, ans_seq)
         # gt_groupby_seq = None
         gt_groupby_seq = model.generate_gt_group_seq(q_seq, col_seq, query_seq, ans_seq)
         score = model.forward(q_seq, col_seq, col_num, pred_entry,
@@ -339,7 +341,7 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry, train=Tru
     perm = list(range(len(sql_data)))
     # loggig.warning('len sql: %d', len(sql_data))
     st = 0
-    one_acc = np.zeros((2,4)) # row 1 = acc_count, row 2 = tot_count
+    one_acc = np.zeros((2,5)) # row 1 = acc_count, row 2 = tot_count
     tot_acc= np.zeros(2) #  1 = acc_count, 2 = tot_count
     tot_acc_count = 0.0
     acc_num_breakdown = 0.0

@@ -18,7 +18,7 @@ if __name__ == '__main__':
     logging.basicConfig(handlers=[
         logging.FileHandler("{0}/{1}.log".format(logPath, fileName)),
         logging.StreamHandler()
-    ], level=logging.INFO)
+    ], level=logging.ERROR)
     parser = argparse.ArgumentParser()
     parser.add_argument('--toy', action='store_true', 
             help='If set, use small data; used for fast debugging.')
@@ -58,7 +58,7 @@ if __name__ == '__main__':
     if args.toy:
         # sql_data = sql_data[40:50]
         # val_sql_data = val_sql_data[40:50]        
-        sql_data = sql_data[0:500]
+        sql_data = sql_data[0:400]
         val_sql_data = val_sql_data
     # logging.warning(json.dumps(sql_data, indent=4))
     # logging.warning(json.dumps(val_sql_data, indent=4))
@@ -86,6 +86,7 @@ if __name__ == '__main__':
     #     agg_m, sel_m, cond_m, agg_e, sel_e, cond_e = best_model_name(args)
     # else:
     agg_m, sel_m, cond_m, groupby_m = best_model_name(args)
+
 
     if args.rl or args.train_emb: # Load pretrained model.
         agg_lm, sel_lm, cond_lm, groupby_m = best_model_name(args, for_load=True)
@@ -124,6 +125,7 @@ if __name__ == '__main__':
                 torch.save(model.cond_pred.state_dict(), cond_m)
             logging.info(' Best exec acc = %s, on epoch %s'%(best_acc, best_idx))
     else:
+        logging.warning('about to call epoch_acc_new')
         init_acc = epoch_acc_new(model, BATCH_SIZE,
                 val_sql_data, val_table_data, TRAIN_ENTRY, train=False)
         logging.warning('init_acc: %s', str(init_acc))
@@ -137,6 +139,8 @@ if __name__ == '__main__':
         best_cond_idx = 0
         best_group_acc = init_acc[1][3]
         best_group_idx = 0
+        best_having_acc = init_acc[1][4]
+        best_having_idx = 0
         # accuracy breakdowns
         # best_agg_num_acc = init_acc[2][0][0]
         # best_agg_num_idx = 0
@@ -173,8 +177,8 @@ if __name__ == '__main__':
         loss = 100
 
         EPOCH_NUM = args.train_num
-        train_acc = np.zeros((EPOCH_NUM + 1, 5)) #(100, 5) = (Epoch_num, accuracy) accuracy = (Total, Agg, Sel, Cond, Group)
-        dev_acc = np.zeros((EPOCH_NUM + 2, 5)) 
+        train_acc = np.zeros((EPOCH_NUM + 1, 6)) #(100, 5) = (Epoch_num, accuracy) accuracy = (Total, Agg, Sel, Cond, Group)
+        dev_acc = np.zeros((EPOCH_NUM + 2, 6)) 
         # last row = best accuracy!!
         dev_acc[0,0] = init_acc[0]
         dev_acc[0, 1:] = init_acc[1]
@@ -204,9 +208,9 @@ if __name__ == '__main__':
                 if val_acc_indiv[0] > best_agg_acc:
                     best_agg_acc = val_acc_indiv[0]
                     best_agg_idx = i + 1
-                    torch.save(model.agg_pred.state_dict(),
-                        'saved_model/epoch%d.agg_model%s'%(i+1, args.suffix))
-                    torch.save(model.agg_pred.state_dict(), agg_m)
+                    # torch.save(model.agg_pred.state_dict(),
+                    #     'saved_model/epoch%d.agg_model%s'%(i+1, args.suffix))
+                    # torch.save(model.agg_pred.state_dict(), agg_m)
                 # agg_acc = val_acc[2][0]
                 # if agg_acc[0] > best_agg_num_acc:
                 #     best_agg_num_acc = agg_acc[0]
@@ -218,13 +222,13 @@ if __name__ == '__main__':
                 if val_acc_indiv[1] > best_sel_acc:
                     best_sel_acc = val_acc_indiv[1]
                     best_sel_idx = i + 1
-                    torch.save(model.sel_pred.state_dict(),
-                        'saved_model/epoch%d.sel_model%s'%(i+1, args.suffix))
-                    torch.save(model.sel_pred.state_dict(), sel_m)
-                    if args.train_emb:
-                        torch.save(model.sel_embed_layer.state_dict(),
-                        'saved_model/epoch%d.sel_embed%s'%(i+1, args.suffix))
-                        torch.save(model.sel_embed_layer.state_dict(), sel_e)
+                    # torch.save(model.sel_pred.state_dict(),
+                    #     'saved_model/epoch%d.sel_model%s'%(i+1, args.suffix))
+                    # torch.save(model.sel_pred.state_dict(), sel_m)
+                    # if args.train_emb:
+                    #     torch.save(model.sel_embed_layer.state_dict(),
+                    #     'saved_model/epoch%d.sel_embed%s'%(i+1, args.suffix))
+                    #     torch.save(model.sel_embed_layer.state_dict(), sel_e)
                 # sel_acc = val_acc[2][1]
                 # if sel_acc[0] > best_sel_num_acc:
                 #     best_sel_num_acc = sel_acc[0]
@@ -237,12 +241,12 @@ if __name__ == '__main__':
                     best_cond_acc =  val_acc_indiv[2]
                     best_cond_idx = i + 1 
  
-                    torch.save(model.cond_pred.state_dict(),
-                        'saved_model/epoch%d.cond_model%s'%(i+1, args.suffix))
-                    torch.save(model.cond_pred.state_dict(), cond_m)
-                    if args.train_emb:
-                        torch.save(model.cond_embed_layer.state_dict(),
-                        'saved_model/epoch%d.cond_embed%s'%(i+1, args.suffix))
+                    # torch.save(model.cond_pred.state_dict(),
+                    #     'saved_model/epoch%d.cond_model%s'%(i+1, args.suffix))
+                    # torch.save(model.cond_pred.state_dict(), cond_m)
+                    # if args.train_emb:
+                    #     torch.save(model.cond_embed_layer.state_dict(),
+                    #     'saved_model/epoch%d.cond_embed%s'%(i+1, args.suffix))
                 # cond_acc = val_acc[2][2]
                 # if cond_acc[0] > best_cond_num_acc:
                 #     best_cond_num_acc = cond_acc[0]
@@ -258,9 +262,13 @@ if __name__ == '__main__':
                     best_group_acc = val_acc_indiv[3]
                     best_group_idx = i + 1 
  
-                    torch.save(model.cond_pred.state_dict(),
-                        'saved_model/epoch%d.cond_model%s'%(i+1, args.suffix))
-                    torch.save(model.cond_pred.state_dict(), cond_m)
+                    # torch.save(model.group_pred.state_dict(),
+                    #     'saved_model/epoch%d.group_model%s'%(i+1, args.suffix))
+                    # torch.save(model.group_pred.state_dict(), cond_m)
+                if val_acc_indiv[4] > best_having_acc:
+                    best_having_acc = val_acc_indiv[4]
+                    best_having_idx = i + 1 
+
             os.environ["EPOCH"] = "{0}".format(i)
             print('\a')
 
@@ -269,22 +277,24 @@ if __name__ == '__main__':
         logging.error('best_sel_acc = %s on epoch %s ', str(best_sel_acc), str(best_sel_idx))
         logging.error('best_cond_acc = %s on epoch %s ', str(best_cond_acc), str(best_cond_idx))
         logging.error('best_group_acc = %s on epoch %s ', str(best_group_acc), str(best_group_idx))
+        logging.error('best_group_acc = %s on epoch %s ', str(best_having_acc), str(best_having_acc))
         with open('results_train.csv', 'wb') as csvfile:
             spamwriter = csv.writer(csvfile, delimiter=' ',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            spamwriter.writerow(['total', 'agg', 'sel', 'cond', 'group'])
+            spamwriter.writerow(['total', 'agg', 'sel', 'cond', 'group', 'having'])
             for row in train_acc:
                 spamwriter.writerow(row)
         with open('results_dev.csv', 'wb') as csvfile_new:
             new_writer = csv.writer(csvfile_new, delimiter=' ',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            new_writer.writerow(['total', 'agg', 'sel', 'cond', 'group'])
+            new_writer.writerow(['total', 'agg', 'sel', 'cond', 'group', 'having'])
             for row in dev_acc:
                 new_writer.writerow(row)
 
 
         print('\a')
         logging.warning('dev_data[1:,:] == my_data[1:,:]: {0}'.format(dev_acc[1:,:] == train_acc[1:,:]))
+        exit(1)
             # print ' Best val acc = %d, on epoch %d individually'% (best_agg_acc, best_sel_acc, best_cond_acc), (best_agg_idx, best_sel_idx, best_cond_idx)
                     # (best_agg_num_acc, best_agg_op_acc, best_sel_num_acc, best_sel_col_acc, best_cond_num_acc, best_cond_col_acc, best_cond_op_acc),
                     # (best_agg_num_idx, best_agg_op_idx, best_sel_num_idx, best_sel_col_idx, best_cond_num_idx, best_cond_col_idx, best_cond_op_idx))

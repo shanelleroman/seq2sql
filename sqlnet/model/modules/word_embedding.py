@@ -10,7 +10,7 @@ import logging
 class Type_Pred(Enum):
     cond = 16
     sel = 8 # includes sel + agg
-    group = 3
+    group = 3 
 
 
 class WordEmbedding(nn.Module):
@@ -21,11 +21,13 @@ class WordEmbedding(nn.Module):
         self.N_word = N_word
         self.gpu = gpu
         self.SQL_TOK = (len(SQL_TOK), SQL_TOK)
-        self.AGG_SQL_TOK= ['MAX', 'MIN', 'AVG', 'COUNT', 'SUM']
+        self.AGG_SQL_TOK= ['MAX', 'MIN', 'COUNT', 'SUM', 'AVG']
         self.AGG_SQL_TOK = (len(self.AGG_SQL_TOK), self.AGG_SQL_TOK)
         self.SEL_SQL_TOK = ['SELECT', '<END>'] + self.AGG_SQL_TOK[1] 
         self.SEL_SQL_TOK = (len(self.SEL_SQL_TOK), self.SEL_SQL_TOK)
-        self.GROUPBY_SQL_TOK = (3, ['GROUPBY', '<END>'])
+        self.GROUPBY_SQL_TOK = ['GROUPBY', '<END>'] + ['MAX', 'MIN', 'AVG', 'COUNT', 'SUM'] + \
+        ['NT', 'BTWN', 'EQL', 'GT', 'LT', 'GTEQL', 'LTEQL', 'NTEQL', 'IN', 'LKE', 'IS', 'XST']
+        self.GROUPBY_SQL_TOK = (len(self.GROUPBY_SQL_TOK), self.GROUPBY_SQL_TOK)
 
 
         if trainable:
@@ -38,6 +40,7 @@ class WordEmbedding(nn.Module):
             # else use word2vec or glove
             self.word_emb = word_emb
             print "Using fixed embedding for words but trainable embedding for types"
+
 
 
     def gen_xc_type_batch(self, xc_type, is_col=False, is_list=False):
