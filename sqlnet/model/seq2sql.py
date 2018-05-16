@@ -37,11 +37,11 @@ def remove_duplicates(sel_toks):
         sel_toks_new = [sel_toks[0]]
     return sel_toks_new
 
-def safe_index_get(lst, word):
+def safe_index_get(lst, word, default=-2):
     try:
         return lst.index(word)
     except:
-        return -2
+        return default
 
 
 
@@ -68,6 +68,7 @@ class Seq2SQL(nn.Module):
          #WHERE = 12, END = 14
         self.GROUPBY_SQL_TOK = ['GROUPBY', '<END>'] + self.AGG_SQL_TOK + \
         ['NT', 'BTWN', 'EQL', 'GT', 'LT', 'GTEQL', 'LTEQL', 'NTEQL', 'IN', 'LKE', 'IS', 'XST']
+        self.ORDERBY_SQL_TOK = ['ORDERBY', '<END>'] + self.AGG_SQL_TOK + ['0', '1', 'LIMIT']
         self.COND_OPS = ['NT', 'BTWN', 'EQL', 'GT', 'LT', 'GTEQL', 'LTEQL', 'NTEQL', 'IN', 'LKE', 'IS', 'XST']
 
         #Word embedding
@@ -100,6 +101,9 @@ class Seq2SQL(nn.Module):
         #Predict GROUPBY columns
         self.groupby_pred = Seq2SQLSubSeqPredictor(N_word, N_h, N_depth, self.max_col_num, self.max_tok_num, gpu)
 
+        #Predict ORDERBY columns
+        self.orderby_pred = Seq2SQLSubSeqPredictor(N_word, N_h, N_depth, self.max_col_num, self.max_tok_num, gpu)
+
         #Predict number of cond
         self.cond_pred = Seq2SQLCondPredictor(N_word, N_h, N_depth, self.max_col_num, self.max_tok_num, gpu)
 
@@ -111,6 +115,22 @@ class Seq2SQL(nn.Module):
 
         if gpu:
             self.cuda()
+
+    def generate_SQL_query(pred_queries, idxes, sql_data, table_data, st, end, table_ids):
+        # logging.error('pred_queries[0]: {0}'.format(pred_queries[0]))
+        # logging.error('table_id[0]: {0}'.format(table_ids[0]))
+        # logging.error('table_data: {0}'.format(json.dumps(table_data[table_ids[0]]['table_data'], indent=4)))
+        # # generate SELECT
+        # database_info = table_data[table_ids[0]]
+        # query = pred_queries[0]
+        # sql_query  = 'SELECT'
+        # for i, x in enumerate(query['agg']):
+        #     if x != 0:
+        #         sql_query += ' ' + self.AGG_SQL_TOK[x]
+        #     sql_query += ' ' + database_info['col_map'][query['sel'][i]]
+        # logging.error('sql_query: {0}'.format(sql_query)) 
+        # exit(1)
+        pass
 
     def search(self, source, target, start=0, end=None, forward=True):
         """Naive search for target in source."""
@@ -144,8 +164,6 @@ class Seq2SQL(nn.Module):
 
             # get aggregators
             cur_seq = [all_toks.index('SELECT')]
-            # logging.error('mini_seq: {0}'.format(mini_seq))
-            # logging.error('mini_query: {0}'.format(cur_query))
 
             for i, x in enumerate(mini_seq[0]):
                 logging.warning('orig_agg_index {0}'.format(mini_seq[0][i]))
@@ -164,79 +182,54 @@ class Seq2SQL(nn.Module):
 
             logging.warning('cur_sel_query_indices: {0}'.format(cur_seq))
             ret_seq.append(cur_seq)
-        # print('gt_sel_seq',ret_seq)
+
         return ret_seq
 
-    # def clean_where_query(self, cur_where_query):
-    #     logging.info('method clean_where_query')
-    #     import re
-    #     logging.info('cur_where_query: {0}'.format(cur_where_query))
-    #     op_index = 100
-    #     cond_ops = [x.lower() for x in self.COND_OPS]
-    #     if 'order' in cur_where_query and 'by' == cur_where_query[cur_where_query.index('order') + 1]:
-    #         cur_where_query = cur_where_query[:cur_where_query.index('order')] # gets rid of order by 
-    #     if 'group' in cur_where_query and 'by' == cur_where_query[cur_where_query.index('group') + 1]:
-    #         cur_where_query = cur_where_query[:cur_where_query.index('group')] # gets rid of group by 
-    #     if 'union' in cur_where_query:
-    #         cur_where_query = cur_where_query[:cur_where_query.index('union')] # gets rid of union
-    #     if 'intersect' in cur_where_query:
-    #         cur_where_query = cur_where_query[:cur_where_query.index('intersect')] # gets rid of intersect
-    #     if 'limit' in cur_where_query:
-    #         cur_where_query = cur_where_query[:cur_where_query.index('limit')] # gets rid of limit
-    #     cur_where_query = filter(lambda a: a != '``' and a != '\'\'' and a !=  '\'', cur_where_query) # get rid of all quotations
-    #     cur_where_query_copy = []
-    #     for i, x in enumerate(cur_where_query):
-    #         x_lowered = x.lower()
-    #         if x == '=':
-    #             if i > 0 and cur_where_query[i - 1] == '<':
-    #                 cur_where_query_copy[-1] = 'lteql' # ['<', '='] => ['lteql']
-    #             if i > 0 and cur_where_query[i - 1] == '>':
-    #                 cur_where_query_copy[-1] = 'gteql' # ['>', '='] => ['gteql']
-    #             else:
-    #                 cur_where_query_copy.append('eql')
-    #         elif x == '>':
-    #             cur_where_query_copy.append('gt')
-    #         elif x == '<':
-    #             cur_where_query_copy.append('lt')
-    #         elif x == '!' or x_lowered == 'not':
-    #             cur_where_query_copy.append('nt')
-    #         elif x_lowered == 'between':
-    #             cur_where_query_copy.append('btwn')
-    #         elif x_lowered == 'like':
-    #             cur_where_query_copy.append('lke')
-    #         elif x_lowered == 'exist':
-    #             cur_where_query_copy.append('xst')
-    #         else:
-    #             cur_where_query_copy.append(x)
-    #     cur_where_query = cur_where_query_copy
-    #     logging.info('cur_where_query: {0}'.format(cur_where_query))
-    #     quote_patt = re.compile('(\')(.*)')
-    #     cur_where_query = map(lambda tok: quote_patt.search(tok).group(2) if quote_patt.search(tok) is not None \
-    #                 else tok, cur_where_query)
-    #     logging.info('cur_where_query_cleaned: {0}'.format(cur_where_query))
-    #     t_pat = re.compile('(t\d+\.)(.*)')
-    #     cur_where_query =  map(lambda tok: t_pat.search(tok).group(2) if t_pat.search(tok) is not None \
-    #                 else tok, cur_where_query) # get rid of t1.colname -> colname
-    #     # splice or / and 
-    #     or_and_indices = [i for i, x in enumerate(cur_where_query) if x == 'or' or x == 'and']
-    #     or_and_indices.append(len(cur_where_query) - 1)
-    #     logging.info('or_and_indices: {0}'.format(or_and_indices))
-    #     st = 0
-    #     spliced = []
-    #     for index in or_and_indices:
-    #         mini_seq = cur_where_query[st:index] # doesn't include the or/and
-    #         op_index = -1
-    #         for i, x in enumerate(mini_seq):
-    #             if x in cond_ops:
-    #                 op_index = i
-    #                 break
-    #         spliced.extend(mini_seq[:i + 1]) # get rid of the value portion
-    #         spliced.append(cur_where_query[index]) # or/and
-    #         st = index + 1
-    #     spliced = spliced[:-1]
-    #     logging.info('spliced: {0}'.format(spliced))
+    def generate_gt_order_seq(self, q, col, query, ans_seq):
+         # NOTE: these numbers are in terms of the overall all_toks!!!!
+        logging.error('method generate_gt_order_seq')
+        gt_order_seq = []
+        ret_seq = []
+        for cur_q, cur_col, cur_query, mini_seq in zip(q, col, query, ans_seq):
+            all_toks = self.ORDERBY_SQL_TOK + cur_col + [None] + cur_q + [None]
+            logging.info('all_toks: {0}'.format(all_toks))
 
-    #     return spliced
+            logging.info('cur_q: {0}'.format(cur_q))
+            logging.info('cur_col: {0}'.format(cur_col))
+            logging.error('cur_query: {0}'.format(cur_query))
+            logging.info('mini_seq: {0}'.format(mini_seq))
+            cur_seq = [all_toks.index('ORDERBY')]
+            for i, x in enumerate(mini_seq[9]):
+                # INDEX FOR AGG_ORDER
+                if mini_seq[9][i] != 0:
+                    my_lst = [''] + self.AGG_SQL_TOK
+                    logging.warning('mini_seq[9]: {0}'.format(mini_seq[9][i]))
+                    logging.info('actual AGG_ORDER: {0}'.format(my_lst[mini_seq[9][i]]))
+                    logging.info('predicted AGG_ORDER: {0}'.format(all_toks[mini_seq[9][i] + 1]))
+                    assert my_lst[mini_seq[9][i]] == all_toks[mini_seq[9][i] + 1], \
+                    'predicted: {0}, actual {1}'.format(all_toks[mini_seq[9][i] + 1], my_lst[mini_seq[9][i]])
+                    cur_seq.append(mini_seq[9][i] + 2)
+                # INDEX FOR COL_ODER
+                logging.warning('col_index: {0}'.format(mini_seq[10][i]))
+                cur_seq.append(all_toks.index(cur_col[mini_seq[10][i]]))
+            # INDEX FOR  ASC/DESC
+            if mini_seq[12] != -1:
+                logging.warning('mini_seq_12: {0}'.format(mini_seq[12]))
+                my_lst = ['0', '1'] # 0 = DESC
+                cur_seq.append(all_toks.index(my_lst[mini_seq[12]]))
+                logging.error('ASC/DESC: {0}'.format(my_lst[int(mini_seq[12])]))
+            if mini_seq[13]:
+                logging.error('non null limit!')
+                cur_seq.append(all_toks.index('LIMIT'))
+
+            cur_seq.append(all_toks.index('<END>'))
+            logging.error('gt_order_seq: {0}'.format(cur_seq))
+            ret_seq.append(cur_seq)
+        return ret_seq
+
+
+
+
 
 
     def generate_gt_where_seq(self, q, col_seq, cond_tuples):
@@ -281,35 +274,31 @@ class Seq2SQL(nn.Module):
                 if mini_seq[8]:
                     cur_seq.append(mini_seq[8][0] + 1) # AGG INDEX
                     # make sure correct agg_tok
-                    my_lst = [''] + self.AGG_SQL_TOK
-                    assert all_toks[mini_seq[8][0] + 1] == my_lst[mini_seq[8][0]], 'predicted: {0} actual: {1}'.format(all_toks[mini_seq[8][0] + 2] , my_lst[mini_seq[8][0]])
-                    logging.warning('predicted AGG TOK is: {0}'.format(all_toks[mini_seq[8][0] + 2]))
-                    cur_seq.append(all_toks.index(cur_col[mini_seq[8][1]]))
+                    if mini_seq[8][0] != 0:
+                        my_lst = [''] + self.AGG_SQL_TOK
+                        assert all_toks[mini_seq[8][0] + 1] == my_lst[mini_seq[8][0]], 'predicted: {0} actual: {1}'.format(all_toks[mini_seq[8][0] + 2] , my_lst[mini_seq[8][0]])
+                        logging.warning('predicted AGG TOK is: {0}'.format(all_toks[mini_seq[8][0] + 2]))
+                        cur_seq.append(all_toks.index(cur_col[mini_seq[8][1]]))
                     logging.warning('predicted col tok is: {0}'.format(cur_col[mini_seq[8][1]]))
                     cur_seq.append(all_toks.index(self.COND_OPS[mini_seq[8][2]]))
                     logging.warning('predicted cond op is: {0}'.format(self.COND_OPS[mini_seq[8][2]]))
 
-                # first_index = self.search(all_toks, column_words)
-                # if first_index != -1:
-                #     logging.warning('all_toks: {0}'.format(all_toks))
-                #     logging.warning('first_index: {0}'.format(first_index))
-                #     for i in range(first_index, first_index + len(column_words)):
                 
             cur_seq.append(all_toks.index('<END>'))
             logging.warning('cur_group_query_indices: {0}'.format(cur_seq))
             logging.warning('--------')
             ret_seq.append(cur_seq)
         return ret_seq
-        # print('gt_sel_seq',ret_seq)
+
 
         
 
 
     def forward(self, q, col, col_num, pred_entry,
-                gt_where = None, gt_cond=None, reinforce=False, gt_sel=None, gt_groupby=None):
+                gt_where = None, gt_cond=None, reinforce=False, gt_sel=None, gt_groupby=None, gt_orderby=None):
         logging.info('method seq2sqlforward')
         B = len(q)
-        pred_agg, pred_sel, pred_cond, pred_groupby = pred_entry
+        pred_agg, pred_sel, pred_cond, pred_groupby, pred_orderby = pred_entry
 
         agg_score = None
         sel_score = None
@@ -327,6 +316,7 @@ class Seq2SQL(nn.Module):
             if pred_cond:
                 x_emb_var, x_len = self.cond_embed_layer.gen_x_batch(q, col)
                 batch = self.cond_embed_layer.gen_col_batch(col)
+
                 col_inp_var, col_name_len, col_len = batch
                 max_x_len = max(x_len)
                 cond_score = self.cond_pred(x_emb_var, x_len, col_inp_var,
@@ -346,8 +336,6 @@ class Seq2SQL(nn.Module):
                                               reinforce=reinforce)
 
             if pred_sel:
-                logging.info('seq2sqlforward non-trainable embeddings')
-                logging.info('gt_sel: {0}'.format(gt_sel))
                 x_emb_var, x_len = self.embed_layer.gen_x_batch(q, col, is_q=True, type_pred=Type_Pred.sel) 
                 # [[col_tok_1, col_tok_2]] => generate average for each column
                 col_inp_var, col_len = self.embed_layer.gen_x_batch(col, col, is_list=True, type_pred=Type_Pred.sel)
@@ -356,7 +344,6 @@ class Seq2SQL(nn.Module):
                                           col_name_len, col_len, col_num, gt_index_seq=gt_sel)
 
             if pred_groupby:
-                logging.info('gt_groupby: {0}'.format(gt_groupby))
                 x_emb_var, x_len = self.embed_layer.gen_x_batch(q, col, is_q=True, type_pred=Type_Pred.group) 
                 # [[col_tok_1, col_tok_2]] => generate average for each column
                 col_inp_var, col_len = self.embed_layer.gen_x_batch(col, col, is_list=True, type_pred=Type_Pred.group)
@@ -364,14 +351,25 @@ class Seq2SQL(nn.Module):
                 groupby_score = self.groupby_pred(x_emb_var, x_len, col_inp_var,
                                           col_name_len, col_len, col_num, gt_index_seq=gt_groupby)
 
+            if pred_orderby:
+                x_emb_var, x_len = self.embed_layer.gen_x_batch(q, col, is_q=True, type_pred=Type_Pred.order) 
+                # [[col_tok_1, col_tok_2]] => generate average for each column
+                col_inp_var, col_len = self.embed_layer.gen_x_batch(col, col, is_list=True, type_pred=Type_Pred.order)
+                max_x_len = max(x_len)
+                orderby_score = self.orderby_pred(x_emb_var, x_len, col_inp_var,
+                                          col_name_len, col_len, col_num, gt_index_seq=gt_orderby)
+
+
+
+
 
             
 
-        return (sel_score, cond_score, groupby_score)
+        return (sel_score, cond_score, groupby_score, orderby_score)
 
-    def loss(self, score, truth_num, pred_entry, gt_where, gt_sel, gt_groupby):
-        pred_agg, pred_sel, pred_cond, pred_groupby = pred_entry
-        sel_score, cond_score, groupby_score = score
+    def loss(self, score, truth_num, pred_entry, gt_where, gt_sel, gt_groupby, gt_orderby):
+        pred_agg, pred_sel, pred_cond, pred_groupby, pred_orderby= pred_entry
+        sel_score, cond_score, groupby_score, orderby_score = score
         loss = 0
         if pred_cond:
             for b in range(len(gt_where)):
@@ -403,7 +401,7 @@ class Seq2SQL(nn.Module):
                     sel_pred_score, sel_truth_var)) / len(sel_truth)
         if pred_groupby:
             groupby_truth = gt_groupby
-            # logging.warning('groupby_truth: {0}'.format(groupby_truth))
+
             for b in range(len(groupby_truth)):
                 if self.gpu:
                     groupby_truth_var = Variable(
@@ -411,19 +409,40 @@ class Seq2SQL(nn.Module):
                 else:
                     groupby_truth_var = Variable(
                         torch.from_numpy(np.array(groupby_truth[b][1:])))
-                # logging.warning('groupby_truth_var.size(): {0}'.format(groupby_truth_var.size()))
-                # logging.warning('groupby_truth_var: {0}'.format(groupby_truth_var))
+
                 groupby_pred_score = groupby_score[b, :len(groupby_truth[b]) - 1] # get rid of the last token
                 # Reshape variables
                 groupby_truth_var = groupby_truth_var.squeeze()
                 groupby_pred_score = groupby_pred_score.squeeze()
-                # logging.warning('groupby_pred_score_len: {0}'.format(len(groupby_pred_score.size())))
+
                 if len(groupby_pred_score.size()) == 1:
                     groupby_pred_score = groupby_pred_score.unsqueeze(0)
-                # logging.warning('groupby_pred_score.size(): {0}'.format(groupby_pred_score.size()))
-                # logging.warning('groupby_truth_var.size(): {0}'.format(groupby_truth_var.size()))
+
                 loss += ( self.CE(
                     groupby_pred_score, groupby_truth_var)) / len(groupby_truth)
+
+
+        if pred_orderby:
+            orderby_truth = gt_orderby
+
+            for b in range(len(orderby_truth)):
+                if self.gpu:
+                    orderby_truth_var = Variable(
+                        torch.from_numpy(np.array(orderby_truth[b][1:])).cuda()) # 1: - get rid of the first token
+                else:
+                    orderby_truth_var = Variable(
+                        torch.from_numpy(np.array(orderby_truth[b][1:])))
+
+                orderby_pred_score = orderby_score[b, :len(orderby_truth[b]) - 1] # get rid of the last token
+                # Reshape variables
+                orderby_truth_var = orderby_truth_var.squeeze()
+                orderby_pred_score = orderby_pred_score.squeeze()
+
+                if len(orderby_pred_score.size()) == 1:
+                    orderby_pred_score = orderby_pred_score.unsqueeze(0)
+
+                loss += ( self.CE(
+                    orderby_pred_score, orderby_truth_var)) / len(orderby_truth)            
         
 
         return loss
@@ -475,6 +494,84 @@ class Seq2SQL(nn.Module):
             ret = ret + tok
         return ret.strip()
 
+    def gen_order_query(self, col, orderby_score, b, q, raw_col, raw_q, verbose=False, train=True):
+        logging.error('gen_order_query')
+        all_toks = self.ORDERBY_SQL_TOK + col[b] + [''] + q[b] + ['']
+        logging.info('all_toks: {0}'.format(all_toks))
+
+
+        order_toks = []
+        for i, order_score_idx in enumerate(orderby_score[b].data.cpu().numpy()):
+            order_tok = np.argmax(order_score_idx)
+
+            try:
+                order_val = all_toks[order_tok] # get all the words
+                logging.error('order_val {0}'.format(order_val))
+            except:
+                break
+            
+            if order_val == '<END>':
+                logging.error('found EXIT!!!')
+                break
+            elif not train and i > 5:
+                logging.error('cut it off short!!')
+                break
+            order_toks.append(order_val) #list of words
+        logging.error('order_toks: {0}'.format(order_toks))
+        order_query = [[], [], -1]
+        looking_for = 'agg' # agg, column, order
+        my_agg_lst = [''] + self.AGG_SQL_TOK
+        i = 0
+        len_order_toks = len(order_toks)
+        if 'LIMIT' in order_toks:
+            limit_query = True
+        else:
+            limit_query = None
+
+        while i < len_order_toks:
+            tok = order_toks[i]
+            if looking_for == 'agg':
+
+                if tok in self.AGG_SQL_TOK: # AGG sql tok
+                    order_query[0].append(safe_index_get(self.AGG_SQL_TOK, order_toks[0], default=0)) # aggregator  
+                    looking_for = 'column'
+                    i += 1
+                elif tok in col[b]: # COLUMN sql tok - append 0 for AGG sql
+                    order_query[0].append(0)
+                    order_query[1].append(col[b].index(tok))
+                    looking_for = 'agg'
+                    i += 1
+                else:
+                    looking_for = 'column'
+
+                    # don't move token
+            elif looking_for == 'column':
+                if tok in col[b]:
+                    order_query[1].append(col[b].index(tok))
+                    i += 1
+                else:
+                    looking_for = 'order'
+            else:
+                my_lst = ['0', '1']
+                order_query[2] = safe_index_get(my_lst, tok, default=0)  if order_query[0] else safe_index_get(my_lst, tok, default=-1)# ASC / DESC 
+                i += 1
+
+        if not train:
+            order_query[0] = order_query[0][:2] # constrain to two items
+            order_query[1] = order_query[1][:2]
+            len_order_query_0 = len(order_query[0])
+            len_order_query_1 = len(order_query[1])
+            if len_order_query_0 < len_order_query_1:
+                for i in range(len_order_query_1 - len_order_query_0):
+                    order_query[0].append(0)
+            elif len_order_query_1 < len_order_query_0: 
+                order_query[0] = order_query[0][:len_order_query_1]
+            
+        logging.error('order_query: {0}'.format(order_query))
+        return order_query, limit_query
+
+
+
     def gen_group_query(self, col, group_score, b, q, raw_col, raw_q, verbose=False, train=True):
         all_toks = self.GROUPBY_SQL_TOK + \
                    col[b] + ['']  + q[b] + [''] # should I delete q --> issue is that I get the wrong dimensions, should I change the embeddings??
@@ -493,7 +590,7 @@ class Seq2SQL(nn.Module):
 
             try:
                 group_val = all_toks[group_tok] # get all the words
-                logging.error('group_val {0}'.format(group_val))
+                # logging.error('group_val {0}'.format(group_val))
                 if group_val in self.COND_OPS:
                     index_having_cond_tok = i
             except:
@@ -506,17 +603,15 @@ class Seq2SQL(nn.Module):
                 logging.error('cut it off short!!')
                 break
             group_toks.append(group_val) # get the column names
-        if verbose:
-            print group_toks
-
+        logging.error('group_toks: {0}'.format(group_toks))
         # splice based on the first index of having
         if index_having_cond_tok != -1:
             # gets everything up to [having indices] if it makes sense, otherwise, just saves the first token as the group token
             group_splice = group_toks[:index_having_cond_tok - 1] if index_having_cond_tok  > 0 else group_toks[:1] 
             having_splice = group_toks[index_having_cond_tok - 1: ] if  index_having_cond_tok  > 0 else group_toks[1:]
         else:
-            group_splice = group_toks
-            having_splice = []
+            group_splice = [group_toks[0]] if len(group_toks) > 0 else group_toks
+            having_splice = group_toks[1:]
 
         having_query = []
         if not train:
@@ -532,11 +627,27 @@ class Seq2SQL(nn.Module):
             if tok in col[b]:
                 group_query.append(to_idx.index(tok))
         if len(having_splice) >= 3:
-            having_query.append(safe_index_get(self.AGG_SQL_TOK, having_splice[0]) + 1) # agg ops
+            having_query.append(safe_index_get(self.AGG_SQL_TOK, having_splice[0], default=0) + 1) # agg ops
             having_query.append(safe_index_get(to_idx, having_splice[1])) # column name
             having_query.append(safe_index_get(self.COND_OPS, having_splice[2]))
+        elif len(having_splice) == 2:
+            having_query.append(0)
+            having_query.append(safe_index_get(to_idx, having_splice[0])) # column name
+            having_query.append(safe_index_get(self.COND_OPS, having_splice[1]))
+        else:
+            having_query = []
+        if not train:
+            for i, x in enumerate(having_query):
+                if x == -2:
+                    if i == 0:
+                        having_query[i] = 0 # predict no AGG
+                    elif i == 1:
+                        having_query[i] = np.random.choice(range(len(to_idx[1:])), 1)[0] # predict a random column index
+                    else:
+                        having_query[i] = np.random.choice(range(len(self.COND_OPS)), 1)[0]
+            
 
-
+        logging.error('group_query: {0}, having_query: {1}'.format(group_query, having_query))
         return  group_query, having_query
 
     def gen_sel_query(self, col, sel_score, b, q, raw_col, raw_q, verbose=False, train=True):
@@ -757,7 +868,7 @@ class Seq2SQL(nn.Module):
                     ' ' + unicode(cond[2]).lower())
             return 'WHERE ' + ' AND '.join(cond_str)
 
-        pred_agg, pred_sel, pred_cond, pred_group = pred_entry
+        pred_agg, pred_sel, pred_cond, pred_group, pred_orderby = pred_entry
         logging.warning('---------')
         logging.warning('check_acc')
         B = len(gt_queries)
@@ -769,6 +880,8 @@ class Seq2SQL(nn.Module):
         tot_count = agg_count = sel_count = group_count = cond_count = 0.0
         group_cor = cond_val_cor
         having_count = having_cor = 0.0
+        order_count = order_cor = 0.0
+        limit_count = limit_cor = 0.0
         agg_ops = ['None', 'MAX', 'MIN', 'COUNT', 'SUM', 'AVG']
         for b, (pred_qry, gt_qry) in enumerate(zip(pred_queries, gt_queries)):
             logging.error('------')
@@ -786,34 +899,17 @@ class Seq2SQL(nn.Module):
                     if agg_pred == agg_gt:
                         agg_cor += 1
                     else:
-                        
                         good = False
+                else:
+                    logging.error('!!!!!!!!!!')
 
-                
 
-                # if flag and len(set(agg_pred)) != len(set(agg_gt)):
-                #     flag = False
-                #     agg_num_err += 1
-
-                # if flag and set(agg_pred) != set(agg_gt):
-                #     flag = False
-                #     agg_val_err += 1
-
-                # if not flag:
-                #     agg_err += 1
-                #     good = False
-                #     logging.warning('agg_pred: %s', str(agg_pred))
-                #     logging.warning('agg_gt: %s', str(agg_gt))
 
             if pred_sel:
                 sel_pred = pred_qry['sel']
                 sel_gt = gt_qry['sel']
 
-                # flag = True
-                # if len(sel_pred) != len(sel_gt): # if length is off
-                #     flag = False
-                #     logging.warning('wrong number of columns selected')
-                #     sel_num_err += 1
+
                 sel_pred_sorted = sorted(sel_pred)
                 sel_gt_sorted = sorted(sel_gt)
                 if not(sel_pred_sorted == sel_gt_sorted == [0]): # don't count [0]
@@ -822,24 +918,11 @@ class Seq2SQL(nn.Module):
                     if sel_pred_sorted == sel_gt_sorted:
                         sel_cor += 1
                     else:
-                        
                         good = False
+                else:
+                    logging.error('!!!!!!!!!!')
 
-                # for idx in range(len(sel_pred)):
-                #     if not flag:
-                #         break
-                #     if flag and sel_pred_sorted[idx] != sel_gt_sorted[idx]:
-                #         flag = False
-                #         logging.warning('wrong columns!')
-                #         sel_val_err += 1
-                #         #sel_err += 1
 
-                # if not flag:
-                #     sel_err += 1
-                #     logging.warning('incremented sel_err')
-                #     logging.warning('sel_pred: {0}'.format(sel_pred))
-                #     logging.warning('sel_gt: {0}'.format(sel_gt))
-                #     good = False
 
             if pred_group:
                 group_pred = pred_qry['group']
@@ -851,11 +934,15 @@ class Seq2SQL(nn.Module):
                         group_cor += 1
                     else:
                         good = False
+                else:
+                    logging.error('!!!!!!!!!!')
 
                 # having accuracy
                 having_pred = pred_qry['having']
                 # logging.warning('gt_qry: {0}'.format(json.dumps(gt_qry, indent=4)))
                 having_gt = gt_qry['group'][1][:-1] if len(gt_qry['group']) == 2 else []
+                logging.error('having_gt: {0}'.format(having_gt))
+                logging.error('gt_qry[group]: {0}'.format(gt_qry['group']))
                 if not (having_pred == having_gt == []):
                     logging.error('pred_having: {0}, gt_having: {1}'.format(having_pred, having_gt))
                     having_count += 1
@@ -863,26 +950,38 @@ class Seq2SQL(nn.Module):
                         having_cor += 1
                     else:
                         good = False
+                else:
+                    logging.error('!!!!!!!!!!')
 
+            if pred_orderby:
+                order_pred = pred_qry['order']
+                order_gt = gt_qry['order']
+                if not (order_gt == order_pred == [[], [], -1]):
+                    logging.error('pred_order: {0}, gt_order: {1}'.format(order_pred, order_gt))
+                    order_count += 1
+                    if order_gt == order_pred:
+                        order_cor += 1
+                    else:
+                        good = False
+                else:
+                    logging.error('!!!!!!!!!!')
 
+                limit_pred = pred_qry['limit']
+                limit_gt = gt_qry['limit']
+                if limit_pred or limit_gt:
+                    logging.error('pred_limit: {0}, gt_limit: {1}'.format(limit_pred, limit_gt))
+                    limit_count += 1
+                    if limit_pred == limit_gt:
+                        limit_cor += 1
+                    else:
+                        good = False
 
-                # if group_pred != group_gt:
-                #     group_err += 1
-                #     good = False
-                #     logging.warning('incremented group_err')
-                #     logging.warning('group_pred: {0}, group_gt: {1}'.format(group_pred, group_gt))
 
 
             if pred_cond:
                 cond_pred = [x[:-1] for x in sorted(pred_qry['conds'])]
                 cond_gt = [x[:-1] for x in sorted(gt_qry['cond'])]
 
-                # # clean column names
-                # for idx in range(len(cond_gt)):
-                #     try:
-                #         cond_gt[idx][2] = cond_gt[idx][2].replace('\'', '').replace('\"', '')
-                #     except AttributeError as e:
-                #         pass
 
                 if not(cond_pred == cond_gt == []):
                     logging.error('pred_cond: {0}, gt_cond: {1}'.format(cond_pred, cond_gt))
@@ -890,69 +989,11 @@ class Seq2SQL(nn.Module):
                     if cond_pred == cond_gt and gt_qry['conj'] == pred_qry['conj']:
                         cond_cor += 1
                     else:
-
                         good = False
-                # flag = True
+                else:
+                    logging.error('!!!!!!!!!!')
 
 
-                # # penalize if they predict the wrong number of conditions
-                # if len(cond_pred) != len(cond_gt): 
-                #     flag = False
-                #     cond_num_err += 1
-                #     logging.warning('wrong number of columns')
-
-                # # penalize if they predict the different columns
-                # if flag and set(
-                #         x[0] for x in cond_pred) != set(x[0] for x in cond_gt): 
-                #     flag = False
-                #     cond_col_err += 1
-                #     logging.warning('wrong column selected')
-
-
-                # for idx in range(len(cond_pred)):
-                #     if not flag:
-                #         break
-                #     # get indices of all possible matches
-                #     gt_idx_lst = [i for i, y in enumerate([x[0] for x in cond_gt]) if y == cond_pred[idx][0]]
-                #     condition_op = False
-                #     # make sure there is one where there is the right operation
-                #     for gt_idx in gt_idx_lst:
-                #         if cond_gt[gt_idx][1] == cond_pred[idx][1]:
-                #             condition_op = True
-
-                #     if flag and not condition_op:
-                #         flag = False
-                #         cond_op_err += 1
-                #         logging.warning('Wrong condition op')
-
-                
-
-                # # check right values for conditions
-                # for idx in range(len(cond_pred)):
-                #     if not flag:
-                #         break
-                #     gt_idx_lst = [i for i, y in enumerate([x[0] for x in cond_gt]) if y == cond_pred[idx][0]]
-                #     value_correct = False
-                #     for gt_idx in gt_idx_lst:
-                #         if unicode(cond_gt[gt_idx][2]).lower() == unicode(cond_pred[idx][2]).lower():
-                #             value_correct = True
-
-                #     if flag and not value_correct:
-                #         flag = False
-                #         cond_val_err += 1
-                #         logging.warning('Wrong values!')   
-                # check correct conjunctions for the columns
-                # if flag and gt_qry['conj'] != pred_qry['conj']:
-                #     cond_conj_err += 1
-                #     flag = False
-                # if not flag:
-                #     cond_err += 1
-                #     logging.warning('cond_pred: {0}, cond_gt: {1}'.format(cond_pred, cond_gt))    
-                #     good = False
-                # else:
-                #     logging.warning('predicted correctly cond!')
-                #     logging.warning('cond_pred: {0}, cond_gt: {1}'.format(cond_pred, cond_gt))
- 
             if good:
                 tot_cor += 1
 
@@ -963,7 +1004,8 @@ class Seq2SQL(nn.Module):
         # err_breakdown[2,:] = (cond_num_err, cond_op_err, cond_val_err, cond_conj_err)
         # err_breakdown[3, 1] = group_err
         # logging.warning('err_breakdown: {0}'.format(err_breakdown))
-        return np.array([(agg_cor, sel_cor, cond_cor, group_cor, having_cor), (agg_count, sel_count, cond_count, group_count, having_count)]), \
+        return np.array([(agg_cor, sel_cor, cond_cor, group_cor, having_cor, order_cor, limit_cor), \
+            (agg_count, sel_count, cond_count, group_count, having_count, order_count, limit_count)]), \
         np.array((tot_cor, tot_count)), err_breakdown
     
 
@@ -972,8 +1014,8 @@ class Seq2SQL(nn.Module):
     def gen_query(self, score, q, col, raw_q, raw_col, pred_entry,
                   reinforce=False, verbose=False, train=True):
         logging.error('gen_query_train: {0}'.format(train))
-        pred_agg, pred_sel, pred_cond, pred_groupby = pred_entry
-        sel_score, cond_score, groupby_score = score
+        pred_agg, pred_sel, pred_cond, pred_groupby, pred_orderby = pred_entry
+        sel_score, cond_score, groupby_score, orderby_score = score
 
         ret_queries = []
         # if pred_agg:
@@ -984,6 +1026,8 @@ class Seq2SQL(nn.Module):
             B = len(cond_score[0]) if reinforce else len(cond_score)
         elif pred_groupby:
             B = len(groupby_score)
+        elif pred_orderby:
+            B = len(orderby_score)
         for b in range(B):
             cur_query = {}
             # raw_col[b] = [(0, [u'*']), (1, [u'template', u'type', u'code']), \
@@ -1002,8 +1046,10 @@ class Seq2SQL(nn.Module):
                 logging.warning('cur_query_conds: %s', str(cur_query['conds']))
                 logging.warning('cur_query_conj: %s', str(cur_query['conj'])) 
             if pred_groupby:
-                cur_query['group'], cur_query['having'] = self.gen_group_query(col, groupby_score, b, q, raw_col[b], raw_q, train=train)           
-            # print('cur_query', cur_query)
+                cur_query['group'], cur_query['having'] = self.gen_group_query(col, groupby_score, b, q, raw_col[b], raw_q, train=train)
+            if pred_orderby:
+                cur_query['order'], cur_query['limit'] = self.gen_order_query(col, orderby_score, b, q, raw_col[b], raw_q, train=train)           
+            
             ret_queries.append(cur_query)
 
 

@@ -11,6 +11,7 @@ class Type_Pred(Enum):
     cond = 16
     sel = 8 # includes sel + agg
     group = 3 
+    order = 2
 
 
 class WordEmbedding(nn.Module):
@@ -27,8 +28,9 @@ class WordEmbedding(nn.Module):
         self.SEL_SQL_TOK = (len(self.SEL_SQL_TOK), self.SEL_SQL_TOK)
         self.GROUPBY_SQL_TOK = ['GROUPBY', '<END>'] + ['MAX', 'MIN', 'AVG', 'COUNT', 'SUM'] + \
         ['NT', 'BTWN', 'EQL', 'GT', 'LT', 'GTEQL', 'LTEQL', 'NTEQL', 'IN', 'LKE', 'IS', 'XST']
+        self.ORDERBY_SQL_TOK = ['ORDERBY', '<END>'] + self.AGG_SQL_TOK[1] + ['0', '1', 'LIMIT'] # ASC = 1 + 
+        self.ORDERBY_SQL_TOK = (len(self.ORDERBY_SQL_TOK), self.ORDERBY_SQL_TOK)
         self.GROUPBY_SQL_TOK = (len(self.GROUPBY_SQL_TOK), self.GROUPBY_SQL_TOK)
-
 
         if trainable:
             print "Using trainable embedding"
@@ -101,18 +103,6 @@ class WordEmbedding(nn.Module):
             else:
                 q_val = self.get_avg_word_emb(one_q)
                 col_val = self.get_avg_word_emb(one_col)
-                # q_val = []  
-                # for ws in one_q:
-                #     emb_list = []
-                #     ws_len = len(ws)
-                #     for w in ws:
-                #         emb_list.append(self.word_emb.get(w, np.zeros(self.N_word, dtype=np.float32)))
-                #     if ws_len == 0:
-                #         raise Exception("word list should not be empty!")
-                #     elif ws_len == 1:
-                #         q_val.append(emb_list[0])
-                #     else:
-                #         q_val.append(sum(emb_list) / float(ws_len))
 
             if self.trainable:
                 val_embs.append([1] + q_val + [2])  #<BEG> and <END>
@@ -130,9 +120,13 @@ class WordEmbedding(nn.Module):
                     val_embs.append([np.zeros(self.N_word, dtype=np.float32) * self.SEL_SQL_TOK[0]]+ \
                          col_val + [np.zeros(self.N_word, dtype=np.float32)] + 
                     q_val + [np.zeros(self.N_word, dtype=np.float32)])  #<BEG> and <END>
+                elif type_pred == Type_Pred.order:
+                    val_len[i] = self.ORDERBY_SQL_TOK[0] + len(one_col) + 1 + len(one_q) + 1
+                    val_embs.append([np.zeros(self.N_word, dtype=np.float32) * self.ORDERBY_SQL_TOK[0]]+ \
+                         col_val + [np.zeros(self.N_word, dtype=np.float32)] + q_val + [np.zeros(self.N_word, dtype=np.float32)])  #<BEG> and <END>
                 else:
-                    val_len[i] = self.SQL_TOK[0] + len(one_col) + 1 + len(one_q) + 1
-                    val_embs.append([np.zeros(self.N_word, dtype=np.float32) * self.SQL_TOK[0]]+ \
+                    val_len[i] = self.ORDERBY_SQL_TOK[0] + len(one_col) + 1 + len(one_q) + 1
+                    val_embs.append([np.zeros(self.N_word, dtype=np.float32) * self.ORDERBY_SQL_TOK[0]]+ \
                           col_val + [np.zeros(self.N_word, dtype=np.float32)] + \
                     q_val + [np.zeros(self.N_word, dtype=np.float32)])  #<BEG> and <END>
 

@@ -44,7 +44,7 @@ class Seq2SQLSubSeqPredictor(nn.Module):
         for b, one_tok_seq in enumerate(tok_seq):
             # print('one_tok_seq', one_tok_seq)
             out_one_tok_seq = one_tok_seq[:-1] if gen_inp else one_tok_seq[1:]
-            logging.warning('generated_gt_sel_decoder_seq {0}'.format(out_one_tok_seq))
+            # logging.warning('generated_gt_sel_decoder_seq {0}'.format(out_one_tok_seq))
             # print ('out_one_tok_seq', out_one_tok_seq)
             for t, tok_id in enumerate(out_one_tok_seq):
                 ret_array[b, t, tok_id] = 1
@@ -72,7 +72,7 @@ class Seq2SQLSubSeqPredictor(nn.Module):
         # print('decoder_hidden[1].size()', decoder_hidden[1].size())
         if gt_index_seq is not None:
             logging.info('gold sequence provided')
-            logging.info('gt_sel_gt_index_seq {0}'.format(gt_index_seq))
+            # logging.info('gt_sel_gt_index_seq {0}'.format(gt_index_seq))
             gt_tok_seq, gt_tok_len = self.gen_gt_batch(gt_index_seq, gen_inp=True) # get rid of <SELECT>
             # print('gt_index_seq', gt_tok_seq)
             # gt_tok_seq: SELECT_index agg_index , col_index ... last_col_index
@@ -91,7 +91,7 @@ class Seq2SQLSubSeqPredictor(nn.Module):
                     self.seq_out_g(g_s_expand) ).squeeze()
             if len(seq_score.size()) == 2:
                 seq_score = seq_score.unsqueeze(1)
-                logging.info('new seq_score.size() {0}'.format(seq_score.size()))
+                # logging.info('new seq_score.size() {0}'.format(seq_score.size()))
             # print('seq_score.size()', seq_score.size())
             for idx, num in enumerate(x_len):
                 if num < max_x_len and len(seq_score.size()) > 2:
@@ -151,7 +151,7 @@ class Seq2SQLSubSeqPredictor(nn.Module):
                 t += 1
 
             seq_score = torch.stack(scores, 1)
-            logging.warning('seq_score.size()" {0}'.format(seq_score.size()))
+            # logging.warning('seq_score.size()" {0}'.format(seq_score.size()))
 
         if reinforce:
             return seq_score, choices

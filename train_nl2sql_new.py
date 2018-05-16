@@ -49,22 +49,15 @@ if __name__ == '__main__':
         USE_SMALL=True
         GPU=True
         BATCH_SIZE=40
-    TRAIN_ENTRY=(False, False, False, True)  # (AGG, SEL, COND, GROUPBY) 
-    TRAIN_AGG, TRAIN_SEL, TRAIN_COND, TRAIN_GROUPBY = TRAIN_ENTRY
+    TRAIN_ENTRY=(True, True, True, True, True)  # (AGG, SEL, COND, GROUPBY, ORDERBY) 
+    TRAIN_AGG, TRAIN_SEL, TRAIN_COND, TRAIN_GROUPBY, TRAIN_ORDERBY = TRAIN_ENTRY
     learning_rate = 1e-4 if args.rl else 1e-3
 
     logging.warning('about to load dataset')
     sql_data, table_data, val_sql_data, val_table_data, test_sql_data, test_table_data = load_dataset(args.dataset, use_small=USE_SMALL)
-    if args.toy:
-        # sql_data = sql_data[40:50]
-        # val_sql_data = val_sql_data[40:50]        
+    if args.toy:       
         sql_data = sql_data[0:400]
         val_sql_data = val_sql_data
-    # logging.warning(json.dumps(sql_data, indent=4))
-    # logging.warning(json.dumps(val_sql_data, indent=4))
-    # logging.warning(json.dumps(sql_data, indent=4))
-    # logging.warning('------')
-    # logging.warning(json.dumps(val_sql_data, indent=4))
 
     logging.warning('data loaded')
     word_emb = load_word_emb('glove/glove.%dB.%dd.txt'%(B_word,N_word), \
@@ -141,6 +134,10 @@ if __name__ == '__main__':
         best_group_idx = 0
         best_having_acc = init_acc[1][4]
         best_having_idx = 0
+        best_order_acc = init_acc[1][5]
+        best_order_idx = 0
+        best_limit_acc = init_acc[1][6]
+        best_limit_idx = 0
         # accuracy breakdowns
         # best_agg_num_acc = init_acc[2][0][0]
         # best_agg_num_idx = 0
@@ -174,11 +171,15 @@ if __name__ == '__main__':
             torch.save(model.groupby_pred.state_dict(), cond_m)
             if args.train_emb:
                 torch.save(model.groupby_embed_layer.state_dict(), cond_e)
+        if TRAIN_ORDERBY:
+            torch.save(model.groupby_pred.state_dict(), cond_m)
+            if args.train_emb:
+                torch.save(model.groupby_embed_layer.state_dict(), cond_e)
         loss = 100
 
         EPOCH_NUM = args.train_num
-        train_acc = np.zeros((EPOCH_NUM + 1, 6)) #(100, 5) = (Epoch_num, accuracy) accuracy = (Total, Agg, Sel, Cond, Group)
-        dev_acc = np.zeros((EPOCH_NUM + 2, 6)) 
+        train_acc = np.zeros((EPOCH_NUM + 1, 8)) #(100, 5) = (Epoch_num, accuracy) accuracy = (Total, Agg, Sel, Cond, Group)
+        dev_acc = np.zeros((EPOCH_NUM + 2, 8)) 
         # last row = best accuracy!!
         dev_acc[0,0] = init_acc[0]
         dev_acc[0, 1:] = init_acc[1]
@@ -222,72 +223,49 @@ if __name__ == '__main__':
                 if val_acc_indiv[1] > best_sel_acc:
                     best_sel_acc = val_acc_indiv[1]
                     best_sel_idx = i + 1
-                    # torch.save(model.sel_pred.state_dict(),
-                    #     'saved_model/epoch%d.sel_model%s'%(i+1, args.suffix))
-                    # torch.save(model.sel_pred.state_dict(), sel_m)
-                    # if args.train_emb:
-                    #     torch.save(model.sel_embed_layer.state_dict(),
-                    #     'saved_model/epoch%d.sel_embed%s'%(i+1, args.suffix))
-                    #     torch.save(model.sel_embed_layer.state_dict(), sel_e)
-                # sel_acc = val_acc[2][1]
-                # if sel_acc[0] > best_sel_num_acc:
-                #     best_sel_num_acc = sel_acc[0]
-                #     best_sel_num_idx = i+1
-                # if sel_acc[1] > best_sel_col_acc:
-                #     best_sel_col_acc = sel_acc[1]
-                #     best_sel_col_idx = i+1
+
             if TRAIN_COND:
                 if val_acc_indiv[2] > best_cond_acc:
                     best_cond_acc =  val_acc_indiv[2]
                     best_cond_idx = i + 1 
  
-                    # torch.save(model.cond_pred.state_dict(),
-                    #     'saved_model/epoch%d.cond_model%s'%(i+1, args.suffix))
-                    # torch.save(model.cond_pred.state_dict(), cond_m)
-                    # if args.train_emb:
-                    #     torch.save(model.cond_embed_layer.state_dict(),
-                    #     'saved_model/epoch%d.cond_embed%s'%(i+1, args.suffix))
-                # cond_acc = val_acc[2][2]
-                # if cond_acc[0] > best_cond_num_acc:
-                #     best_cond_num_acc = cond_acc[0]
-                #     best_cond_num_idx = i+1
-                # if cond_acc[1] > best_cond_op_acc:
-                #     best_cond_op_acc = cond_acc[1]
-                #     best_cond_op_idx = i+1
-                # if cond_acc[2] > best_cond_col_acc:
-                #     best_cond_col_acc = cond_acc[2]
-                #     best_cond_col_idx = i+1
+
             if TRAIN_GROUPBY:
                 if val_acc_indiv[3] > best_group_acc:
                     best_group_acc = val_acc_indiv[3]
                     best_group_idx = i + 1 
- 
-                    # torch.save(model.group_pred.state_dict(),
-                    #     'saved_model/epoch%d.group_model%s'%(i+1, args.suffix))
-                    # torch.save(model.group_pred.state_dict(), cond_m)
+
                 if val_acc_indiv[4] > best_having_acc:
                     best_having_acc = val_acc_indiv[4]
                     best_having_idx = i + 1 
 
-            os.environ["EPOCH"] = "{0}".format(i)
-            print('\a')
+            if TRAIN_ORDERBY:
+                if val_acc_indiv[5] > best_order_acc:
+                    best_order_acc = val_acc_indiv[5]
+                    best_order_idx = i + 1
+                if val_acc_indiv[6] > best_limit_acc:
+                    best_limit_acc = val_acc_indiv[6]
+                    best_limit_idx = i + 1
+
 
   
         logging.error('Best_agg_acc = %s on epoch %s ', str(best_agg_acc), str(best_agg_idx))
         logging.error('best_sel_acc = %s on epoch %s ', str(best_sel_acc), str(best_sel_idx))
         logging.error('best_cond_acc = %s on epoch %s ', str(best_cond_acc), str(best_cond_idx))
         logging.error('best_group_acc = %s on epoch %s ', str(best_group_acc), str(best_group_idx))
-        logging.error('best_group_acc = %s on epoch %s ', str(best_having_acc), str(best_having_acc))
+        logging.error('best_having_acc = %s on epoch %s ', str(best_having_acc), str(best_having_idx))
+        logging.error('best_orderby_acc = %s on epoch %s ', str(best_order_acc), str(best_order_idx))
+        logging.error('best_limit_acc = %s on epoch %s ', str(best_limit_acc), str(best_limit_idx))
         with open('results_train.csv', 'wb') as csvfile:
             spamwriter = csv.writer(csvfile, delimiter=' ',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            spamwriter.writerow(['total', 'agg', 'sel', 'cond', 'group', 'having'])
+            spamwriter.writerow(['total', 'agg', 'sel', 'cond', 'group', 'having', 'orderby', 'limit'])
             for row in train_acc:
                 spamwriter.writerow(row)
         with open('results_dev.csv', 'wb') as csvfile_new:
             new_writer = csv.writer(csvfile_new, delimiter=' ',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            new_writer.writerow(['total', 'agg', 'sel', 'cond', 'group', 'having'])
+            new_writer.writerow(['total', 'agg', 'sel', 'cond', 'group', 'having', 'orderby', 'limit'])
             for row in dev_acc:
                 new_writer.writerow(row)
 

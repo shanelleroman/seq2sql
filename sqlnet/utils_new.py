@@ -226,8 +226,6 @@ def to_batch_seq(sql_data, table_data, idxes, st, ed, ret_vis_data=False):
         tab_cols = [col[1].split(' ') for col in table['col_map']]
         tab_col_indices = [(i, col[1].split(' ')) for i, col in enumerate(table['col_map'])]
         col_seq.append(tab_cols)
-        logging.warning('sql_group: {0}'.format(sql['group']))
-        logging.warning('sql_query_tok: {0}'.format(sql['query_tok']))
         ans_seq.append((sql['agg'], #index 0
             sql['sel'], # index 1
             len(sql['cond']), # index 2
@@ -237,10 +235,11 @@ def to_batch_seq(sql_data, table_data, idxes, st, ed, ret_vis_data=False):
             sql['group'][:-1], # index 6 = group         
             len(sql['group']) - 1,   # index 7 - not really sure   
             sql['group'][-1], # index 8
-            sql['order'][0],            
-            sql['order'][1],            
+            sql['order'][0], # index 9 = AGG_ORDER            
+            sql['order'][1], # index 10 = COL_ORDER           
             len(sql['order'][1]),       
-            sql['order'][2]             
+            sql['order'][2], # index 12 = ASC / DESC 
+            sql['limit']
             ))
 
 
@@ -298,8 +297,8 @@ def epoch_train_old(model, optimizer, batch_size, sql_data, table_data, pred_ent
 def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
     logging.info('method epoch_train')
     model.train()
-    # perm=np.random.permutation(len(sql_data))
-    perm = list(range(len(sql_data)))
+    perm=np.random.permutation(len(sql_data))
+    # perm = list(range(len(sql_data)))
     cum_loss = 0.0
     st = 0
     while st < len(sql_data):
@@ -313,16 +312,18 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
         # raw_col_seq = [x[1] for x in raw_data] 
 
         # logging.warning('gt_cond_seq: {0}'.format(gt_cond_seq))
-        # gt_where_seq = model.generate_gt_where_seq(q_seq, col_seq, gt_cond_seq)
-        gt_where_seq = None
-        gt_sel_seq = None
+        gt_where_seq = model.generate_gt_where_seq(q_seq, col_seq, gt_cond_seq)
 
-        # gt_sel_seq = model.generate_gt_sel_seq(q_seq, col_seq, query_seq, ans_seq)
-        # gt_groupby_seq = None
+
+
+        gt_sel_seq = model.generate_gt_sel_seq(q_seq, col_seq, query_seq, ans_seq)
+
         gt_groupby_seq = model.generate_gt_group_seq(q_seq, col_seq, query_seq, ans_seq)
+        gt_orderby_seq = model.generate_gt_order_seq(q_seq, col_seq, query_seq, ans_seq)
+
         score = model.forward(q_seq, col_seq, col_num, pred_entry,
-                gt_where=gt_where_seq, gt_cond=gt_cond_seq, gt_sel=gt_sel_seq, gt_groupby=gt_groupby_seq)
-        loss = model.loss(score, ans_seq, pred_entry, gt_where_seq, gt_sel_seq, gt_groupby_seq)
+                gt_where=gt_where_seq, gt_cond=gt_cond_seq, gt_sel=gt_sel_seq, gt_groupby=gt_groupby_seq, gt_orderby=gt_orderby_seq)
+        loss = model.loss(score, ans_seq, pred_entry, gt_where_seq, gt_sel_seq, gt_groupby_seq, gt_orderby_seq)
         cum_loss += loss.data.cpu().numpy()[0]*(ed - st)
         optimizer.zero_grad()
         loss.backward()
@@ -332,16 +333,20 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
     return cum_loss / len(sql_data)
 
 
+    # logging.error('first_pred_query: {0}'.format(pred_queries[0]))
+    # exit(1)
+
+
 def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry, train=True):
     logging.info('epoch_acc_new')
 
     model.eval()
     # print ('perm', perm)\
-    # perm=np.random.permutation(len(sql_data))
-    perm = list(range(len(sql_data)))
+    perm=np.random.permutation(len(sql_data))
+    # perm = list(range(len(sql_data)))
     # loggig.warning('len sql: %d', len(sql_data))
     st = 0
-    one_acc = np.zeros((2,5)) # row 1 = acc_count, row 2 = tot_count
+    one_acc = np.zeros((2,7)) # row 1 = acc_count, row 2 = tot_count
     tot_acc= np.zeros(2) #  1 = acc_count, 2 = tot_count
     tot_acc_count = 0.0
     acc_num_breakdown = 0.0
@@ -349,7 +354,7 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry, train=Tru
         ed = st+batch_size if st+batch_size < len(perm) else len(perm)
 
         q_seq, col_seq, col_num, ans_seq, query_seq, gt_cond_seq, raw_data = to_batch_seq(sql_data, table_data, perm, st, ed, ret_vis_data=True)
-        # raw_data = (_, (col_index, [col_tok_1, col_tok_2]), _)
+ 
         if len(q_seq) == 0:
             break
         raw_q_seq = [x[0] for x in raw_data]
@@ -363,24 +368,15 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry, train=Tru
                 raw_q_seq, raw_col_seq, pred_entry, train=train) # is this the decoder portion??
 
         ind_cor, tot_cor, _ = model.check_acc(raw_data, pred_queries, query_gt, pred_entry)
+        model.generate_SQL_query(pred_queries, perm, sql_data, table_data, st, ed, table_ids)
 
 
-        # change to 
-        '''
-        (one_num_cor, total counted_arr),(tot_num_corr, total_counted), (corr_breakdown, that array repeated) = just keep track of the number correct
-        '''
-
-        # one_acc_num += (ed-st-one_err) # 5 - 0 - 2
         # tot_acc_num += (ed-st-tot_err)
         one_acc[0,:] += ind_cor[0,:] # total number correct
         one_acc[1,:] += ind_cor[1, :] # total number counted
         tot_acc[0] += tot_cor[0]
         tot_acc[1] += tot_cor[1]
-        # # acc_num_breakdown += (ed-st-err_breakdown)
-        # logging.debug('one_acc_num: {0}'.format(one_acc_num)) # should be 3
-        # logging.debug('tot_acc_num: {0}'.format(tot_acc_num))
-        # logging.warning('acc_num_breakdown: {0}'.format(acc_num_breakdown))
-        # exit(1)
+
 
         st = ed
 
@@ -389,6 +385,7 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry, train=Tru
     logging.error('acc_percent: {0}, acc_percent_sp: {1}'.format(total_acc_percent, one_acc_percent))
     return total_acc_percent,  one_acc_percent, 0
     return tot_acc_num / len(sql_data), one_acc_num / len(sql_data), acc_num_breakdown / len(sql_data)
+
 
 
 def epoch_acc(model, batch_size, sql_data, table_data, pred_entry, error_print=False, train_flag = False):
@@ -562,12 +559,7 @@ def process(sql_data, table_data):
                 sql_temp['cond'].append(curr_cond)
 
         sql_temp['conj'] = [gt_cond[x] for x in range(len(gt_cond)) if x % 2 == 1]
-        # logging.warning('process')
-        # logging.warning('sql: {0}'.format(json.dumps(gt_cond, indent=4)))
-        # logging.warning('sql_temp: {0}'.format(json.dumps(sql_temp, indent=4)))
 
-        # process group by / having
-        # logging.warning('sql_groupby: {0}'.format(sql['sql']['groupby']))
         sql_temp['group'] = [x[1] for x in sql['sql']['groupby']]
         having_cond = []
         if len(sql['sql']['having']) > 0:
@@ -595,6 +587,7 @@ def process(sql_data, table_data):
             else:
                 order_par = 0
         sql_temp['order'] = [order_aggs, order_cols, order_par]
+        sql_temp['limit'] = sql['sql']['limit']
 
         # process intersect/except/union
         sql_temp['special'] = 0
