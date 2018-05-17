@@ -56,8 +56,8 @@ if __name__ == '__main__':
     logging.warning('about to load dataset')
     sql_data, table_data, val_sql_data, val_table_data, test_sql_data, test_table_data = load_dataset(args.dataset, use_small=USE_SMALL)
     if args.toy:       
-        sql_data = sql_data[0:400]
-        val_sql_data = val_sql_data
+        sql_data = sql_data[0:300]
+        val_sql_data = val_sql_data[0:300]
 
     logging.warning('data loaded')
     word_emb = load_word_emb('glove/glove.%dB.%dd.txt'%(B_word,N_word), \
@@ -119,7 +119,7 @@ if __name__ == '__main__':
             logging.info(' Best exec acc = %s, on epoch %s'%(best_acc, best_idx))
     else:
         logging.warning('about to call epoch_acc_new')
-        init_acc = epoch_acc_new(model, BATCH_SIZE,
+        init_acc, sql_queries = epoch_acc_new(model, BATCH_SIZE,
                 val_sql_data, val_table_data, TRAIN_ENTRY, train=False)
         logging.warning('init_acc: %s', str(init_acc))
 
@@ -153,7 +153,7 @@ if __name__ == '__main__':
         # best_cond_col_idx = 0
         # best_cond_op_acc = init_acc[2][2][2]
         # best_cond_op_idx = 0
-        logging.warning('Init dev acc_qm: %s\n  breakdown on (agg, sel, where): %s futher breakdown %s' % init_acc)
+        logging.warning('Init dev acc_qm: %s\n  breakdown on (agg, sel, where): %s futher breakdown' % init_acc)
 
         if TRAIN_AGG:
             torch.save(model.agg_pred.state_dict(), agg_m)
@@ -183,13 +183,17 @@ if __name__ == '__main__':
         # last row = best accuracy!!
         dev_acc[0,0] = init_acc[0]
         dev_acc[0, 1:] = init_acc[1]
-
+        generate_sql_query = False
         for i in range(EPOCH_NUM):
             logging.error('Epoch %d @ %s'%(i+1, datetime.datetime.now()))
             logging.error(' Loss = %s'%epoch_train(
                     model, optimizer, BATCH_SIZE, 
                     sql_data, table_data, TRAIN_ENTRY))
-            train_acc_tot, train_acc_indiv, _ = epoch_acc_new(model, BATCH_SIZE, sql_data, table_data, TRAIN_ENTRY) # train=True
+            if i == EPOCH_NUM -1:
+                generate_sql_query  = True
+            train_acc_returned, sql_queries = epoch_acc_new(model, BATCH_SIZE, sql_data, table_data, TRAIN_ENTRY, generate_SQL_query=generate_sql_query) # train=True
+            train_acc_tot = train_acc_returned[0]
+            train_acc_indiv = train_acc_returned[1]
             logging.error(' Train acc_qm: %s\n   breakdown result: %s'% (train_acc_tot, train_acc_indiv))
             logging.error('-------------')
             logging.error('validation acc!')
@@ -197,7 +201,7 @@ if __name__ == '__main__':
             train_acc[i,0] = train_acc_tot
             train_acc[i,1:] = train_acc_indiv
 
-            val_acc_tot, val_acc_indiv, _ = epoch_acc_new(model,
+            (val_acc_tot, val_acc_indiv),  _ = epoch_acc_new(model,
                     BATCH_SIZE, val_sql_data, val_table_data, TRAIN_ENTRY, train=False)
             dev_acc[i + 1,0] = val_acc_tot
             dev_acc[i + 1, 1:] = val_acc_indiv
@@ -268,6 +272,10 @@ if __name__ == '__main__':
             new_writer.writerow(['total', 'agg', 'sel', 'cond', 'group', 'having', 'orderby', 'limit'])
             for row in dev_acc:
                 new_writer.writerow(row)
+
+        with open('predicted.sql', 'wb') as file:
+            for sql_query in sql_queries:
+                file.write(sql_query + '\n')
 
 
         print('\a')

@@ -3,6 +3,7 @@ import io
 import json
 import numpy as np
 import os
+import csv
 import logging
 #from lib.dbengine import DBEngine
 
@@ -255,12 +256,16 @@ def to_batch_seq(sql_data, table_data, idxes, st, ed, ret_vis_data=False):
 def to_batch_query(sql_data, idxes, st, ed):
     query_gt = []
     table_ids = []
+    correct_sql_queries = []
     for i in range(st, ed):
         # query_gt.append(sql_data[idxes[i]]['sql1'])
         # query_gt.append(sql_data[idxes[i]]['sql'])
         query_gt.append(sql_data[idxes[i]])
         table_ids.append(sql_data[idxes[i]]['table_id'])
-    return query_gt, table_ids
+        correct_sql_queries.append(sql_data[idxes[i]]['query_tok'])
+
+
+    return query_gt, table_ids, correct_sql_queries
 
 
 def epoch_train_old(model, optimizer, batch_size, sql_data, table_data, pred_entry):
@@ -337,7 +342,7 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
     # exit(1)
 
 
-def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry, train=True):
+def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry, train=True, generate_SQL_query=False):
     logging.info('epoch_acc_new')
 
     model.eval()
@@ -350,6 +355,8 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry, train=Tru
     tot_acc= np.zeros(2) #  1 = acc_count, 2 = tot_count
     tot_acc_count = 0.0
     acc_num_breakdown = 0.0
+    sql_queries = []
+    logging.error('generate_SQL_query: {0}'.format(generate_SQL_query))
     while st < len(sql_data):
         ed = st+batch_size if st+batch_size < len(perm) else len(perm)
 
@@ -359,7 +366,7 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry, train=Tru
             break
         raw_q_seq = [x[0] for x in raw_data]
         raw_col_seq = [x[1] for x in raw_data] # [(col_index, [col_tok_1, col_tok_2]), (col_index, [col_tok_1, col_tok_2])]
-        query_gt, table_ids = to_batch_query(sql_data, perm, st, ed)
+        query_gt, table_ids, correct_sql_queries = to_batch_query(sql_data, perm, st, ed)
 
         score = model.forward(q_seq, col_seq, col_num,
                 pred_entry)
@@ -368,7 +375,25 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry, train=Tru
                 raw_q_seq, raw_col_seq, pred_entry, train=train) # is this the decoder portion??
 
         ind_cor, tot_cor, _ = model.check_acc(raw_data, pred_queries, query_gt, pred_entry)
-        model.generate_SQL_query(pred_queries, perm, sql_data, table_data, st, ed, table_ids)
+        if generate_SQL_query:
+            sql_queries.extend(model.generate_SQL_query(pred_queries, perm, sql_data, table_data, st, ed, table_ids, correct_sql_queries))
+            logging.error('appended for sql_queries- not empty {0}'.format(sql_queries))
+            if os.path.exists('pred_results_itemized.csv'):
+                mode = 'a'
+            else:
+                mode = 'w'
+            with open('pred_results_itemized.csv', mode) as csvfile:
+                spamwriter = csv.writer(csvfile, delimiter=' ',
+                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                if mode == 'w':
+                    spamwriter.writerow(['agg', 'sel', 'cond', 'group', 'having', 'orderby', 'limit'])
+                for query in pred_queries:
+                    row = [query['agg'], query['sel'], query['conds'], query['group'], query['having'], query['order'], query['limit']]
+                    spamwriter.writerow(row)
+
+
+
+
 
 
         # tot_acc_num += (ed-st-tot_err)
@@ -383,7 +408,7 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry, train=Tru
     total_acc_percent = np.divide(tot_acc[0], tot_acc[1], out=np.zeros_like(tot_acc[0]), where=tot_acc[1]!=0)
     one_acc_percent = np.divide(one_acc[0, :], one_acc[1,:], out=np.zeros_like(one_acc[0, :]), where=one_acc[1,:]!=0)
     logging.error('acc_percent: {0}, acc_percent_sp: {1}'.format(total_acc_percent, one_acc_percent))
-    return total_acc_percent,  one_acc_percent, 0
+    return (total_acc_percent,  one_acc_percent), sql_queries
     return tot_acc_num / len(sql_data), one_acc_num / len(sql_data), acc_num_breakdown / len(sql_data)
 
 
@@ -515,6 +540,9 @@ def process(sql_data, table_data):
         table = table_data[i]
         temp = {}
         temp['col_map'] = table['column_names']
+        temp['foreign_keys'] = table['foreign_keys']
+        temp['column_names_original'] = table['column_names_original']
+        temp['table_names'] = table['table_names_original']
 
         db_name = table['db_id']
         # print table

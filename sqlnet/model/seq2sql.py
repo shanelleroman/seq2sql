@@ -69,6 +69,7 @@ class Seq2SQL(nn.Module):
         self.GROUPBY_SQL_TOK = ['GROUPBY', '<END>'] + self.AGG_SQL_TOK + \
         ['NT', 'BTWN', 'EQL', 'GT', 'LT', 'GTEQL', 'LTEQL', 'NTEQL', 'IN', 'LKE', 'IS', 'XST']
         self.ORDERBY_SQL_TOK = ['ORDERBY', '<END>'] + self.AGG_SQL_TOK + ['0', '1', 'LIMIT']
+        self.ORDER_ASC_DESC = ['0', '1']
         self.COND_OPS = ['NT', 'BTWN', 'EQL', 'GT', 'LT', 'GTEQL', 'LTEQL', 'NTEQL', 'IN', 'LKE', 'IS', 'XST']
 
         #Word embedding
@@ -116,21 +117,291 @@ class Seq2SQL(nn.Module):
         if gpu:
             self.cuda()
 
-    def generate_SQL_query(pred_queries, idxes, sql_data, table_data, st, end, table_ids):
-        # logging.error('pred_queries[0]: {0}'.format(pred_queries[0]))
-        # logging.error('table_id[0]: {0}'.format(table_ids[0]))
-        # logging.error('table_data: {0}'.format(json.dumps(table_data[table_ids[0]]['table_data'], indent=4)))
-        # # generate SELECT
-        # database_info = table_data[table_ids[0]]
-        # query = pred_queries[0]
-        # sql_query  = 'SELECT'
-        # for i, x in enumerate(query['agg']):
-        #     if x != 0:
-        #         sql_query += ' ' + self.AGG_SQL_TOK[x]
-        #     sql_query += ' ' + database_info['col_map'][query['sel'][i]]
-        # logging.error('sql_query: {0}'.format(sql_query)) 
-        # exit(1)
-        pass
+    def generate_SQL_query(self, pred_queries, idxes, sql_data, table_data, st, end, table_ids, gt_queries):
+        sql_queries = []
+        # SELECT & AGG component
+        logging.error('len_pred_queries: {0}'.format(len(pred_queries)))
+
+        for i in range(len(pred_queries)):
+            database_info = table_data[table_ids[i]]
+            logging.error('database_info: {0}'.format(json.dumps(database_info)))
+            query = pred_queries[i]
+            sql_query  = ['SELECT']
+            table_names = set()
+            table_names_to_indices = {}
+            table_indices_to_names = {}
+            selection_indices = {} # index_sql_query : column_index 
+            for i, x in enumerate(query['sel']):
+                try:
+                    if query['agg'][i] != 0 :
+                        
+                        sql_query.append(self.AGG_SQL_TOK[query['agg'][i]])
+                        sql_query.append('(')
+                except IndexError:
+                    logging.warning('unequal number of agg and select')
+                    sql_queries.append(' '.join(sql_query))
+                    continue
+                try:
+                    sql_query.append(database_info['column_names_original'][x][1])
+                    sql_query.append(')')
+                    sql_query.append(',')
+                except Exception as e:
+                    logging.error('Error: appending as is: {0}'.format(e))
+                    # sql_queries.append(' '.join(sql_query))
+                    # continue
+
+
+                # information for join
+                selection_indices[sql_query.index(database_info['column_names_original'][x][1])] = x
+                table_name = database_info['table_names'][database_info['column_names_original'][x][0]]
+                table_names.add(table_name)
+                table_index = database_info['column_names_original'][x][0]
+                table_names_to_indices[table_name] = table_index
+                table_indices_to_names[table_index] = table_name
+            logging.error('after SELECT: {0}'.format(sql_query))
+            logging.error('table_names: {0}'.format(table_names))
+            if not query['sel']:
+                sql_queries.append(' '.join(sql_query))
+                continue
+            logging.error('query_before_delete: {0}'.format(sql_query))
+            if len(sql_query) > 1:
+                sql_query = sql_query[:-1] # get rid of ,
+            logging.error('query_after_delete: {0}'.format(sql_query))
+
+            
+
+            t_count = 0
+            
+            try:
+                sql_query.append('FROM')
+                table_name = table_names.pop()
+                sql_query.append(table_name)
+            except Exception as e:
+                logging.error('Error appending as is: {0}'.format(e))
+                # sql_queries.append(' '.join(sql_query))
+                # continue
+
+            index_join = len(sql_query) - 1
+            
+
+
+
+            # WHERE component 
+            
+            if query['conds']:
+                sql_query.append('WHERE')
+                try:
+                    for i, cond in enumerate(query['conds']):
+                        if cond[0] >= 0:
+                            sql_query.append(database_info['column_names_original'][cond[0]][1])
+                        if cond[1] != 15 and cond[1] >= 0: 
+                            sql_query.append(self.COND_OPS[cond[1]]) 
+                        if sql_query[:-1] != 'WHERE':
+                            sql_query.append('UNKNOWN_VALUE')
+
+                        x = cond[0]
+                        logging.error('x: {0}'.format(cond[0]))
+                        logging.error('database_info')
+                        # information for join
+                        selection_indices[sql_query.index(database_info['column_names_original'][x][1])] = x
+                        table_name = database_info['table_names'][database_info['column_names_original'][x][0]]
+                        table_names.add(table_name)
+                        table_index = database_info['column_names_original'][x][0]
+                        table_names_to_indices[table_name] = table_index
+                        table_indices_to_names[table_index] = table_name
+
+                        # get the conjunction
+                        if query['conj'] and i % 2 == 1:
+                            sql_query.append(query['conj'][i - 1])
+                    if sql_query[-1] == 'WHERE':
+                        sql_query = sql_query[:-1]
+                except Exception as e:
+                    logging.error('Error appending as is {0}'.format(e))
+                    # sql_queries.append(' '.join(sql_query))
+                    # continue
+
+            # GROUPBY component 
+            if query['group']:
+                sql_query.append('GROUP BY')
+                try:
+                    for x in query['group']:
+                        if x >= 0:
+                            sql_query.append(database_info['column_names_original'][x][1])
+                            sql_query.append(',')
+
+                        selection_indices[sql_query.index(database_info['column_names_original'][x][1])] = x
+                        table_name = database_info['table_names'][database_info['column_names_original'][x][0]]
+                        table_names.add(table_name)
+                        table_index = database_info['column_names_original'][x][0]
+                        table_names_to_indices[table_name] = table_index
+                        table_indices_to_names[table_index] = table_name
+                    if len(query['group']) > 0:
+                        sql_query = sql_query[:-1]
+                except Exception as e:
+                    logging.error('Error appending as is {0}'.format(e))
+                    # sql_queries.append(' '.join(sql_query))
+                    # continue
+
+            # HAVING component
+            if query['having']:
+                sql_query.append('HAVING')
+                try:
+                    if query['having'][0] != 0:
+                        
+                        sql_query.append(self.AGG_SQL_TOK.index(query['having'][0])) # AGG SQL tok
+                        sql_query.append('(')
+                        
+
+                    # append columnn name
+                    x = query['having'][1]
+                    if x >= 0:
+                        sql_query.append(database_info['column_names_original'][x][1])  # SEL SQL tok
+                        sql_query.append(')')
+
+                    # join info
+                    selection_indices[sql_query.index(database_info['column_names_original'][x][1])] = x
+                    table_name = database_info['table_names'][database_info['column_names_original'][x][0]]
+                    table_names.add(table_name)
+                    table_index = database_info['column_names_original'][x][0]
+                    table_names_to_indices[table_name] = table_index
+                    table_indices_to_names[table_index] = table_name
+                    
+                    sql_query.append(self.COND_OPS.index(query['having'][2])) # COND_OPS tok
+                    sql_query.apppend('UNKNOWN_VALUE')
+                except Exception as e:
+                    logging.error('Error appending as is {0}'.format(e))
+                    # logging.error(e)
+                    # sql_queries.append(' '.join(sql_query))
+                    # continue
+
+            # ORDERBY component
+            if query['order'][2] >= 0:
+                sql_query.append('ORDER BY')
+                try:
+                    for i, x in enumerate(self.SEL_SQL_TOK):
+                        try:
+                            if query['order'][0][i] != 0:
+                                
+                                sql_query.append(self.AGG_SQL_TOK.index(query['order'][0][i])) # AGG SQL tok
+                                sql_query.append('(')
+
+                        except:
+                            pass
+
+                        # append columnn name
+                        for x in query['order'][1]:
+                            if x >= 0:
+                                sql_query.append(database_info['column_names_original'][x][1])
+                                sql_query.append(')')  # SEL SQL tok
+
+                            # join info
+                            selection_indices[sql_query.index(database_info['column_names_original'][x][1])] = x
+                            table_name = database_info['table_names'][database_info['column_names_original'][x][0]]
+                            table_names.add(table_name)
+                            table_index = database_info['column_names_original'][x][0]
+                            table_names_to_indices[table_name] = table_index
+                            table_indices_to_names[table_index] = table_name
+
+                        # ORDER
+                        sql_query.append(self.ORDER_ASC_DESC.index(query['order'][2]))
+                except Exception as e:
+                    logging.error('Error appending as is {0}'.format(e))
+                    # logging.error(e)
+                    # sql_queries.append(' '.join(sql_query))
+                    # continue
+
+            # LIMIT component
+            if query['limit']:
+                sql_query.append('LIMIT 1')   
+            if len(table_names) > 1:
+                t_count = 1
+            logging.error('about to implement join part')
+            logging.error('t_count: {0}'.format(t_count))
+            logging.error('sql_query: {0}'.format(sql_query))
+            logging.error('table_names: {0}'.format(table_names))
+            database_links  = {}
+            database_to_foreign_keys = {}
+            try:
+                for item in database_info['foreign_keys']:
+     
+                    tok_0 = database_links.get(database_info['col_map'][item[0]][0], set())
+
+                    tok_0.add(database_info['col_map'][item[1]][0])
+                    logging.error('tok_0 : {0}'.format(tok_0))
+                    database_links[database_info['col_map'][item[0]][0]] = tok_0.copy()
+                    logging.error('key: {0}'.format(database_info['col_map'][item[0]][0]))
+                    logging.error(database_links)
+
+                    
+                    tok_1 = database_links.get(database_info['col_map'][item[1]][0], set())
+                    tok_1.add(database_info['col_map'][item[0]][0])
+                    database_links[database_info['col_map'][item[1]][0]] =  tok_1.copy()
+                    logging.error('tok_1: {0}'.format(tok_1))
+                    logging.error('key: {0}'.format(database_info['col_map'][item[1]][0]))
+                    logging.error(database_links)
+                    logging.error('tok_0: {0}, tok_1: {1}, item_0: {2}, item_1: {3}'.format(tok_0, tok_1, item[0], item[1]))
+                    database_to_foreign_keys[(tok_0.pop(), tok_1.pop())] = (item[0], item[1])
+                    # database indices -> column indices             
+                logging.error('database_links: {0}'.format(database_links))
+                logging.error('database_to_foreign_keys: {0}'.format(database_to_foreign_keys))
+                logging.error('foreign_keys: {0}'.format(database_info['foreign_keys']))
+
+
+
+
+                # JOIN
+                t_index_to_table_name = [None]
+                join_query = []
+                if t_count != 0:
+                    join_query.append('AS')
+                    join_query.append('T1')
+                    t_index_to_table_name.append(table_name)
+                    logging.error('table_name: {0}'.format(table_name))
+                    logging.error('table_names_to_indices: {0}'.format(table_names_to_indices))
+
+                    # implement joins
+                    joined_indices = database_links[table_names_to_indices[table_name]]
+                    joined_names = [table_indices_to_names[x] for x in joined_indices]
+                    table_names.remove(table_name)
+                    while table_names:
+                        join_query.append('JOIN')
+                        # choose an intersect column name
+                        possible_joins = set.intersect(table_names, joined_names)
+                        second_table_name = possible_joins.pop()
+                        table_names.remove(second_table_name)
+                        t_index_to_table_name.append(second_table_name)
+
+                        t_count += 1
+                        join_query.append(second_table_name)
+                        join_query.append('AS')
+                        join_query.append('T{0}'.format(t_count))
+                        join_query.append('ON')
+                        # join pair
+                        column_1_table_1, column_2_table_2 = database_to_foreign_keys[(table_names_to_indices[table_name], table_names_to_indices[second_table_name])]
+                        join_query.append('T{0}.{1}'.format(t_count - 1, database_info['column_names_original'][column_1_table_1]))
+                        join_query.append('=')
+                        join_query.append('T{0}.{1}'.format(t_count, database_info['column_names_original'][column_2_table_2]))
+                        # next component 
+                        table_name = second_table_name
+                        joined_indices = database_links[table_names_to_indices[table_name]]
+                        joined_names = [table_indices_to_names[x] for x in joined_indices]
+
+                   
+                    # change the selection components
+                    for index in selection_indices.keys():
+                        column_name = sql_query[index]
+                        table_index = database_info['column_names_original'][selection_indices[index]][0]
+
+                        t_val = t_index_to_table_name.index(table_indices_to_names[table_index])
+                        sql_query[index] = 'T{0}'.format(t_val) + '.' + column_name
+            except Exception as e:
+                logging.error('Issue with join - no join implemented as a result')
+                join_query = []
+
+            sql_query = sql_query[:index_join + 1] + join_query + sql_query[index_join + 1:]
+            sql_queries.append(' '.join(sql_query))
+        logging.error('sql_queries: {0}'.format(sql_queries))
+        return sql_queries
 
     def search(self, source, target, start=0, end=None, forward=True):
         """Naive search for target in source."""
@@ -196,7 +467,7 @@ class Seq2SQL(nn.Module):
 
             logging.info('cur_q: {0}'.format(cur_q))
             logging.info('cur_col: {0}'.format(cur_col))
-            logging.error('cur_query: {0}'.format(cur_query))
+
             logging.info('mini_seq: {0}'.format(mini_seq))
             cur_seq = [all_toks.index('ORDERBY')]
             for i, x in enumerate(mini_seq[9]):
@@ -217,13 +488,13 @@ class Seq2SQL(nn.Module):
                 logging.warning('mini_seq_12: {0}'.format(mini_seq[12]))
                 my_lst = ['0', '1'] # 0 = DESC
                 cur_seq.append(all_toks.index(my_lst[mini_seq[12]]))
-                logging.error('ASC/DESC: {0}'.format(my_lst[int(mini_seq[12])]))
+                # logging.error('ASC/DESC: {0}'.format(my_lst[int(mini_seq[12])]))
             if mini_seq[13]:
-                logging.error('non null limit!')
+                # logging.error('non null limit!')
                 cur_seq.append(all_toks.index('LIMIT'))
 
             cur_seq.append(all_toks.index('<END>'))
-            logging.error('gt_order_seq: {0}'.format(cur_seq))
+            # logging.error('gt_order_seq: {0}'.format(cur_seq))
             ret_seq.append(cur_seq)
         return ret_seq
 
@@ -511,13 +782,13 @@ class Seq2SQL(nn.Module):
                 break
             
             if order_val == '<END>':
-                logging.error('found EXIT!!!')
+                # logging.error('found EXIT!!!')
                 break
             elif not train and i > 5:
-                logging.error('cut it off short!!')
+                # logging.error('cut it off short!!')
                 break
             order_toks.append(order_val) #list of words
-        logging.error('order_toks: {0}'.format(order_toks))
+        # logging.error('order_toks: {0}'.format(order_toks))
         order_query = [[], [], -1]
         looking_for = 'agg' # agg, column, order
         my_agg_lst = [''] + self.AGG_SQL_TOK
@@ -567,7 +838,7 @@ class Seq2SQL(nn.Module):
             elif len_order_query_1 < len_order_query_0: 
                 order_query[0] = order_query[0][:len_order_query_1]
             
-        logging.error('order_query: {0}'.format(order_query))
+        # logging.error('order_query: {0}'.format(order_query))
         return order_query, limit_query
 
 
@@ -597,13 +868,13 @@ class Seq2SQL(nn.Module):
                 break
             
             if group_val == '<END>':
-                logging.error('found EXIT!!!')
+                # logging.error('found EXIT!!!')
                 break
             elif not train and i > 3:
-                logging.error('cut it off short!!')
+                # logging.error('cut it off short!!')
                 break
             group_toks.append(group_val) # get the column names
-        logging.error('group_toks: {0}'.format(group_toks))
+        # logging.error('group_toks: {0}'.format(group_toks))
         # splice based on the first index of having
         if index_having_cond_tok != -1:
             # gets everything up to [having indices] if it makes sense, otherwise, just saves the first token as the group token
@@ -647,7 +918,7 @@ class Seq2SQL(nn.Module):
                         having_query[i] = np.random.choice(range(len(self.COND_OPS)), 1)[0]
             
 
-        logging.error('group_query: {0}, having_query: {1}'.format(group_query, having_query))
+        # logging.error('group_query: {0}, having_query: {1}'.format(group_query, having_query))
         return  group_query, having_query
 
     def gen_sel_query(self, col, sel_score, b, q, raw_col, raw_q, verbose=False, train=True):
@@ -686,7 +957,7 @@ class Seq2SQL(nn.Module):
             sel_toks.append(sel_val) # get the column names
         if verbose:
             print sel_toks
-        logging.error('sel_toks: {0}'.format(sel_toks))
+        # logging.error('sel_toks: {0}'.format(sel_toks))
         sel_query = []    
         for tok in sel_toks:
 
@@ -704,7 +975,7 @@ class Seq2SQL(nn.Module):
                 logging.error('unknown pred col: {0}'.format(tok))
                 if not train and len(sel_query) == 0:
                     sel_query.append(0)
-        logging.error('sel_indices: {0}'.format(sel_query))
+        # logging.error('sel_indices: {0}'.format(sel_query))
 
         if not train:
             len_agg_query = len(agg_query)
