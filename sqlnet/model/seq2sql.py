@@ -10,7 +10,9 @@ from modules.aggregator_predict import AggPredictor
 from modules.selection_predict import SelPredictor
 from modules.seq2sql_subseq_predict import Seq2SQLSubSeqPredictor
 from modules.seq2sql_condition_predict import Seq2SQLCondPredictor
+from from_clause_generation import *
 import logging
+import traceback
 
 
 # This is a re-implementation based on the following paper:
@@ -71,6 +73,7 @@ class Seq2SQL(nn.Module):
         self.ORDERBY_SQL_TOK = ['ORDERBY', '<END>'] + self.AGG_SQL_TOK + ['0', '1', 'LIMIT']
         self.ORDER_ASC_DESC = ['0', '1']
         self.COND_OPS = ['NT', 'BTWN', 'EQL', 'GT', 'LT', 'GTEQL', 'LTEQL', 'NTEQL', 'IN', 'LKE', 'IS', 'XST']
+        self.COND_OPS_SYM = ['!', 'between', '=', '>', '<', '>=', '<=', '!=', 'in', 'like', 'is', 'exist']
 
         #Word embedding
         if trainable_emb:
@@ -128,6 +131,7 @@ class Seq2SQL(nn.Module):
             query = pred_queries[i]
             sql_query  = ['SELECT']
             table_names = set()
+            table_indices = set()
             table_names_to_indices = {}
             table_indices_to_names = {}
             selection_indices = {} # index_sql_query : column_index 
@@ -139,11 +143,14 @@ class Seq2SQL(nn.Module):
                         sql_query.append('(')
                 except IndexError:
                     logging.warning('unequal number of agg and select')
-                    sql_queries.append(' '.join(sql_query))
+                    txt = ' '.join(sql_query)
+                    txt += '\t' + table_ids[i]
+                    sql_queries.append(txt)
                     continue
                 try:
                     sql_query.append(database_info['column_names_original'][x][1])
-                    sql_query.append(')')
+                    if query['agg'][i] != 0:
+                        sql_query.append(')')
                     sql_query.append(',')
                 except Exception as e:
                     logging.error('Error: appending as is: {0}'.format(e))
@@ -153,15 +160,27 @@ class Seq2SQL(nn.Module):
 
                 # information for join
                 selection_indices[sql_query.index(database_info['column_names_original'][x][1])] = x
-                table_name = database_info['table_names'][database_info['column_names_original'][x][0]]
-                table_names.add(table_name)
-                table_index = database_info['column_names_original'][x][0]
-                table_names_to_indices[table_name] = table_index
-                table_indices_to_names[table_index] = table_name
+                if x >= 0:
+                    table_name = database_info['table_names'][database_info['column_names_original'][x][0]]
+                    table_names.add(table_name)
+                    table_index = database_info['column_names_original'][x][0]
+                    table_indices.add(table_index)
+                    table_names_to_indices[table_name] = table_index
+                    table_indices_to_names[table_index] = table_name
+                else:
+                    # select all of the table names
+                    for table_name in database_info['table_names']:
+                        table_names.add(table_name)
+                        table_index = database_info['column_names_original'][x][0]
+                        table_indices.add(table_index)
+                        table_names_to_indices[table_name] = table_index
+                        table_indices_to_names[table_index] = table_name
             logging.error('after SELECT: {0}'.format(sql_query))
             logging.error('table_names: {0}'.format(table_names))
             if not query['sel']:
-                sql_queries.append(' '.join(sql_query))
+                txt = ' '.join(sql_query)
+                txt += '\t' + table_ids[i]
+                sql_queries.append(txt)
                 continue
             logging.error('query_before_delete: {0}'.format(sql_query))
             if len(sql_query) > 1:
@@ -172,12 +191,12 @@ class Seq2SQL(nn.Module):
 
             t_count = 0
             
-            try:
-                sql_query.append('FROM')
-                table_name = table_names.pop()
-                sql_query.append(table_name)
-            except Exception as e:
-                logging.error('Error appending as is: {0}'.format(e))
+            # try:
+            #     sql_query.append('FROM')
+            #     table_name = table_names.pop()
+            #     sql_query.append(table_name)
+            # except Exception as e:
+            #     logging.error('Error appending as is: {0}'.format(e))
                 # sql_queries.append(' '.join(sql_query))
                 # continue
 
@@ -195,7 +214,8 @@ class Seq2SQL(nn.Module):
                         if cond[0] >= 0:
                             sql_query.append(database_info['column_names_original'][cond[0]][1])
                         if cond[1] != 15 and cond[1] >= 0: 
-                            sql_query.append(self.COND_OPS[cond[1]]) 
+                            sql_query.append(self.COND_OPS_SYM[cond[1]])
+                            # sql_query.append(self.COND_OPS[cond[1]]) 
                         if sql_query[:-1] != 'WHERE':
                             sql_query.append('UNKNOWN_VALUE')
 
@@ -207,6 +227,7 @@ class Seq2SQL(nn.Module):
                         table_name = database_info['table_names'][database_info['column_names_original'][x][0]]
                         table_names.add(table_name)
                         table_index = database_info['column_names_original'][x][0]
+                        table_indices.add(table_index)
                         table_names_to_indices[table_name] = table_index
                         table_indices_to_names[table_index] = table_name
 
@@ -217,12 +238,14 @@ class Seq2SQL(nn.Module):
                         sql_query = sql_query[:-1]
                 except Exception as e:
                     logging.error('Error appending as is {0}'.format(e))
+                    traceback.print_exc(file=sys.stdout)
                     # sql_queries.append(' '.join(sql_query))
                     # continue
 
             # GROUPBY component 
             if query['group']:
                 sql_query.append('GROUP BY')
+
                 try:
                     for x in query['group']:
                         if x >= 0:
@@ -233,6 +256,7 @@ class Seq2SQL(nn.Module):
                         table_name = database_info['table_names'][database_info['column_names_original'][x][0]]
                         table_names.add(table_name)
                         table_index = database_info['column_names_original'][x][0]
+                        table_indices.add(table_index)
                         table_names_to_indices[table_name] = table_index
                         table_indices_to_names[table_index] = table_name
                     if len(query['group']) > 0:
@@ -242,164 +266,183 @@ class Seq2SQL(nn.Module):
                     # sql_queries.append(' '.join(sql_query))
                     # continue
 
-            # HAVING component
-            if query['having']:
-                sql_query.append('HAVING')
-                try:
-                    if query['having'][0] != 0:
-                        
-                        sql_query.append(self.AGG_SQL_TOK.index(query['having'][0])) # AGG SQL tok
-                        sql_query.append('(')
-                        
+                # HAVING component
+                if query['having']:
+                    sql_query.append('HAVING')
+                    try:
+                        if query['having'][0] != 0:
+                            
+                            sql_query.append(self.AGG_SQL_TOK.index(query['having'][0])) # AGG SQL tok
+                            sql_query.append('(')
+                            
 
-                    # append columnn name
-                    x = query['having'][1]
-                    if x >= 0:
-                        sql_query.append(database_info['column_names_original'][x][1])  # SEL SQL tok
-                        sql_query.append(')')
+                        # append columnn name
+                        x = query['having'][1]
+                        if x >= 0:
+                            sql_query.append(database_info['column_names_original'][x][1])  # SEL SQL tok
+                            if query['having'][0] != 0:
+                                sql_query.append(')')
 
-                    # join info
-                    selection_indices[sql_query.index(database_info['column_names_original'][x][1])] = x
-                    table_name = database_info['table_names'][database_info['column_names_original'][x][0]]
-                    table_names.add(table_name)
-                    table_index = database_info['column_names_original'][x][0]
-                    table_names_to_indices[table_name] = table_index
-                    table_indices_to_names[table_index] = table_name
-                    
-                    sql_query.append(self.COND_OPS.index(query['having'][2])) # COND_OPS tok
-                    sql_query.apppend('UNKNOWN_VALUE')
-                except Exception as e:
-                    logging.error('Error appending as is {0}'.format(e))
-                    # logging.error(e)
-                    # sql_queries.append(' '.join(sql_query))
-                    # continue
+                        # join info
+                        selection_indices[sql_query.index(database_info['column_names_original'][x][1])] = x
+                        table_name = database_info['table_names'][database_info['column_names_original'][x][0]]
+                        table_names.add(table_name)
+                        table_index = database_info['column_names_original'][x][0]
+                        table_indices.add(table_index)
+                        table_names_to_indices[table_name] = table_index
+                        table_indices_to_names[table_index] = table_name
+                        
+                        sql_query.append(self.COND_OPS_SYM.index(query['having'][2])) # COND_OPS tok
+                        sql_query.apppend('UNKNOWN_VALUE')
+                    except Exception as e:
+                        logging.error('Error appending as is {0}'.format(e))
+                        # logging.error(e)
+                        # sql_queries.append(' '.join(sql_query))
+                        # continue
 
             # ORDERBY component
             if query['order'][2] >= 0:
                 sql_query.append('ORDER BY')
+                logging.error('order_by: {0}'.format(query['order']))
                 try:
-                    for i, x in enumerate(self.SEL_SQL_TOK):
-                        try:
+                    # iterate through all of the SELECT and use the i to iterate through agg as well
+                    for i, x in enumerate(query['order'][1]):
+                        # first append the order
+                        if query['order'][0][i] != 0:
+                            my_lst = [''] + self.AGG_SQL_TOK
+                            sql_query.append(my_lst[query['order'][0][i]]) # AGG SQL tok
+                            sql_query.append('(')
+
+                        # append the select
+                        if x >= 0:
+                            sql_query.append(database_info['column_names_original'][x][1])
                             if query['order'][0][i] != 0:
-                                
-                                sql_query.append(self.AGG_SQL_TOK.index(query['order'][0][i])) # AGG SQL tok
-                                sql_query.append('(')
-
-                        except:
-                            pass
-
-                        # append columnn name
-                        for x in query['order'][1]:
-                            if x >= 0:
-                                sql_query.append(database_info['column_names_original'][x][1])
                                 sql_query.append(')')  # SEL SQL tok
 
-                            # join info
+                            # join info 
                             selection_indices[sql_query.index(database_info['column_names_original'][x][1])] = x
                             table_name = database_info['table_names'][database_info['column_names_original'][x][0]]
                             table_names.add(table_name)
                             table_index = database_info['column_names_original'][x][0]
+                            table_indices.add(table_index)
                             table_names_to_indices[table_name] = table_index
                             table_indices_to_names[table_index] = table_name
 
-                        # ORDER
-                        sql_query.append(self.ORDER_ASC_DESC.index(query['order'][2]))
+                            sql_query.append(self.ORDER_ASC_DESC.index(query['order'][2]))
+                        else:
+                            # invalid selection => get rid of of order by
+                            sql_query = sql_query[:sql_query.index('ORDER BY')]
+                            logging.error('invalid select x = {0}'.format(x))
                 except Exception as e:
-                    logging.error('Error appending as is {0}'.format(e))
-                    # logging.error(e)
-                    # sql_queries.append(' '.join(sql_query))
-                    # continue
+                    logging.error('error in order by: {0}'.format(e))
+    
 
             # LIMIT component
             if query['limit']:
                 sql_query.append('LIMIT 1')   
             if len(table_names) > 1:
                 t_count = 1
-            logging.error('about to implement join part')
-            logging.error('t_count: {0}'.format(t_count))
-            logging.error('sql_query: {0}'.format(sql_query))
-            logging.error('table_names: {0}'.format(table_names))
-            database_links  = {}
-            database_to_foreign_keys = {}
-            try:
-                for item in database_info['foreign_keys']:
-     
-                    tok_0 = database_links.get(database_info['col_map'][item[0]][0], set())
+            # join_query = []
 
-                    tok_0.add(database_info['col_map'][item[1]][0])
-                    logging.error('tok_0 : {0}'.format(tok_0))
-                    database_links[database_info['col_map'][item[0]][0]] = tok_0.copy()
-                    logging.error('key: {0}'.format(database_info['col_map'][item[0]][0]))
-                    logging.error(database_links)
+            table_to_t_val, join_query = gen_from(list(table_indices), database_info)
+            logging.error('table_to_t_val: {0}'.format(table_to_t_val))
+            logging.error('join_query: {0}'.format(join_query))
+            # logging.error('about to implement join part')
+            # logging.error('t_count: {0}'.format(t_count))
+            # logging.error('sql_query: {0}'.format(sql_query))
+            # logging.error('table_names: {0}'.format(table_names))
+            # database_links  = {} # {index_table : set (connected_tables)}
+            # database_to_foreign_keys = {} # {(index_table_1, index_table_2): (index_col_1, index_col_2)}
+            # try:
+            #     for item in database_info['foreign_keys']:
+     
+            #         tok_0 = database_links.get(database_info['col_map'][item[0]][0], set()) # 
+            #         tok_0.add(database_info['col_map'][item[1]][0])
+
+            #         database_links[database_info['col_map'][item[0]][0]] = tok_0.copy()
+            #         # logging.error('key: {0}'.format(database_info['col_map'][item[0]][0]))
+            #         logging.error(database_links)
 
                     
-                    tok_1 = database_links.get(database_info['col_map'][item[1]][0], set())
-                    tok_1.add(database_info['col_map'][item[0]][0])
-                    database_links[database_info['col_map'][item[1]][0]] =  tok_1.copy()
-                    logging.error('tok_1: {0}'.format(tok_1))
-                    logging.error('key: {0}'.format(database_info['col_map'][item[1]][0]))
-                    logging.error(database_links)
-                    logging.error('tok_0: {0}, tok_1: {1}, item_0: {2}, item_1: {3}'.format(tok_0, tok_1, item[0], item[1]))
-                    database_to_foreign_keys[(tok_0.pop(), tok_1.pop())] = (item[0], item[1])
-                    # database indices -> column indices             
-                logging.error('database_links: {0}'.format(database_links))
-                logging.error('database_to_foreign_keys: {0}'.format(database_to_foreign_keys))
-                logging.error('foreign_keys: {0}'.format(database_info['foreign_keys']))
+            #         tok_1 = database_links.get(database_info['col_map'][item[1]][0], set())
+            #         tok_1.add(database_info['col_map'][item[0]][0])
+            #         database_links[database_info['col_map'][item[1]][0]] =  tok_1.copy()
+            #         # logging.error('tok_1: {0}'.format(tok_1))
+            #         # logging.error('key: {0}'.format(database_info['col_map'][item[1]][0]))
+            #         database_to_foreign_keys[(database_info['col_map'][item[0]][0], database_info['col_map'][item[1]][0])] = (item[0], item[1])
+            #         database_to_foreign_keys[(database_info['col_map'][item[1]][0], database_info['col_map'][item[0]][0])] = (item[1], item[0])                    # database indices -> column indices             
+            #     logging.error('database_links: {0}'.format(database_links))
+            #     logging.error('database_to_foreign_keys: {0}'.format(database_to_foreign_keys))
+            #     logging.error('foreign_keys: {0}'.format(database_info['foreign_keys']))
 
 
 
 
-                # JOIN
-                t_index_to_table_name = [None]
-                join_query = []
-                if t_count != 0:
-                    join_query.append('AS')
-                    join_query.append('T1')
-                    t_index_to_table_name.append(table_name)
-                    logging.error('table_name: {0}'.format(table_name))
-                    logging.error('table_names_to_indices: {0}'.format(table_names_to_indices))
+            #     # JOIN
+            #     t_index_to_table_name = [None]
+            #     join_query = []
+            #     if t_count != 0:
+            #         join_query.append('AS')
+            #         join_query.append('T1')
+            #         t_index_to_table_name.append(table_name)
+            #         logging.error('table_name: {0}'.format(table_name))
+            #         logging.error('table_names_to_indices: {0}'.format(table_names_to_indices))
 
-                    # implement joins
-                    joined_indices = database_links[table_names_to_indices[table_name]]
-                    joined_names = [table_indices_to_names[x] for x in joined_indices]
-                    table_names.remove(table_name)
-                    while table_names:
-                        join_query.append('JOIN')
-                        # choose an intersect column name
-                        possible_joins = set.intersect(table_names, joined_names)
-                        second_table_name = possible_joins.pop()
-                        table_names.remove(second_table_name)
-                        t_index_to_table_name.append(second_table_name)
+            #         # implement joins
+            #         joined_indices = database_links[table_names_to_indices[table_name]]
+            #         logging.error('joined_indices: {0}'.format(joined_indices))
+            #         joined_names = [table_indices_to_names[x] for x in joined_indices]
+            #         logging.error('joined_names: {0}'.format(joined_names))
+            #         table_names.discard(table_name)
+            #         while table_names:
+            #             join_query.append('JOIN')
+            #             # choose an intersect column name
+            #             possible_joins = set.intersect(table_names, joined_names)
+            #             second_table_name = possible_joins.pop()
+            #             table_names.remove(second_table_name)
+            #             t_index_to_table_name.append(second_table_name)
 
-                        t_count += 1
-                        join_query.append(second_table_name)
-                        join_query.append('AS')
-                        join_query.append('T{0}'.format(t_count))
-                        join_query.append('ON')
-                        # join pair
-                        column_1_table_1, column_2_table_2 = database_to_foreign_keys[(table_names_to_indices[table_name], table_names_to_indices[second_table_name])]
-                        join_query.append('T{0}.{1}'.format(t_count - 1, database_info['column_names_original'][column_1_table_1]))
-                        join_query.append('=')
-                        join_query.append('T{0}.{1}'.format(t_count, database_info['column_names_original'][column_2_table_2]))
-                        # next component 
-                        table_name = second_table_name
-                        joined_indices = database_links[table_names_to_indices[table_name]]
-                        joined_names = [table_indices_to_names[x] for x in joined_indices]
+            #             t_count += 1
+            #             join_query.append(second_table_name)
+            #             join_query.append('AS')
+            #             join_query.append('T{0}'.format(t_count))
+            #             join_query.append('ON')
+            #             # join pair
+            #             column_1_table_1, column_2_table_2 = database_to_foreign_keys[(table_names_to_indices[table_name], table_names_to_indices[second_table_name])]
+            #             join_query.append('T{0}.{1}'.format(t_count - 1, database_info['column_names_original'][column_1_table_1]))
+            #             join_query.append('=')
+            #             join_query.append('T{0}.{1}'.format(t_count, database_info['column_names_original'][column_2_table_2]))
+            #             # next component 
+            #             table_name = second_table_name
+            #             joined_indices = database_links[table_names_to_indices[table_name]]
+            #             joined_names = [table_indices_to_names[x] for x in joined_indices]
 
                    
-                    # change the selection components
-                    for index in selection_indices.keys():
-                        column_name = sql_query[index]
-                        table_index = database_info['column_names_original'][selection_indices[index]][0]
+            #         # change the selection components
+            #         for index in selection_indices.keys():
+            #             column_name = sql_query[index]
+            #             table_index = database_info['column_names_original'][selection_indices[index]][0]
 
-                        t_val = t_index_to_table_name.index(table_indices_to_names[table_index])
-                        sql_query[index] = 'T{0}'.format(t_val) + '.' + column_name
-            except Exception as e:
-                logging.error('Issue with join - no join implemented as a result')
-                join_query = []
-
-            sql_query = sql_query[:index_join + 1] + join_query + sql_query[index_join + 1:]
-            sql_queries.append(' '.join(sql_query))
+            #             t_val = t_index_to_table_name.index(table_indices_to_names[table_index])
+            #             sql_query[index] = 'T{0}'.format(t_val) + '.' + column_name
+            # except Exception as e:
+            #     logging.error('Issue with join - no join implemented as a result')
+            #     join_query = []
+                                # change the selection components
+            logging.error('fixing column values')
+            logging.error('selection_indices: {0}'.format(selection_indices))
+            if table_to_t_val:
+                for index in selection_indices.keys():
+                    column_name = sql_query[index]
+                    table_index = database_info['column_names_original'][selection_indices[index]][0]
+                    t_val = table_to_t_val[table_index]
+                    logging.error('index: {0}, column_name: {1}, table_index: {2}, t_val: {3}'.format(index, column_name, table_index, t_val))
+                    sql_query[index] = 'T{0}'.format(t_val) + '.' + column_name
+                    logging.error('new_val: {0}'.format(sql_query[index]))
+            sql_query = sql_query[:index_join + 1] + [join_query] + sql_query[index_join + 1:]
+            txt = ' '.join(sql_query)
+            txt += '\t' + table_ids[i]
+            sql_queries.append(txt)
         logging.error('sql_queries: {0}'.format(sql_queries))
         return sql_queries
 
@@ -567,7 +610,7 @@ class Seq2SQL(nn.Module):
 
     def forward(self, q, col, col_num, pred_entry,
                 gt_where = None, gt_cond=None, reinforce=False, gt_sel=None, gt_groupby=None, gt_orderby=None):
-        logging.info('method seq2sqlforward')
+        logging.warning('method seq2sqlforward')
         B = len(q)
         pred_agg, pred_sel, pred_cond, pred_groupby, pred_orderby = pred_entry
 
@@ -635,7 +678,7 @@ class Seq2SQL(nn.Module):
 
 
             
-
+        logging.error('finished forward!!')
         return (sel_score, cond_score, groupby_score, orderby_score)
 
     def loss(self, score, truth_num, pred_entry, gt_where, gt_sel, gt_groupby, gt_orderby):

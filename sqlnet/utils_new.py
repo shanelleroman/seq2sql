@@ -128,7 +128,7 @@ def load_data(sql_paths, table_paths, use_small=False):
     return sql_data, table_data
 
 
-def load_dataset(dataset_id, use_small=False):
+def load_dataset(dataset_id, use_small=False, type_dataset=0):
     if dataset_id == 2:
         print "Loading from new dataset"
         # sql_data, table_data = load_data_new(['../alt/processed/train/art_1.json'],
@@ -138,14 +138,30 @@ def load_dataset(dataset_id, use_small=False):
 
         # test_sql_data, test_table_data = load_data_new(['../alt/processed/train/art_1.json'],
         #          ['../alt/processed/tables/art_1_table.json'], use_small=use_small)
+        if type_dataset == 'data':
+            sql_data, table_data = load_data_new(['/data/projects/nl2sql/datasets/data/train.json'], 
+                     ['/data/projects/nl2sql/datasets/data/tables.json'], use_small=use_small)
+            val_sql_data, val_table_data = load_data_new(['/data/projects/nl2sql/datasets/data/dev.json'], 
+                     ['/data/projects/nl2sql/datasets/data/tables.json'], use_small=use_small)
 
-        sql_data, table_data = load_data_new(['New_Data/train.json'], 
-                 ['New_Data/tables.json'], use_small=use_small)
-        val_sql_data, val_table_data = load_data_new(['New_Data/dev.json'], 
-                 ['New_Data/tables.json'], use_small=use_small)
+            test_sql_data, test_table_data = load_data_new(['/data/projects/nl2sql/datasets/data/train.json'], 
+                     ['/data/projects/nl2sql/datasets/data/tables.json'], use_small=use_small)
+        elif type_dataset == 'data_add_wikisql': # WIKISQL   
+            sql_data, table_data = load_data_new(['/data/projects/nl2sql/datasets/data_add_wikisql/train_wikisql.json'], 
+                     ['/data/projects/nl2sql/datasets/data_add_wikisql/wikisql_tables.json'], use_small=use_small)
+            val_sql_data, val_table_data = load_data_new(['/data/projects/nl2sql/datasets/data_add_wikisql/dev.json'], 
+                     ['/data/projects/nl2sql/datasets/data_add_wikisql/wikisql_tables.json'], use_small=use_small)
 
-        test_sql_data, test_table_data = load_data_new(['New_Data/train.json'], 
-                 ['New_Data/tables.json'], use_small=use_small)
+            test_sql_data, test_table_data = load_data_new(['/data/projects/nl2sql/datasets/data_add_wikisql/train_wikisql.json'], 
+                     ['/data/projects/nl2sql/datasets/data_add_wikisql/wikisql_tables.json'], use_small=use_small)
+        else: #RADN =='data_radn_split'
+            sql_data, table_data = load_data_new(['/data/projects/nl2sql/datasets/data_radn_split/train_radn.json'], 
+                     ['/data/projects/nl2sql/datasets/data/tables.json'], use_small=use_small)
+            val_sql_data, val_table_data = load_data_new(['/data/projects/nl2sql/datasets/data_radn_split/dev_radn.json'], 
+                     ['/data/projects/nl2sql/datasets/data/tables.json'], use_small=use_small)
+
+            test_sql_data, test_table_data = load_data_new(['/data/projects/nl2sql/datasets/data_radn_split/test_radn.json'], 
+                     ['/data/projects/nl2sql/datasets/data/tables.json'], use_small=use_small)
 
         TRAIN_DB = '../alt/data/train.db'
         DEV_DB = '../alt/data/dev.db'
@@ -177,7 +193,7 @@ def load_dataset(dataset_id, use_small=False):
     return sql_data, table_data, val_sql_data, val_table_data,\
             test_sql_data, test_table_data
 
-def best_model_name(args, for_load=False):
+def best_model_name(args, for_load=False, data_dir='data'):
     new_data = 'new' if args.dataset > 0 else 'old'
     mode = 'seq2sql' if args.baseline else 'sqlnet'
     if for_load:
@@ -187,13 +203,15 @@ def best_model_name(args, for_load=False):
         use_rl = 'rl_' if args.rl else ''
     use_ca = '_ca' if args.ca else ''
 
-    agg_model_name = 'saved_model/%s_%s%s%s.agg_model'%(new_data,
+    agg_model_name = '%s/%s_%s%s%s.agg_model'%(data_dir, new_data,
             mode, use_emb, use_ca)
-    sel_model_name = 'saved_model/%s_%s%s%s.sel_model'%(new_data,
+    sel_model_name = '%s/%s_%s%s%s.sel_model'%(data_dir, new_data,
             mode, use_emb, use_ca)
-    cond_model_name = 'saved_model/%s_%s%s%s.cond_%smodel'%(new_data,
+    cond_model_name = '%s/%s_%s%s%s.cond_%smodel'%(data_dir, new_data,
             mode, use_emb, use_ca, use_rl)
-    groupby_model_name = 'saved_model/%s_%s%s%s.groupby_%smodel'%(new_data,
+    groupby_model_name = '%s/%s_%s%s%s.groupby_%smodel'%(data_dir, new_data,
+            mode, use_emb, use_ca, use_rl)
+    orderby_model_name = '%s/%s_%s%s%s.orderby%smodel'%(data_dir, new_data,
             mode, use_emb, use_ca, use_rl)
 
     if not for_load and args.train_emb:
@@ -206,7 +224,7 @@ def best_model_name(args, for_load=False):
         return agg_model_name, sel_model_name, cond_model_name,\
                 agg_embed_name, sel_embed_name, cond_embed_name
     else:
-        return agg_model_name, sel_model_name, cond_model_name, groupby_model_name
+        return agg_model_name, sel_model_name, cond_model_name, groupby_model_name, orderby_model_name
 
 
 def to_batch_seq(sql_data, table_data, idxes, st, ed, ret_vis_data=False):
@@ -342,7 +360,7 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
     # exit(1)
 
 
-def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry, train=True, generate_SQL_query=False):
+def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry, train=True, generate_SQL_query=False, test_file=False):
     logging.info('epoch_acc_new')
 
     model.eval()
@@ -368,8 +386,7 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry, train=Tru
         raw_col_seq = [x[1] for x in raw_data] # [(col_index, [col_tok_1, col_tok_2]), (col_index, [col_tok_1, col_tok_2])]
         query_gt, table_ids, correct_sql_queries = to_batch_query(sql_data, perm, st, ed)
 
-        score = model.forward(q_seq, col_seq, col_num,
-                pred_entry)
+        score = model.forward(q_seq, col_seq, col_num, pred_entry)
 
         pred_queries = model.gen_query(score, q_seq, col_seq,
                 raw_q_seq, raw_col_seq, pred_entry, train=train) # is this the decoder portion??
@@ -378,11 +395,15 @@ def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry, train=Tru
         if generate_SQL_query:
             sql_queries.extend(model.generate_SQL_query(pred_queries, perm, sql_data, table_data, st, ed, table_ids, correct_sql_queries))
             logging.error('appended for sql_queries- not empty {0}'.format(sql_queries))
-            if os.path.exists('pred_results_itemized.csv'):
+            if test_file:
+                filename = 'pred_results_itemized_test.csv'
+            else:
+                filename = 'pred_results_itemized.csv'
+            if os.path.exists(filename):
                 mode = 'a'
             else:
                 mode = 'w'
-            with open('pred_results_itemized.csv', mode) as csvfile:
+            with open(filename, mode) as csvfile:
                 spamwriter = csv.writer(csvfile, delimiter=' ',
                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)
                 if mode == 'w':

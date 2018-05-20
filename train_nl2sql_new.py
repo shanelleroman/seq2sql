@@ -36,6 +36,7 @@ if __name__ == '__main__':
             help='Train word embedding for SQLNet(requires pretrained model).')
     parser.add_argument('--train_num', type=int, default=100,
             help='If set, number of training epochs. Default is 100. ')
+    parser.add_argument('--data', type=str, default='data', help='Three options: data, data_add_wikisql, and data_radn_split')
     args = parser.parse_args()
 
 
@@ -54,7 +55,7 @@ if __name__ == '__main__':
     learning_rate = 1e-4 if args.rl else 1e-3
 
     logging.warning('about to load dataset')
-    sql_data, table_data, val_sql_data, val_table_data, test_sql_data, test_table_data = load_dataset(args.dataset, use_small=USE_SMALL)
+    sql_data, table_data, val_sql_data, val_table_data, test_sql_data, test_table_data = load_dataset(args.dataset, use_small=USE_SMALL, type_dataset=args.data)
     if args.toy:       
         sql_data = sql_data[0:300]
         val_sql_data = val_sql_data[0:300]
@@ -78,7 +79,7 @@ if __name__ == '__main__':
     # if args.train_emb:
     #     agg_m, sel_m, cond_m, agg_e, sel_e, cond_e = best_model_name(args)
     # else:
-    agg_m, sel_m, cond_m, groupby_m = best_model_name(args)
+    agg_m, sel_m, cond_m, groupby_m, orderby_m = best_model_name(args, data_dir=args.data)
 
 
     if args.rl or args.train_emb: # Load pretrained model.
@@ -168,13 +169,14 @@ if __name__ == '__main__':
             if args.train_emb:
                 torch.save(model.cond_embed_layer.state_dict(), cond_e)
         if TRAIN_GROUPBY:
-            torch.save(model.groupby_pred.state_dict(), cond_m)
+            torch.save(model.groupby_pred.state_dict(), groupby_m)
             if args.train_emb:
                 torch.save(model.groupby_embed_layer.state_dict(), cond_e)
         if TRAIN_ORDERBY:
-            torch.save(model.groupby_pred.state_dict(), cond_m)
+            torch.save(model.orderby_pred.state_dict(), orderby_m)
             if args.train_emb:
-                torch.save(model.groupby_embed_layer.state_dict(), cond_e)
+                torch.save(model.orderby_embed_layer.state_dict(), cond_e)
+
         loss = 100
 
         EPOCH_NUM = args.train_num
@@ -191,7 +193,7 @@ if __name__ == '__main__':
                     sql_data, table_data, TRAIN_ENTRY))
             if i == EPOCH_NUM -1:
                 generate_sql_query  = True
-            train_acc_returned, sql_queries = epoch_acc_new(model, BATCH_SIZE, sql_data, table_data, TRAIN_ENTRY, generate_SQL_query=generate_sql_query) # train=True
+            train_acc_returned, _ = epoch_acc_new(model, BATCH_SIZE, sql_data, table_data, TRAIN_ENTRY, generate_SQL_query=generate_sql_query) # train=True
             train_acc_tot = train_acc_returned[0]
             train_acc_indiv = train_acc_returned[1]
             logging.error(' Train acc_qm: %s\n   breakdown result: %s'% (train_acc_tot, train_acc_indiv))
@@ -201,8 +203,8 @@ if __name__ == '__main__':
             train_acc[i,0] = train_acc_tot
             train_acc[i,1:] = train_acc_indiv
 
-            (val_acc_tot, val_acc_indiv),  _ = epoch_acc_new(model,
-                    BATCH_SIZE, val_sql_data, val_table_data, TRAIN_ENTRY, train=False)
+            (val_acc_tot, val_acc_indiv),  sql_queries = epoch_acc_new(model,
+                    BATCH_SIZE, val_sql_data, val_table_data, TRAIN_ENTRY, train=False, generate_SQL_query = generate_sql_query)
             dev_acc[i + 1,0] = val_acc_tot
             dev_acc[i + 1, 1:] = val_acc_indiv
             logging.error(' Dev acc_qm: %s\n   breakdown result: %s\n'%(val_acc_tot, val_acc_indiv))
@@ -213,9 +215,7 @@ if __name__ == '__main__':
                 if val_acc_indiv[0] > best_agg_acc:
                     best_agg_acc = val_acc_indiv[0]
                     best_agg_idx = i + 1
-                    # torch.save(model.agg_pred.state_dict(),
-                    #     'saved_model/epoch%d.agg_model%s'%(i+1, args.suffix))
-                    # torch.save(model.agg_pred.state_dict(), agg_m)
+                    torch.save(model.agg_pred.state_dict(), agg_m)
                 # agg_acc = val_acc[2][0]
                 # if agg_acc[0] > best_agg_num_acc:
                 #     best_agg_num_acc = agg_acc[0]
@@ -227,29 +227,35 @@ if __name__ == '__main__':
                 if val_acc_indiv[1] > best_sel_acc:
                     best_sel_acc = val_acc_indiv[1]
                     best_sel_idx = i + 1
+                    torch.save(model.sel_pred.state_dict(), sel_m)
 
             if TRAIN_COND:
                 if val_acc_indiv[2] > best_cond_acc:
                     best_cond_acc =  val_acc_indiv[2]
                     best_cond_idx = i + 1 
+                    torch.save(model.cond_pred.state_dict(), cond_m)
  
 
             if TRAIN_GROUPBY:
                 if val_acc_indiv[3] > best_group_acc:
                     best_group_acc = val_acc_indiv[3]
-                    best_group_idx = i + 1 
+                    best_group_idx = i + 1
+                    torch.save(model.groupby_pred.state_dict(), groupby_m) 
 
                 if val_acc_indiv[4] > best_having_acc:
                     best_having_acc = val_acc_indiv[4]
                     best_having_idx = i + 1 
+                    torch.save(model.groupby_pred.state_dict(), groupby_m)
 
             if TRAIN_ORDERBY:
                 if val_acc_indiv[5] > best_order_acc:
                     best_order_acc = val_acc_indiv[5]
                     best_order_idx = i + 1
+                    torch.save(model.orderby_pred.state_dict(), orderby_m)
                 if val_acc_indiv[6] > best_limit_acc:
                     best_limit_acc = val_acc_indiv[6]
                     best_limit_idx = i + 1
+                    torch.save(model.orderby_pred.state_dict(), orderby_m)
 
 
   
