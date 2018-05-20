@@ -138,8 +138,8 @@ class Seq2SQLSubSeqPredictor(nn.Module):
                     choices.append(ans_tok_var) # list of the different probability distributions
                 ans_tok = ans_tok_var.data.cpu()
                 if self.gpu:  #To one-hot
-                    cur_inp = Variable(torch.zeros(
-                        B, self.max_tok_num).scatter_(1, ans_tok, 1).cuda())
+                    logging.warning('ans_tok.size(): {0}'.format(ans_tok.size()))
+                    cur_inp = Variable(torch.zeros(B, self.max_tok_num).scatter_(1, ans_tok, 1).cuda())
                 else:
                     cur_inp = Variable(torch.zeros(
                         B, self.max_tok_num).scatter_(1, ans_tok, 1))

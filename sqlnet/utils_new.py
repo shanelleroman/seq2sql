@@ -133,7 +133,7 @@ def load_data(sql_paths, table_paths, use_small=False):
     return sql_data, table_data
 
 
-def load_dataset(dataset_id, use_small=False, type_dataset=0):
+def load_dataset(dataset_id, use_small=False, type_dataset='data'):
     if dataset_id == 2:
         print "Loading from new dataset"
         # sql_data, table_data = load_data_new(['../alt/processed/train/art_1.json'],
