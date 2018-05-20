@@ -554,6 +554,8 @@ class Seq2SQL(nn.Module):
                    ind_col_seq + [''] + cur_q + ['']
             logging.warning('all_toks: {0}'.format(all_toks))
             logging.warning('cond: {0}'.format(cond_tuple))
+            logging.warning('len_all_toks: {0}'.format(len(all_toks)))
+            logging.warning('ind_col_seq: {0}'.format(ind_col_seq))
             cond = [all_toks.index('WHERE')] # append index WHERE
             for ind_cond in cond_tuple:
                 col_toks = ind_col_seq[ind_cond[0]] #list of the tokens that represent the column_token_sequence
@@ -956,9 +958,11 @@ class Seq2SQL(nn.Module):
                     if i == 0:
                         having_query[i] = 0 # predict no AGG
                     elif i == 1:
-                        having_query[i] = np.random.choice(range(len(to_idx[1:])), 1)[0] # predict a random column index
+                        if len(to_idx[1:]) > 0:
+                            having_query[i] = np.random.choice(range(len(to_idx[1:])), 1)[0]
                     else:
-                        having_query[i] = np.random.choice(range(len(self.COND_OPS)), 1)[0]
+                        if len(self.COND_OPS) > 0:
+                            having_query[i] = np.random.choice(range(len(self.COND_OPS)), 1)[0]
             
 
         # logging.error('group_query: {0}, having_query: {1}'.format(group_query, having_query))

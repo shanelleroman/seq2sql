@@ -6,6 +6,11 @@ import os
 import csv
 import logging
 #from lib.dbengine import DBEngine
+PATH = '/data/projects/nl2sql/datasets/'
+WIKI = 'data_add_wikisql'
+RADN = 'data_radn_split'
+DATA = 'data'
+
 
 def lower_keys(x):
     if isinstance(x, list):
@@ -139,29 +144,18 @@ def load_dataset(dataset_id, use_small=False, type_dataset=0):
         # test_sql_data, test_table_data = load_data_new(['../alt/processed/train/art_1.json'],
         #          ['../alt/processed/tables/art_1_table.json'], use_small=use_small)
         if type_dataset == 'data':
-            sql_data, table_data = load_data_new(['/data/projects/nl2sql/datasets/data/train.json'], 
-                     ['/data/projects/nl2sql/datasets/data/tables.json'], use_small=use_small)
-            val_sql_data, val_table_data = load_data_new(['/data/projects/nl2sql/datasets/data/dev.json'], 
-                     ['/data/projects/nl2sql/datasets/data/tables.json'], use_small=use_small)
-
-            test_sql_data, test_table_data = load_data_new(['/data/projects/nl2sql/datasets/data/train.json'], 
-                     ['/data/projects/nl2sql/datasets/data/tables.json'], use_small=use_small)
+            sql_data, table_data = load_data_new([PATH + DATA + '/train.json'], [PATH + DATA + '/tables.json'], use_small=use_small)
+            val_sql_data, val_table_data = load_data_new([PATH + DATA + '/dev.json'], [PATH + DATA  + '/tables.json'], use_small=use_small)
+            test_sql_data, test_table_data = sql_data, table_data
         elif type_dataset == 'data_add_wikisql': # WIKISQL   
-            sql_data, table_data = load_data_new(['/data/projects/nl2sql/datasets/data_add_wikisql/train_wikisql.json'], 
-                     ['/data/projects/nl2sql/datasets/data_add_wikisql/wikisql_tables.json'], use_small=use_small)
-            val_sql_data, val_table_data = load_data_new(['/data/projects/nl2sql/datasets/data_add_wikisql/dev.json'], 
-                     ['/data/projects/nl2sql/datasets/data_add_wikisql/wikisql_tables.json'], use_small=use_small)
-
-            test_sql_data, test_table_data = load_data_new(['/data/projects/nl2sql/datasets/data_add_wikisql/train_wikisql.json'], 
-                     ['/data/projects/nl2sql/datasets/data_add_wikisql/wikisql_tables.json'], use_small=use_small)
+            sql_data, table_data = load_data_new([PATH + WIKI + '/train_wikisql.json'], [PATH + WIKI + '/all_tables.json'], use_small=use_small)
+            val_sql_data, val_table_data = load_data_new([PATH + WIKI + '/dev.json'], [PATH + WIKI + '/all_tables.json'], use_small=use_small)
+            test_sql_data, test_table_data = sql_data, table_data
         else: #RADN =='data_radn_split'
-            sql_data, table_data = load_data_new(['/data/projects/nl2sql/datasets/data_radn_split/train_radn.json'], 
-                     ['/data/projects/nl2sql/datasets/data/tables.json'], use_small=use_small)
-            val_sql_data, val_table_data = load_data_new(['/data/projects/nl2sql/datasets/data_radn_split/dev_radn.json'], 
-                     ['/data/projects/nl2sql/datasets/data/tables.json'], use_small=use_small)
+            sql_data, table_data = load_data_new([PATH + RADN + '/train_radn.json'], [PATH + DATA + '/tables.json'], use_small=use_small)
+            val_sql_data, val_table_data = load_data_new([PATH + RADN + '/dev_radn.json'], [PATH + DATA + '/tables.json'], use_small=use_small)
 
-            test_sql_data, test_table_data = load_data_new(['/data/projects/nl2sql/datasets/data_radn_split/test_radn.json'], 
-                     ['/data/projects/nl2sql/datasets/data/tables.json'], use_small=use_small)
+            test_sql_data, test_table_data = load_data_new([PATH + RADN + '/test_radn.json'], [PATH + DATA + '/tables.json'], use_small=use_small)
 
         TRAIN_DB = '../alt/data/train.db'
         DEV_DB = '../alt/data/dev.db'
@@ -335,6 +329,8 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
         # raw_col_seq = [x[1] for x in raw_data] 
 
         # logging.warning('gt_cond_seq: {0}'.format(gt_cond_seq))
+        logging.warning('raw_data: {0}'.format(raw_data))
+        logging.warning('table_data: {0}'.format(table_data['baseball_1']))
         gt_where_seq = model.generate_gt_where_seq(q_seq, col_seq, gt_cond_seq)
 
 
@@ -360,7 +356,7 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data, pred_entry):
     # exit(1)
 
 
-def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry, train=True, generate_SQL_query=False, test_file=False):
+def epoch_acc_new(model, batch_size, sql_data, table_data, pred_entry, train=True, generate_SQL_query=False, test_file=False, data_dir='data'):
     logging.info('epoch_acc_new')
 
     model.eval()

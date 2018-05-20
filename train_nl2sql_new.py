@@ -98,7 +98,7 @@ if __name__ == '__main__':
         best_idx = -1
         logging.warning("Init dev acc_qm: %s\n  breakdown on (agg, sel, where): %s\n more specific breakdown %s"% \
                 epoch_acc_new(model, BATCH_SIZE, val_sql_data,\
-                val_table_data, TRAIN_ENTRY))
+                val_table_data, TRAIN_ENTRY, data_dir=args.data))
         logging.warning("Init dev acc_  : %s"%epoch_exec_acc(
                 model, BATCH_SIZE, val_sql_data, val_table_data, DEV_DB))
         torch.save(model.cond_pred.state_dict(), cond_m)
@@ -121,7 +121,7 @@ if __name__ == '__main__':
     else:
         logging.warning('about to call epoch_acc_new')
         init_acc, sql_queries = epoch_acc_new(model, BATCH_SIZE,
-                val_sql_data, val_table_data, TRAIN_ENTRY, train=False)
+                val_sql_data, val_table_data, TRAIN_ENTRY, train=False, data_dir=args.data)
         logging.warning('init_acc: %s', str(init_acc))
 
         # total accuracies
@@ -193,7 +193,7 @@ if __name__ == '__main__':
                     sql_data, table_data, TRAIN_ENTRY))
             if i == EPOCH_NUM -1:
                 generate_sql_query  = True
-            train_acc_returned, _ = epoch_acc_new(model, BATCH_SIZE, sql_data, table_data, TRAIN_ENTRY, generate_SQL_query=generate_sql_query) # train=True
+            train_acc_returned, _ = epoch_acc_new(model, BATCH_SIZE, sql_data, table_data, TRAIN_ENTRY, generate_SQL_query=generate_sql_query, data_dir=args.data) # train=True
             train_acc_tot = train_acc_returned[0]
             train_acc_indiv = train_acc_returned[1]
             logging.error(' Train acc_qm: %s\n   breakdown result: %s'% (train_acc_tot, train_acc_indiv))
@@ -204,7 +204,7 @@ if __name__ == '__main__':
             train_acc[i,1:] = train_acc_indiv
 
             (val_acc_tot, val_acc_indiv),  sql_queries = epoch_acc_new(model,
-                    BATCH_SIZE, val_sql_data, val_table_data, TRAIN_ENTRY, train=False, generate_SQL_query = generate_sql_query)
+                    BATCH_SIZE, val_sql_data, val_table_data, TRAIN_ENTRY, train=False, generate_SQL_query = generate_sql_query, data_dir=args.data)
             dev_acc[i + 1,0] = val_acc_tot
             dev_acc[i + 1, 1:] = val_acc_indiv
             logging.error(' Dev acc_qm: %s\n   breakdown result: %s\n'%(val_acc_tot, val_acc_indiv))
@@ -266,20 +266,23 @@ if __name__ == '__main__':
         logging.error('best_having_acc = %s on epoch %s ', str(best_having_acc), str(best_having_idx))
         logging.error('best_orderby_acc = %s on epoch %s ', str(best_order_acc), str(best_order_idx))
         logging.error('best_limit_acc = %s on epoch %s ', str(best_limit_acc), str(best_limit_idx))
-        with open('results_train.csv', 'wb') as csvfile:
+        train_file = 'results_train_{0}.csv'.format(args.data)
+        dev_file = 'results_dev_{0}.csv'.format(args.data)
+        predicted_sql = 'predicted_{0}.sql'.format(args.data)
+        with open(train_file, 'wb') as csvfile:
             spamwriter = csv.writer(csvfile, delimiter=' ',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
             spamwriter.writerow(['total', 'agg', 'sel', 'cond', 'group', 'having', 'orderby', 'limit'])
             for row in train_acc:
                 spamwriter.writerow(row)
-        with open('results_dev.csv', 'wb') as csvfile_new:
+        with open(dev_file, 'wb') as csvfile_new:
             new_writer = csv.writer(csvfile_new, delimiter=' ',
                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
             new_writer.writerow(['total', 'agg', 'sel', 'cond', 'group', 'having', 'orderby', 'limit'])
             for row in dev_acc:
                 new_writer.writerow(row)
 
-        with open('predicted.sql', 'wb') as file:
+        with open(predicted_sql, 'wb') as file:
             for sql_query in sql_queries:
                 file.write(sql_query + '\n')
 
